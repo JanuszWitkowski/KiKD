@@ -113,6 +113,15 @@ public:
           cout << (char)i << " " << charOccs[i] << endl;
       }
   }
+
+  void printBytesCondOccurances (void) {
+      for (int i = 0; i < 256; i++) {
+          for (int j = 0; j < 256; j++) {
+            cout << charOccsCond[i][j] << " ";
+          }
+          cout << endl;
+      }
+  }
 };
 
 
