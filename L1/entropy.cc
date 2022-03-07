@@ -11,7 +11,7 @@ private:
   uchar *array;     // bajty
   int n;            // dlugosc
   int *charOccs;        // wystapienia poszczegolnych znakow
-  int **charOccsCond;   // wystapienia poszczegoknych znakow po danych znakach
+  int **charOccsCond;   // wystapienia poszczegolnych znakow po danych znakach
 public:
   File (string filename) {
     ifstream fin;
@@ -65,6 +65,7 @@ public:
       }
   }
 
+  // na iteracje: 1 sprawdzenie, 1 konwersja, 1 logarytm, 1 mnozenie, 1 dodawanie
   double entropy (void) {
     double H = 0.0;
     double p, i;
@@ -81,11 +82,11 @@ public:
   double entropyCond (void) {
     double H = 0.0;
     double HCond, logOfX;
-    for (int j = 0; j < 256; j++) {
+    for (int j = 0; j < 256; j++) {   // 1 sprawdzenie, 1 logarytm, 1 konwersja, 1 dodawanie, 256 iteracji
       HCond = 0.0;
       if (charOccs[j] != 0) {
         logOfX = log2(1.0 * charOccs[j]);
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < 256; i++) {   // 1 sprawdzenie, 1 logarytm, 1 odejmowanie, 1 mnozenie, 1 dodawanie
           if (charOccsCond[i][j] != 0) {
             HCond += charOccsCond[i][j] * (logOfX - log2(charOccsCond[i][j]));
           }
