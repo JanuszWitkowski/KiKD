@@ -65,18 +65,17 @@ public:
       }
   }
 
-  // na iteracje: 1 sprawdzenie, 1 konwersja, 1 logarytm, 1 mnozenie, 1 dodawanie
+  // na iteracje: 1 sprawdzenie, 1 logarytm, 1 mnozenie, 1 odejmowanie
   double entropy (void) {
     double H = 0.0;
+    double logOfN = log2(n);
     double p, i;
     for (int j = 0; j < 256; j++) {
       if (charOccs[j] != 0) {
-        p = 1.0 * charOccs[j] / n;
-        i = -log2(p);
-        H += p * i;
+        H += charOccs[j] * (logOfN - log2(charOccs[j]));
       }
     }
-    return H;
+    return H / n;
   }
 
   double entropyCond (void) {
@@ -92,9 +91,9 @@ public:
           }
         }
       }
-      H += HCond / n;
+      H += HCond;
     }
-    return H;
+    return H / n;
   }
 
   void printArray (void) {
