@@ -14,9 +14,9 @@ ArithmeticCode::ArithmeticCode(int length, double value) {
     marker(value);
 }
 
-ArithmeticCode *encode (File *file) {
+ArithmeticCode *encode (uchar* array, int n) {
     double marker = 0.0;
-    return new ArithmeticCode(file->length(), marker);
+    return new ArithmeticCode(n, marker);
 }
 
 uchar* decode (int n, double marker) {

@@ -33,7 +33,7 @@ public:
     }
 };
 
-ArithmeticCode *encode (File *file);
+ArithmeticCode *encode (uchar* array, int n);
 
 uchar* decode (int n, double marker);
 
