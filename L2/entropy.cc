@@ -2,7 +2,7 @@
 #include <fstream>
 #include <limits>
 #include <math.h>
-#include <tuple>
+// #include <tuple>
 
 #include "entropy.hh"
 using namespace std;
@@ -10,14 +10,17 @@ typedef unsigned char uchar;
 
 uchar* fileToArray (string filename, int &n) {
     ifstream fin;
+    // int n;
     fin.open(filename, ios::in|ios::binary);
     streampos start = fin.tellg();
     fin.ignore(numeric_limits<streamsize>::max());
     n = fin.gcount();
+    // cout << "file2Array n = " << n  << "; gcount = " << fin.gcount() << endl;
     fin.seekg(start,ios_base::beg);
     uchar* array = new uchar[n];
     fin.read((char *)array, n);
     fin.close();
+    // cout << "array[0] = " << array[0] << endl;
     return array;
 }
 

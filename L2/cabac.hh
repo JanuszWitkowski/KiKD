@@ -16,19 +16,19 @@ private:
 public:
     ArithmeticCode(int length, double value);
 
-    int n() {
+    int getN() {
         return n;
     }
 
-    void n(int length) {
+    void setN(int length) {
         n = length;
     }
 
-    double tag() {
+    double getTag() {
         return tag;
     }
 
-    void tag(double value) {
+    void setTag(double value) {
         tag = value;
     }
 };
@@ -42,6 +42,6 @@ uchar* decode (int n, double tag);
 
 void compress (string filename, string codename);
 void decompress (string codename, string filename);
-void compareFiles (string file1, string file2);
+bool compareFiles (string file1, string file2);
 
 #endif

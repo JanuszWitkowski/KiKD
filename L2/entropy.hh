@@ -9,7 +9,7 @@
 using namespace std;
 typedef unsigned char uchar;
 
-uchar* fileToArray (string filename);
+uchar* fileToArray (string filename, int &n);
 
 int* initCharOccs (int value);
 // tuple countChars(uchar* array, int n);

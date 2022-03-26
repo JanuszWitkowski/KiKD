@@ -11,8 +11,8 @@ using namespace std;
 typedef unsigned char uchar;
 
 ArithmeticCode::ArithmeticCode(int length, double value) {
-    n(length);
-    tag(value);
+    setN(length);
+    setTag(value);
 }
 
 uchar* setBlock (uchar* array, uchar* block, int start, int m, int n) {
@@ -81,18 +81,22 @@ uchar* decode (int n, double tag) {
 
 void compress (string filename, string codename) {
     ofstream fout;
-    uchar* array = fileToArray(filename);
-    int n = sizeof(array) / sizeof(array[0]);
+    // ofstream fout(codename);
+    int n;
+    uchar* array = fileToArray(filename, n);
 
     auto start = chrono::steady_clock::now();
     ArithmeticCode *code = encode(array, n);
     auto end = chrono::steady_clock::now();
-    cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << endl;
+    cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
+    cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
+    cout << "Znacznik: " << code->getTag() << endl;
 
     delete array;
+    cout << "codename: " << codename << endl;
     fout.open(codename);
-    fout << code->n() << endl;
-    fout << code->tag() << endl;
+    fout << code->getN() << endl;
+    fout << code->getTag() << endl;
     fout.close();
 }
 
@@ -120,14 +124,16 @@ void decompress (string codename, string filename) {
     fout.close();
 }
 
-void compareFiles (string file1, string file2) {
-    uchar* array1 = fileToArray(file1);
-    uchar* array2 = fileToArray(file2);
-    int n = sizeof(array1) / sizeof(array1[0]);
+bool compareFiles (string file1, string file2) {
+    int n, n2;
+    uchar* array1 = fileToArray(file1, n);
+    uchar* array2 = fileToArray(file2, n2);
     int i = 0;
+    bool equal = true;
 
-    if (n != sizeof(array2) / sizeof(array2[0])) {
+    if (n != n2) {
         cout << "ERROR: Rozny rozmiar plikow." << endl;
+        equal = false;
     }
     else {
         while (i < n && array1[i] == array2[i]) {
@@ -135,10 +141,12 @@ void compareFiles (string file1, string file2) {
         }
         if (i < n && array1[i] != array2[i]) {
             cout << "ERROR: Znaleziono rozne znaki na pozycji " << i << endl;
+            equal = false;
         }
-        else cout << "SUCCESS - PLiki sa takie same!" << endl;
+        // else cout << "SUCCESS - Pliki sa takie same!" << endl;
     }
 
     delete array1;
     delete array2;
+    return equal;
 }
