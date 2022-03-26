@@ -80,8 +80,8 @@ uchar* decode (int n, double tag) {
 
 
 void compress (string filename, string codename) {
+    cout << "KOMPRESJA PLIKU " << filename << " --> " << codename << endl;
     ofstream fout;
-    // ofstream fout(codename);
     int n;
     uchar* array = fileToArray(filename, n);
 
@@ -94,13 +94,16 @@ void compress (string filename, string codename) {
 
     delete array;
     cout << "codename: " << codename << endl;
+    // ofstream fout(codename, ofstream::out);
     fout.open(codename);
     fout << code->getN() << endl;
     fout << code->getTag() << endl;
     fout.close();
+    cout << endl;
 }
 
 void decompress (string codename, string filename) {
+    cout << "DEKOMPRESJA " << codename << " DO PLIKU " << filename << endl;
     int n;
     double tag;
     uchar* array;
@@ -110,6 +113,7 @@ void decompress (string codename, string filename) {
     fin >> n;
     fin >> tag;
     fin.close();
+    // cout << "n = " << n << "; tag = " << tag << endl;
 
     auto start = chrono::steady_clock::now();
     array = decode(n, tag);
@@ -120,8 +124,9 @@ void decompress (string codename, string filename) {
     for (int i = 0; i < n; i++) {
         fout << array[i];
     }
-    delete array;
     fout.close();
+    delete array;
+    cout << endl;
 }
 
 bool compareFiles (string file1, string file2) {
