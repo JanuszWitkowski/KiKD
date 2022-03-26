@@ -52,6 +52,8 @@ ArithmeticCode *encode (uchar* array, int n) {
     uchar symbol;
     int* charOccs = initCharOccs(1);    // ustaw liczbe wystapien kazdego znaku na 1
     double allOccs = 256.0;
+    string scale = "";      // co to znaczy "dolacz do KODU slowo 01^licznik" ???
+    int counter = 0;
 
     for (int i = 0; i < n; i += 256) {
         block = setBlock(array, block, i, 256, n);
@@ -61,6 +63,25 @@ ArithmeticCode *encode (uchar* array, int n) {
             d = r - l;
             r = l + ((F + charOccs[symbol]) / allOccs) * d;     // dzielenie!!!
             l = l + (F / allOccs) * d;                          // dzielenie!!!
+            // cout << "it: " << i << "; [" << l << ", " << r << ")" << endl;
+            if (i == 0) cout << "it: " << i << "; [" << l << ", " << r << ")" << endl;
+            if (0 <= l && r <= 0.5) {
+                l = 2.0*l;
+                r = 2.0*r;
+                //
+                counter = 0;
+            }
+            else if (0.5 <= l && r <= 1.0) {
+                l = 2.0*l - 1.0;
+                r = 2.0*r - 1.0;
+                //
+                counter = 0;
+            }
+            else if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
+                l = 2*l - 0.5;
+                r = 2*r - 0.5;
+                counter++;
+            }
         }
         updateCharOccs(charOccs, block, 256);
         allOccs += 256.0;
@@ -93,8 +114,6 @@ void compress (string filename, string codename) {
     cout << "Znacznik: " << code->getTag() << endl;
 
     delete array;
-    cout << "codename: " << codename << endl;
-    // ofstream fout(codename, ofstream::out);
     fout.open(codename);
     fout << code->getN() << endl;
     fout << code->getTag() << endl;
@@ -119,11 +138,13 @@ void decompress (string codename, string filename) {
     array = decode(n, tag);
     auto end = chrono::steady_clock::now();
     cout << "Czas dekompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << endl;
+    cout << "Czas dekompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
 
-    fout.open(filename);
-    for (int i = 0; i < n; i++) {
-        fout << array[i];
-    }
+    fout.open(filename, ios::out|ios::binary);
+    fout.write((char *)array, n);
+    // for (int i = 0; i < n; i++) {
+    //     fout.put((char)array[i]);
+    // }
     fout.close();
     delete array;
     cout << endl;

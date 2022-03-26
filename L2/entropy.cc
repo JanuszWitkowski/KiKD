@@ -2,7 +2,6 @@
 #include <fstream>
 #include <limits>
 #include <math.h>
-// #include <tuple>
 
 #include "entropy.hh"
 using namespace std;
@@ -15,12 +14,10 @@ uchar* fileToArray (string filename, int &n) {
     streampos start = fin.tellg();
     fin.ignore(numeric_limits<streamsize>::max());
     n = fin.gcount();
-    // cout << "file2Array n = " << n  << "; gcount = " << fin.gcount() << endl;
     fin.seekg(start,ios_base::beg);
     uchar* array = new uchar[n];
     fin.read((char *)array, n);
     fin.close();
-    // cout << "array[0] = " << array[0] << endl;
     return array;
 }
 
@@ -31,15 +28,6 @@ int* initCharOccs (int value) {
     }
     return charOccs;
 }
-
-// tuple countChars (uchar* array, int n) {
-//       int prev = 0;
-//       for (int i = 0; i < n; i++) {
-//           charOccs[array[i]]++;
-//           charOccsCond[array[i]][prev]++;
-//           prev = array[i];
-//       }
-// }
 
 int* countCharOccs (uchar* array, int n) {
     int* charOccs = initCharOccs(0);
