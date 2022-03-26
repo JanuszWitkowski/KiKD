@@ -5,7 +5,7 @@
 #include <chrono>
 
 #include "entropy.hh"
-#include "arithmetic.hh"
+#include "cabac.hh"
 using namespace std;
 
 typedef unsigned char uchar;
