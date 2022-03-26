@@ -12,7 +12,7 @@ typedef unsigned char uchar;
 class ArithmeticCode {
 private:
     int n;
-    double marker;
+    double tag;
 public:
     ArithmeticCode(int length, double value);
 
@@ -24,17 +24,24 @@ public:
         n = length;
     }
 
-    double marker() {
-        return marker;
+    double tag() {
+        return tag;
     }
 
-    void marker(double value) {
-        marker = value;
+    void tag(double value) {
+        tag = value;
     }
 };
 
-ArithmeticCode *encode (uchar* array, int n);
+uchar* setBlock (uchar* array, uchar* block, int start, int m, int n);
+void updateCharOccs (int* occs, uchar* array, int n);
+double sumOfOccs (int* occs, uchar symbol);
 
-uchar* decode (int n, double marker);
+ArithmeticCode *encode (uchar* array, int n);
+uchar* decode (int n, double tag);
+
+void compress (string filename, string codename);
+void decompress (string codename, string filename);
+void compareFiles (string file1, string file2);
 
 #endif

@@ -11,6 +11,7 @@ typedef unsigned char uchar;
 
 uchar* fileToArray (string filename);
 
+int* initCharOccs (int value);
 // tuple countChars(uchar* array, int n);
 int* countCharOccs (uchar* array, int n);
 int** countCharOccsCond (uchar* array, int n);

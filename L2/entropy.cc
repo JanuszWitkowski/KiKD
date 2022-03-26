@@ -21,6 +21,14 @@ uchar* fileToArray (string filename, int &n) {
     return array;
 }
 
+int* initCharOccs (int value) {
+    int* charOccs = new int[256];
+    for (int i = 0; i < 256; i++) {
+        charOccs[i] = value;
+    }
+    return charOccs;
+}
+
 // tuple countChars (uchar* array, int n) {
 //       int prev = 0;
 //       for (int i = 0; i < n; i++) {
@@ -31,10 +39,7 @@ uchar* fileToArray (string filename, int &n) {
 // }
 
 int* countCharOccs (uchar* array, int n) {
-    int* charOccs = new int[256];
-    for (int i = 0; i < 256; i++) {
-        charOccs[i] = 0;
-    }
+    int* charOccs = initCharOccs(0);
     for (int i = 0; i < n; i++) {
         charOccs[array[i]]++;
     }
