@@ -9,13 +9,13 @@
 #include "cabac.hh"
 using namespace std;
 // using boost::multiprecision::cpp_dec_float_50;
-// using boost::multiprecision::cpp_dec_float_100;
-using boost::multiprecision::cpp_dec_float;
+using boost::multiprecision::cpp_dec_float_100;
+// using boost::multiprecision::cpp_dec_float;
 
 typedef unsigned char uchar;
 // typedef cpp_dec_float_50 fdec;
-// typedef cpp_dec_float_100 fdec;
-typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
+typedef cpp_dec_float_100 fdec;
+// typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
 
 ArithmeticCode::ArithmeticCode(int length, fdec value) {
     setN(length);
@@ -52,50 +52,48 @@ int sumOfOccs (int* occs, uchar symbol) {
 
 // }
 
-ArithmeticCode *encode (uchar* array, int n) {
+ArithmeticCode *encode (uchar* array, int n, int b) {
     fdec tag = 0;
     fdec l = 0, r = 1, d;
     int F;
-    uchar* block = new uchar[256];
+    uchar* block = new uchar[b];
     uchar symbol;
     int* charOccs = initCharOccs(1);    // ustaw liczbe wystapien kazdego znaku na 1
     int allOccs = 256;
     string scale = "";      // co to znaczy "dolacz do KODU slowo 01^licznik" ???
     int counter = 0;
 
-    for (int i = 0; i < n; i += 256) {
-        block = setBlock(array, block, i, 256, n);
-        for (int j = 0; j < 256; j++) {
+    for (int i = 0; i < n; i += b) {
+        block = setBlock(array, block, i, b, n);
+        for (int j = 0; j < b; j++) {
             symbol = block[j];
             F = sumOfOccs(charOccs, symbol);
             d = r - l;
             r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;     // dzielenie!!!
             l = l + ((double)F / (double)allOccs) * d;                          // dzielenie!!!
             // cout << "it: " << i << "; [" << l << ", " << r << ")" << endl;
-            // if (i == 0) cout << "it: " << i << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
-            if (0 <= l && r <= 0.5) {
-                // cout << "!! 1";
+            if (i == 0) cout << "it: " << i + j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
+            while (r <= 0.5) {
                 l = 2*l;
                 r = 2*r;
                 //
                 counter = 0;
             }
-            else if (0.5 <= l && r <= 1) {
-                // cout << "!! 2";
+            while (0.5 <= l) {
                 l = 2*l - 1;
                 r = 2*r - 1;
                 //
                 counter = 0;
             }
-            else if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
-                // cout << "!! 3" << endl;
+            while (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
                 l = 2*l - 0.5;
                 r = 2*r - 0.5;
                 counter++;
             }
+            // if (l == r) cout << "!!!equal" << endl;
         }
-        updateCharOccs(charOccs, block, 256);
-        allOccs += 256;
+        updateCharOccs(charOccs, block, b);
+        allOccs += b;
     }
 
     delete block;
@@ -112,22 +110,23 @@ uchar* decode (int n, double tag) {
 
 
 void compress (string filename, string codename) {
+    int b = 64;
     cout << "KOMPRESJA PLIKU " << filename << " --> " << codename << endl;
     ofstream fout;
     int n;
     uchar* array = fileToArray(filename, n);
 
     auto start = chrono::steady_clock::now();
-    ArithmeticCode *code = encode(array, n);
+    ArithmeticCode *code = encode(array, n, b);
     auto end = chrono::steady_clock::now();
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
-    cout << "Znacznik: " << fixed << setprecision(200) << code->getTag() << endl;
+    cout << "Znacznik: " << fixed << setprecision(100) << code->getTag() << endl;
 
     delete array;
     fout.open(codename);
     fout << code->getN() << endl;
-    fout << fixed << setprecision(200) << code->getTag() << endl;
+    fout << fixed << setprecision(100) << code->getTag() << endl;
     fout.close();
     cout << endl;
 }

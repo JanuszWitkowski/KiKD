@@ -5,22 +5,25 @@
 #include <fstream>
 #include <limits>
 #include <math.h>
+#include <vector>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include "entropy.hh"
 using namespace std;
 typedef unsigned char uchar;
 // using boost::multiprecision::cpp_dec_float_50;
-using boost::multiprecision::cpp_dec_float;
+using boost::multiprecision::cpp_dec_float_100;
+// using boost::multiprecision::cpp_dec_float;
 
 // typedef cpp_dec_float_50 dec;
-// typedef cpp_dec_float_100 fdec;
-typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
+typedef cpp_dec_float_100 fdec;
+// typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
 
 class ArithmeticCode {
 private:
     int n;
     // double tag;
-    fdec tag;
+    // fdec tag;
+    vector<fdec> tags;
 
 public:
     ArithmeticCode(int length, fdec value);
@@ -33,12 +36,20 @@ public:
         n = length;
     }
 
-    fdec getTag() {
-        return tag;
+    // fdec getTag() {
+    //     return tag;
+    // }
+
+    // void setTag(fdec value) {
+    //     tag = value;
+    // }
+
+    void insertTag (fdec tag) {
+        tags.push_back(tag);
     }
 
-    void setTag(fdec value) {
-        tag = value;
+    fdec getTag (int index) {
+        return tags[index];
     }
 };
 
@@ -46,7 +57,7 @@ uchar* setBlock (uchar* array, uchar* block, int start, int m, int n);
 void updateCharOccs (int* occs, uchar* array, int n);
 int sumOfOccs (int* occs, uchar symbol);
 
-ArithmeticCode *encode (uchar* array, int n);
+ArithmeticCode *encode (uchar* array, int n, int b);
 uchar* decode (int n, fdec tag);
 
 void compress (string filename, string codename);

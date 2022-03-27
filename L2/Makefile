@@ -1,7 +1,7 @@
 all: clean main
 
 main: main.o entropy.o cabac.o
-	g++ main.o entropy.o cabac.o -o main
+	@ g++ main.o entropy.o cabac.o -o main
 
 main.o:
 	g++ -c main.cc
