@@ -26,7 +26,8 @@ private:
     vector<fdec> tags;
 
 public:
-    ArithmeticCode(int length, fdec value);
+    ArithmeticCode(int length, vector<fdec> vector);
+    virtual ~ArithmeticCode (void);
 
     int getN() {
         return n;
@@ -50,6 +51,10 @@ public:
 
     fdec getTag (int index) {
         return tags[index];
+    }
+
+    int getTagsSize () {
+        return tags.size();
     }
 };
 

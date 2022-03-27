@@ -17,9 +17,10 @@ typedef unsigned char uchar;
 typedef cpp_dec_float_100 fdec;
 // typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
 
-ArithmeticCode::ArithmeticCode(int length, fdec value) {
+ArithmeticCode::ArithmeticCode(int length, vector<fdec> vector) {
     setN(length);
-    setTag(value);
+    // setTag(value);
+    tags = vector;
 }
 
 uchar* setBlock (uchar* array, uchar* block, int start, int m, int n) {
@@ -53,9 +54,9 @@ int sumOfOccs (int* occs, uchar symbol) {
 // }
 
 ArithmeticCode *encode (uchar* array, int n, int b) {
-    fdec tag = 0;
-    fdec l = 0, r = 1, d;
-    int F;
+    vector<fdec> tags;      // vector of tags for each b-byte block of chars
+    fdec l = 0, r = 1, d;   // bounds
+    int F;      // distribution
     uchar* block = new uchar[b];
     uchar symbol;
     int* charOccs = initCharOccs(1);    // ustaw liczbe wystapien kazdego znaku na 1
@@ -94,13 +95,14 @@ ArithmeticCode *encode (uchar* array, int n, int b) {
         }
         updateCharOccs(charOccs, block, b);
         allOccs += b;
+        tags.push_back((l + r) / 2);
+        l = 0; r = 1;
     }
 
     delete block;
     delete charOccs;
 
-    tag = (l + r) / 2;
-    return new ArithmeticCode(n, tag);
+    return new ArithmeticCode(n, tags);
 }
 
 uchar* decode (int n, double tag) {
@@ -121,14 +123,18 @@ void compress (string filename, string codename) {
     auto end = chrono::steady_clock::now();
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
-    cout << "Znacznik: " << fixed << setprecision(100) << code->getTag() << endl;
+    // cout << "Znacznik: " << fixed << setprecision(100) << code->getTag() << endl;
 
     delete array;
     fout.open(codename);
     fout << code->getN() << endl;
-    fout << fixed << setprecision(100) << code->getTag() << endl;
+    int size = code->getTagsSize();
+    for (int i = 0; i < size; i++) {
+        fout << fixed << setprecision(100) << code->getTag(i) << endl;
+    }
     fout.close();
     cout << endl;
+    delete code;
 }
 
 void decompress (string codename, string filename) {
