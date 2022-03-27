@@ -3,6 +3,7 @@
 #include <limits>
 #include <math.h>
 #include <chrono>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include "entropy.hh"
 #include "cabac.hh"
