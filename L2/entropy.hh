@@ -8,38 +8,13 @@
 using namespace std;
 typedef unsigned char uchar;
 
-class File {
-private:
-  uchar *array;     // bajty
-  int n;            // dlugosc
-  int *charOccs;        // wystapienia poszczegolnych znakow
-  int **charOccsCond;   // wystapienia poszczegolnych znakow po danych znakach
-public:
-  File (string filename);
+uchar* fileToArray (string filename, int &n);
 
-  virtual ~File (void);
+int* initCharOccs (int value);
+int* countCharOccs (uchar* array, int n);
+int** countCharOccsCond (uchar* array, int n);
 
-  void countChars (void);
-
-  double entropy (void);
-  double entropyCond (void);
-
-  void printArray (void);
-  void printBytesOccurances (void);
-  void printCharacterOccurances (void);
-  void printBytesCondOccurances (void);
-
-  uchar byte (int i) {
-    return array[i];
-  }
-
-  void byte (int i, uchar c) {
-    array[i] = c;
-  }
-
-  int length (void) {
-    return n;
-  }
-};
+double entropy (int* charOccs);
+double entropyCond (int** charOccsCond);
 
 #endif

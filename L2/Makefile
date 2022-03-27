@@ -1,6 +1,16 @@
-all: clean glowny
+all: clean main
 
-glowny: glowny.o entropy.o
+main: main.o entropy.o cabac.o
+	@ g++ main.o entropy.o cabac.o -o main
 
-clean: glowny
-	rm glowny
+main.o:
+	g++ -c main.cc
+
+entropy.o: entropy.cc entropy.hh
+	g++ -c entropy.cc
+
+cabac.o: cabac.cc cabac.hh
+	g++ -c cabac.cc
+
+clean:
+	rm -rf main *.o

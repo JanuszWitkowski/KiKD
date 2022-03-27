@@ -1,1 +1,5 @@
 /L1/pliki/
+*.o
+*.gch
+/L2/*.cps
+/L2/main
