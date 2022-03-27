@@ -12,6 +12,7 @@ int main (int argc, char** argv) {
         codename = codename;
         compress(filename, codename);
         decompress(codename, newname);
+        cout << compareFiles(filename, filename) << endl;
     }
     return 0;
 }

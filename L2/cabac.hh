@@ -5,16 +5,25 @@
 #include <fstream>
 #include <limits>
 #include <math.h>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include "entropy.hh"
 using namespace std;
 typedef unsigned char uchar;
+// using boost::multiprecision::cpp_dec_float_50;
+using boost::multiprecision::cpp_dec_float;
+
+// typedef cpp_dec_float_50 dec;
+// typedef cpp_dec_float_100 fdec;
+typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
 
 class ArithmeticCode {
 private:
     int n;
-    double tag;
+    // double tag;
+    fdec tag;
+
 public:
-    ArithmeticCode(int length, double value);
+    ArithmeticCode(int length, fdec value);
 
     int getN() {
         return n;
@@ -24,21 +33,21 @@ public:
         n = length;
     }
 
-    double getTag() {
+    fdec getTag() {
         return tag;
     }
 
-    void setTag(double value) {
+    void setTag(fdec value) {
         tag = value;
     }
 };
 
 uchar* setBlock (uchar* array, uchar* block, int start, int m, int n);
 void updateCharOccs (int* occs, uchar* array, int n);
-double sumOfOccs (int* occs, uchar symbol);
+int sumOfOccs (int* occs, uchar symbol);
 
 ArithmeticCode *encode (uchar* array, int n);
-uchar* decode (int n, double tag);
+uchar* decode (int n, fdec tag);
 
 void compress (string filename, string codename);
 void decompress (string codename, string filename);

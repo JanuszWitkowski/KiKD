@@ -8,10 +8,16 @@
 #include "entropy.hh"
 #include "cabac.hh"
 using namespace std;
+// using boost::multiprecision::cpp_dec_float_50;
+// using boost::multiprecision::cpp_dec_float_100;
+using boost::multiprecision::cpp_dec_float;
 
 typedef unsigned char uchar;
+// typedef cpp_dec_float_50 fdec;
+// typedef cpp_dec_float_100 fdec;
+typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
 
-ArithmeticCode::ArithmeticCode(int length, double value) {
+ArithmeticCode::ArithmeticCode(int length, fdec value) {
     setN(length);
     setTag(value);
 }
@@ -34,8 +40,8 @@ void updateCharOccs (int* occs, uchar* array, int n) {
     }
 }
 
-double sumOfOccs (int* occs, uchar symbol) {
-    double sum = 0.0;
+int sumOfOccs (int* occs, uchar symbol) {
+    int sum = 0;
     for (int i = symbol - 1; i >= 0; i--) {
         sum += occs[i];
     }
@@ -47,12 +53,13 @@ double sumOfOccs (int* occs, uchar symbol) {
 // }
 
 ArithmeticCode *encode (uchar* array, int n) {
-    double tag = 0.0;
-    double l = 0.0, r = 1.0, d, F;
+    fdec tag = 0;
+    fdec l = 0, r = 1, d;
+    int F;
     uchar* block = new uchar[256];
     uchar symbol;
     int* charOccs = initCharOccs(1);    // ustaw liczbe wystapien kazdego znaku na 1
-    double allOccs = 256.0;
+    int allOccs = 256;
     string scale = "";      // co to znaczy "dolacz do KODU slowo 01^licznik" ???
     int counter = 0;
 
@@ -62,36 +69,39 @@ ArithmeticCode *encode (uchar* array, int n) {
             symbol = block[j];
             F = sumOfOccs(charOccs, symbol);
             d = r - l;
-            r = l + ((F + charOccs[symbol]) / allOccs) * d;     // dzielenie!!!
-            l = l + (F / allOccs) * d;                          // dzielenie!!!
+            r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;     // dzielenie!!!
+            l = l + ((double)F / (double)allOccs) * d;                          // dzielenie!!!
             // cout << "it: " << i << "; [" << l << ", " << r << ")" << endl;
-            if (i == 0) cout << "it: " << i << "; [" << l << ", " << r << ")" << endl;
+            // if (i == 0) cout << "it: " << i << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
             if (0 <= l && r <= 0.5) {
-                l = 2.0*l;
-                r = 2.0*r;
+                // cout << "!! 1";
+                l = 2*l;
+                r = 2*r;
                 //
                 counter = 0;
             }
-            else if (0.5 <= l && r <= 1.0) {
-                l = 2.0*l - 1.0;
-                r = 2.0*r - 1.0;
+            else if (0.5 <= l && r <= 1) {
+                // cout << "!! 2";
+                l = 2*l - 1;
+                r = 2*r - 1;
                 //
                 counter = 0;
             }
             else if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
+                // cout << "!! 3" << endl;
                 l = 2*l - 0.5;
                 r = 2*r - 0.5;
                 counter++;
             }
         }
         updateCharOccs(charOccs, block, 256);
-        allOccs += 256.0;
+        allOccs += 256;
     }
 
     delete block;
     delete charOccs;
 
-    tag = (l + r) / 2.0;
+    tag = (l + r) / 2;
     return new ArithmeticCode(n, tag);
 }
 
@@ -112,12 +122,12 @@ void compress (string filename, string codename) {
     auto end = chrono::steady_clock::now();
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
-    cout << "Znacznik: " << code->getTag() << endl;
+    cout << "Znacznik: " << fixed << setprecision(200) << code->getTag() << endl;
 
     delete array;
     fout.open(codename);
     fout << code->getN() << endl;
-    fout << code->getTag() << endl;
+    fout << fixed << setprecision(200) << code->getTag() << endl;
     fout.close();
     cout << endl;
 }
