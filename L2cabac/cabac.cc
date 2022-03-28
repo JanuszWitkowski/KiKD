@@ -72,8 +72,8 @@ ArithmeticCode *encode (uchar* array, int n, int b) {
             d = r - l;
             r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;     // dzielenie!!!
             l = l + ((double)F / (double)allOccs) * d;                          // dzielenie!!!
-            // cout << "it: " << i << "; [" << l << ", " << r << ")" << endl;
-            if (i == 0) cout << "it: " << i + j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
+            // cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
+            // if (i == 0) cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
             while (r <= 0.5) {
                 l = 2*l;
                 r = 2*r;

@@ -27,7 +27,9 @@ private:
 
 public:
     ArithmeticCode(int length, vector<fdec> vector);
-    virtual ~ArithmeticCode (void);
+    virtual ~ArithmeticCode (void) {
+        vector<fdec>().swap(tags);
+    }
 
     int getN() {
         return n;
