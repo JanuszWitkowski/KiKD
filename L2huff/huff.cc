@@ -19,41 +19,64 @@ FILE* f;
 int bit_counter;
 /* current byte */
 uchar cur_byte;
+// unsigned char cur_byte;
 
 /* write 1 or 0 bit */
 void write_bit(uchar bit) {
+    cerr << "!!!!!!!! 3.3.1" << endl;
     if(++bit_counter == 8) {
+        cerr << "!!!!!!!! 3.3.2" << endl;
         fwrite(&cur_byte,1,1,f);
+        cerr << "!!!!!!!! 3.3.3" << endl;
         bit_counter = 0;
+        cerr << "!!!!!!!! 3.3.4" << endl;
         cur_byte = 0;
+        cerr << "!!!!!!!! 3.3.5" << endl;
     }
+    cerr << "!!!!!!!! 3.3.6" << endl;
     cur_byte <<= 1;
+    cerr << "!!!!!!!! 3.3.7" << endl;
     cur_byte |= bit;
+    cerr << "!!!!!!!! 3.3.8" << endl;
 }
 
-map<string, int> encode (uchar* array, int n, int* charOccs) {
-    map<string, int> dict;
+map<uchar, string> createDict (int* charOccs) {
+    cerr << "!!!! 0" << endl;
+    map<uchar, string> dict;
     vector<uchar> usedChars;
     vector<string> strings;
-    vector<Node*> nodes;
+    vector<Node> nodes;
+    cerr << "!!!! 0.1" << endl;
     for (int i = 0; i < 256; i++) {
+        cerr << "!!!! 0.11: " << i << endl;
         strings.push_back("");
+        cerr << "!!!!!! 0.111: " << i << endl;
         if (charOccs[i] > 0) {
+            cerr << "!!!!!! 0.112: " << i << endl;
             usedChars.push_back(i);
-            Node *node;
-            node->symbols.push_back(i);
-            node->occ = charOccs[i];
+            cerr << "!!!!!! 0.113: " << i << endl;
+            Node node = {{}, charOccs[i]};
+            cerr << "!!!!!! 0.114: " << i << endl;
+            // node->symbols = new vector<>();
+            node.symbols.push_back(i);
+            cerr << "!!!!!! 0.115: " << i << endl;
+            node.occ = charOccs[i];
+            cerr << "!!!!!! 0.116: " << i << endl;
             nodes.push_back(node);
+            cerr << "!!!!!! 0.117: " << i << endl;
         }
+        cerr << "!!!! 0.19: " << i << endl;
     }
     int m = usedChars.size();
+    cerr << "!!!! 1" << endl;
 
+    for (int j = 0; j < m-1; j++) {     // for
     //find 2 smallest
     int minv1 = INT_MAX, minv2 = INT_MAX, tmpv;
     int mini1, mini2, tmpi;
     for (int i = 0; i < m; i++) {
-        if (nodes[i]->occ < minv2) {
-            minv2 = nodes[i]->occ;
+        if (nodes[i].occ < minv2) {
+            minv2 = nodes[i].occ;
             mini2 = i;
             if (minv2 < minv1) {
                 tmpv = minv1;
@@ -65,21 +88,69 @@ map<string, int> encode (uchar* array, int n, int* charOccs) {
             }
         }
     }
-    Node *node;
-    for (int i = 0; i < nodes[mini1]->symbols.size(); i++) {
-        node->symbols.push_back(nodes[mini1]->symbols[i]);
-        strings[nodes[mini1]->symbols[i]] = "0" + strings[nodes[mini1]->symbols[i]];
+    cerr << "!!!! 2" << endl;
+    Node node;
+    for (int i = 0; i < nodes[mini1].symbols.size(); i++) {
+        node.symbols.push_back(nodes[mini1].symbols[i]);
+        strings[nodes[mini1].symbols[i]] = "0" + strings[nodes[mini1].symbols[i]];
     }
-    for (int i = 0; i < nodes[mini2]->symbols.size(); i++) {
-        node->symbols.push_back(nodes[mini2]->symbols[i]);
-        strings[nodes[mini2]->symbols[i]] = "1" + strings[nodes[mini2]->symbols[i]];
+    for (int i = 0; i < nodes[mini2].symbols.size(); i++) {
+        node.symbols.push_back(nodes[mini2].symbols[i]);
+        strings[nodes[mini2].symbols[i]] = "1" + strings[nodes[mini2].symbols[i]];
     }
-    node->occ = nodes[mini1]->occ + nodes[mini2]->occ;
+    node.occ = nodes[mini1].occ + nodes[mini2].occ;
     nodes[mini1] = node;
     nodes.erase(nodes.begin() + mini2);
 
-    // int m = usedChars.size();
+    }   // end for
+    cerr << "!!!! 3" << endl;
+
+    // uzupelnienie slownika
+    for (int j = 0; j < m; j++) {
+        dict.insert({ usedChars[j], strings[usedChars[j]] });
+    }
+    cerr << "!!!! 4" << endl;
+
     return dict;
+}
+
+map<string, uchar> encode (uchar* array, int n, map<uchar, string> dict, char* codename) {
+    cerr << "!!!!!! 1" << endl;
+    f = fopen(codename, "w");       // kikd.kkd
+    cerr << "!!!!!! 2" << endl;
+    uchar symbol, bit;
+    bit_counter = 0;
+    cur_byte = 0;
+    string code;
+    int size;
+    cerr << "!!!!!! 3" << endl;
+    for (int i = 0; i < n; i++) {
+        cerr << "!!!!!! 3.1: " << i << endl;
+        code = dict.at(array[i]);
+        cerr << "!!!!!! 3.2: " << i << endl;
+        size = code.length();
+        cerr << "!!!!!! 3.3: " << i << endl;
+        for (int j = 0; j < size; j++) {
+            write_bit(code.at(j));
+        }
+        cerr << "!!!!!! 3.4: " << i << endl;
+    }
+    if(bit_counter > 0) {
+         // pad the last byte with zeroes
+         cur_byte <<= 8 - bit_counter;
+         fwrite(&cur_byte, 1, 1, f);
+    }
+    fclose(f);
+    cerr << "!!!!!! 4" << endl;
+
+    // create new dict
+    map<string, uchar> new_dict;
+    cerr << "!!!!!! 5" << endl;
+    for (auto const& x : dict) {
+        new_dict.insert({x.second, x.first});
+    }
+    cerr << "!!!!!! 6" << endl;
+    return new_dict;
 }
 
 // int main()
