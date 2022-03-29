@@ -13,32 +13,6 @@ using namespace std;
 // typedef unsigned char uchar;
 typedef uint8_t uchar;
 
-FILE* f;
-
-/* how many bits in current byte */
-int bit_counter;
-/* current byte */
-uchar cur_byte;
-// unsigned char cur_byte;
-
-/* write 1 or 0 bit */
-void write_bit(uchar bit) {
-    cerr << "!!!!!!!! 3.3.1" << endl;
-    if(++bit_counter == 8) {
-        cerr << "!!!!!!!! 3.3.2" << endl;
-        fwrite(&cur_byte,1,1,f);
-        cerr << "!!!!!!!! 3.3.3" << endl;
-        bit_counter = 0;
-        cerr << "!!!!!!!! 3.3.4" << endl;
-        cur_byte = 0;
-        cerr << "!!!!!!!! 3.3.5" << endl;
-    }
-    cerr << "!!!!!!!! 3.3.6" << endl;
-    cur_byte <<= 1;
-    cerr << "!!!!!!!! 3.3.7" << endl;
-    cur_byte |= bit;
-    cerr << "!!!!!!!! 3.3.8" << endl;
-}
 
 map<uchar, string> createDict (int* charOccs) {
     cerr << "!!!! 0" << endl;
@@ -90,6 +64,7 @@ map<uchar, string> createDict (int* charOccs) {
     }
     cerr << "!!!! 2" << endl;
     Node node;
+    // Node tmp1, tmp2;
     for (int i = 0; i < nodes[mini1].symbols.size(); i++) {
         node.symbols.push_back(nodes[mini1].symbols[i]);
         strings[nodes[mini1].symbols[i]] = "0" + strings[nodes[mini1].symbols[i]];
@@ -99,6 +74,7 @@ map<uchar, string> createDict (int* charOccs) {
         strings[nodes[mini2].symbols[i]] = "1" + strings[nodes[mini2].symbols[i]];
     }
     node.occ = nodes[mini1].occ + nodes[mini2].occ;
+    delete nodes[mini1].symbols;
     nodes[mini1] = node;
     nodes.erase(nodes.begin() + mini2);
 
@@ -114,13 +90,15 @@ map<uchar, string> createDict (int* charOccs) {
     return dict;
 }
 
-map<string, uchar> encode (uchar* array, int n, map<uchar, string> dict, char* codename) {
+map<string, uchar> encode (uchar* array, int n, map<uchar, string> dict, string codename) {
     cerr << "!!!!!! 1" << endl;
-    f = fopen(codename, "w");       // kikd.kkd
+    // FILE* f = fopen(codename, "w");       // kikd.kkd
+    ofstream fout;
+    fout.open(codename, ios::out|ios::binary);
     cerr << "!!!!!! 2" << endl;
     uchar symbol, bit;
-    bit_counter = 0;
-    cur_byte = 0;
+    int bit_counter = 0;
+    uchar cur_byte = 0;
     string code;
     int size;
     cerr << "!!!!!! 3" << endl;
@@ -131,16 +109,36 @@ map<string, uchar> encode (uchar* array, int n, map<uchar, string> dict, char* c
         size = code.length();
         cerr << "!!!!!! 3.3: " << i << endl;
         for (int j = 0; j < size; j++) {
-            write_bit(code.at(j));
+            // write_bit(code.at(j));
+            cerr << "!!!!!!!! 3.3.1" << endl;
+            if(++bit_counter == 8) {
+                cerr << "!!!!!!!! 3.3.2" << endl;
+                // fwrite(&cur_byte,1,1,f);
+                fout << cur_byte;
+                cerr << "!!!!!!!! 3.3.3" << endl;
+                bit_counter = 0;
+                cerr << "!!!!!!!! 3.3.4" << endl;
+                cur_byte = 0;
+                cerr << "!!!!!!!! 3.3.5" << endl;
+            }
+            cerr << "!!!!!!!! 3.3.6" << endl;
+            // cur_byte <<= 1;
+            cur_byte *= 2;
+            cerr << "!!!!!!!! 3.3.7" << endl;
+            // cur_byte |= bit;
+            cur_byte += code.at(j);
+            cerr << "!!!!!!!! 3.3.8" << endl;
         }
         cerr << "!!!!!! 3.4: " << i << endl;
     }
     if(bit_counter > 0) {
          // pad the last byte with zeroes
          cur_byte <<= 8 - bit_counter;
-         fwrite(&cur_byte, 1, 1, f);
+        //  fwrite(&cur_byte, 1, 1, f);
+        fout << cur_byte;
     }
-    fclose(f);
+    // fclose(f);
+    fout.close();
     cerr << "!!!!!! 4" << endl;
 
     // create new dict
