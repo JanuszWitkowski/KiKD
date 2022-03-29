@@ -12,5 +12,9 @@ entropy.o: entropy.cc entropy.hh
 cabac.o: cabac.cc cabac.hh
 	g++ -c cabac.cc
 
+test: main testy/test3.bin
+	clear
+	./main testy/test3.bin
+
 clean:
 	rm -rf main *.o

@@ -15,13 +15,15 @@ using boost::multiprecision::cpp_dec_float_100;
 typedef unsigned char uchar;
 // typedef cpp_dec_float_50 fdec;
 // typedef cpp_dec_float_100 fdec;
+typedef cpp_dec_float_100 bigfloat;
 // typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
 typedef double fdec;
 
-ArithmeticCode::ArithmeticCode(int length, vector<fdec> vector) {
+ArithmeticCode::ArithmeticCode(int length, fdec value) {
+// ArithmeticCode::ArithmeticCode(int length, vector<fdec> vector) {
     setN(length);
-    // setTag(value);
-    tags = vector;
+    setTag(value);
+    // tags = vector;
 }
 
 uchar* setBlock (uchar* array, uchar* block, int start, int m, int n) {
@@ -50,21 +52,57 @@ int sumOfOccs (int* occs, uchar symbol) {
     return sum;
 }
 
-// void encodeBlock (uchar* block) {
+unsigned int countBuffer (int* occs, int n) {
+    int j;
+    unsigned int m;
+    double mult = 1.0, prev = 1.0, value = 0.0;
+    double inf = std::numeric_limits<double>::infinity();
+    for (int i = 0; i < 256; i++) {
+        prev = mult;
+        mult *= occs[i];
+        if (mult >= inf) {
+            value += (i - j)*log2(n) - log2(prev);
+            mult = 1.0*occs[i];
+        }
+        cout << "occs[" << i << "] = " << occs[i] << "; mult = " << mult << endl;
+    }
+    value += (256 - j)*log2(n) - log2(mult);
+    m = ceil(value) + 1;
+    std::cout << "m = " << m << endl;
+    return 0;
+}
 
-// }
+void printCharOccs (int* occs) {
+    for (int i = 0; i < 256; i++) {
+        cout << "occs[" << i << "] = " << occs[i] << endl;
+    }
+}
 
-ArithmeticCode *encode (uchar* array, int n, int b) {
-    vector<fdec> tags;      // vector of tags for each b-byte block of chars
+double stringToDouble (string s) {
+    double value = 0.0;
+    for (int i = 1; i <= s.length(); i++) {
+        if (s.at(i-1) == '1') value += pow(2.0, -i);
+    }
+    return value;
+}
+
+ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
+    fdec tagDouble;
+    string tag = "";        // prawdziwy znacznik
+    string line = "";
     fdec l = 0, r = 1, d;   // bounds
     int F;      // distribution
+    unsigned int m;
     uchar* block = new uchar[b];
     uchar symbol;
     int* charOccs = initCharOccs(1);    // ustaw liczbe wystapien kazdego znaku na 1
     int allOccs = 256;
-    string scale = "";      // co to znaczy "dolacz do KODU slowo 01^licznik" ???
     int counter = 0;
     bool do_scaling = true;
+
+    ifstream tmpin;
+    ofstream fout;
+    ofstream tmpout("temp.cps");
 
     for (int i = 0; i < n; i += b) {
         block = setBlock(array, block, i, b, n);
@@ -74,39 +112,22 @@ ArithmeticCode *encode (uchar* array, int n, int b) {
             d = r - l;
             r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;     // dzielenie!!!
             l = l + ((double)F / (double)allOccs) * d;                          // dzielenie!!!
-            // cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
-            // if (i == 0) cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
-            // while (r <= 0.5) {
-            //     l = 2*l;
-            //     r = 2*r;
-            //     //
-            //     counter = 0;
-            // }
-            // while (0.5 <= l) {
-            //     l = 2*l - 1;
-            //     r = 2*r - 1;
-            //     //
-            //     counter = 0;
-            // }
-            // while (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
-            //     l = 2*l - 0.5;
-            //     r = 2*r - 0.5;
-            //     counter++;
-            // }
             do {
                 do_scaling = false;
                 if (r <= 0.5) {
                     do_scaling = true;
                     l = 2*l;
                     r = 2*r;
-                    //
+                    tmpout << 0;
+                    for (; counter > 0; counter--) tmpout << 1;
                     counter = 0;
                 }
                 if (0.5 <= l) {
                     do_scaling = true;
                     l = 2*l - 1;
                     r = 2*r - 1;
-                    //
+                    tmpout << 1;
+                    for (; counter > 0; counter--) tmpout << 0;
                     counter = 0;
                 }
                 if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
@@ -116,61 +137,77 @@ ArithmeticCode *encode (uchar* array, int n, int b) {
                     counter++;
                 }
             } while (do_scaling);
-            // cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
-            // cout << "znacznik: " << fixed << setprecision(100) << (l + r) / 2 << endl;
-            // cout << "znacznik: " << (l + r) / 2 << endl;
-            // if (l == r) cout << "!!!equal" << endl;
+            // tmpout << "|-|";
         }
         updateCharOccs(charOccs, block, b);
+        // printCharOccs(charOccs);
         allOccs += b;
-        // tags.push_back((l + r) / 2);
-        // l = 0; r = 1;
     }
+
+    tagDouble = (l + r) / 2;
+    tmpout.close();
+    tmpin.open("temp.cps");
+    fout.open(codename);
+    fout << n << endl;
+    // m = countBuffer(charOccs, n);
+    while (getline(tmpin, line)) {
+        fout << line << endl;
+    }
+    // fout << tagDouble << endl;
+    fout.close();
+    tmpin.close();
 
     delete block;
     delete charOccs;
-
-    tags.push_back((l + r) / 2);
-    return new ArithmeticCode(n, tags);
+    return new ArithmeticCode(n, tagDouble);
 }
 
-uchar* decode (int n, double tag) {
+uchar* decode (int n, string tag) {
     uchar* array = new uchar[n];
+    string buffer = "";
+    int bufferSize = 32;
+    double bufferTag, l = 0.0, r = 1.0;
+    int symbol;
+    int* charOccs = initCharOccs(1);
+    // double v = pow(2.0, -32.0);
+    // cout << "double: " << v << endl;
+    buffer = tag.substr(0, bufferSize);
+    bufferTag = stringToDouble(buffer);
+    // cout << "buffer = " << buffer << "; tag = " << bufferTag << endl;
+
+    for (int i = 0; i < n; i++) {
+        while (false) {
+            //
+        }
+    }
+
     return array;
 }
 
 
 void compress (string filename, string codename) {
     int b = 256;
-    cout << "KOMPRESJA PLIKU " << filename << " --> " << codename << endl;
+    std::cout << "KOMPRESJA PLIKU " << filename << " --> " << codename << endl;
     ofstream fout;
     int n;
     uchar* array = fileToArray(filename, n);
 
     auto start = chrono::steady_clock::now();
-    ArithmeticCode *code = encode(array, n, b);
+    ArithmeticCode *code = encode(array, n, b, codename);
     auto end = chrono::steady_clock::now();
-    cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
-    cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
-    // cout << "Znacznik: " << fixed << setprecision(100) << code->getTag() << endl;
+    std::cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
+    std::cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
 
     delete array;
-    fout.open(codename);
-    fout << code->getN() << endl;
-    int size = code->getTagsSize();
-    for (int i = 0; i < size; i++) {
-        // fout << fixed << setprecision(100) << code->getTag(i) << endl;
-        fout << code->getTag(i) << endl;
-    }
-    fout.close();
-    cout << endl;
+    std::cout << endl;
     delete code;
 }
 
 void decompress (string codename, string filename) {
-    cout << "DEKOMPRESJA " << codename << " DO PLIKU " << filename << endl;
+    std::cout << "DEKOMPRESJA " << codename << " DO PLIKU " << filename << endl;
     int n;
-    double tag;
+    // fdec tag;
+    string tag;
     uchar* array;
     ifstream fin;
     ofstream fout;
@@ -183,8 +220,8 @@ void decompress (string codename, string filename) {
     auto start = chrono::steady_clock::now();
     array = decode(n, tag);
     auto end = chrono::steady_clock::now();
-    cout << "Czas dekompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << endl;
-    cout << "Czas dekompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
+    std::cout << "Czas dekompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
+    std::cout << "Czas dekompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
 
     fout.open(filename, ios::out|ios::binary);
     fout.write((char *)array, n);
@@ -193,7 +230,7 @@ void decompress (string codename, string filename) {
     // }
     fout.close();
     delete array;
-    cout << endl;
+    std::cout << endl;
 }
 
 bool compareFiles (string file1, string file2) {
@@ -204,7 +241,7 @@ bool compareFiles (string file1, string file2) {
     bool equal = true;
 
     if (n != n2) {
-        cout << "ERROR: Rozny rozmiar plikow." << endl;
+        std::cout << "ERROR: Rozny rozmiar plikow." << endl;
         equal = false;
     }
     else {
@@ -212,7 +249,7 @@ bool compareFiles (string file1, string file2) {
             i++;
         }
         if (i < n && array1[i] != array2[i]) {
-            cout << "ERROR: Znaleziono rozne znaki na pozycji " << i << endl;
+            std::cout << "ERROR: Znaleziono rozne znaki na pozycji " << i << endl;
             equal = false;
         }
         // else cout << "SUCCESS - Pliki sa takie same!" << endl;

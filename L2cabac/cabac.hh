@@ -23,14 +23,15 @@ class ArithmeticCode {
 private:
     int n;
     // double tag;
-    // fdec tag;
-    vector<fdec> tags;
+    fdec tag;
+    // vector<fdec> tags;
 
 public:
-    ArithmeticCode(int length, vector<fdec> vector);
-    virtual ~ArithmeticCode (void) {
-        vector<fdec>().swap(tags);
-    }
+ArithmeticCode(int length, fdec tag);
+    // ArithmeticCode(int length, vector<fdec> vector);
+    // virtual ~ArithmeticCode (void) {
+    //     vector<fdec>().swap(tags);
+    // }
 
     int getN() {
         return n;
@@ -40,33 +41,34 @@ public:
         n = length;
     }
 
-    // fdec getTag() {
-    //     return tag;
+    fdec getTag() {
+        return tag;
+    }
+
+    void setTag(fdec value) {
+        tag = value;
+    }
+
+    // void insertTag (fdec tag) {
+    //     tags.push_back(tag);
     // }
 
-    // void setTag(fdec value) {
-    //     tag = value;
+    // fdec getTag (int index) {
+    //     return tags[index];
     // }
 
-    void insertTag (fdec tag) {
-        tags.push_back(tag);
-    }
-
-    fdec getTag (int index) {
-        return tags[index];
-    }
-
-    int getTagsSize () {
-        return tags.size();
-    }
+    // int getTagsSize () {
+    //     return tags.size();
+    // }
 };
 
 uchar* setBlock (uchar* array, uchar* block, int start, int m, int n);
 void updateCharOccs (int* occs, uchar* array, int n);
 int sumOfOccs (int* occs, uchar symbol);
+unsigned int countBuffer (int* occs, int n);
 
-ArithmeticCode *encode (uchar* array, int n, int b);
-uchar* decode (int n, fdec tag);
+ArithmeticCode *encode (uchar* array, int n, int b, string codename);
+uchar* decode (int n, string tag);
 
 void compress (string filename, string codename);
 void decompress (string codename, string filename);
