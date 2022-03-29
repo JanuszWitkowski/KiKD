@@ -93,6 +93,8 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
     fdec l = 0, r = 1, d;   // bounds
     int F;      // distribution
     unsigned int m;
+    uchar buffer = 0;
+    int bufferCounter = 0;
     uchar* block = new uchar[b];
     uchar symbol;
     int* charOccs = initCharOccs(1);    // ustaw liczbe wystapien kazdego znaku na 1
@@ -118,16 +120,48 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
                     do_scaling = true;
                     l = 2*l;
                     r = 2*r;
-                    tmpout << 0;
-                    for (; counter > 0; counter--) tmpout << 1;
+                    // tmpout << 0;
+                    buffer = buffer*10;
+                    bufferCounter++;
+                    if (bufferCounter == 8) {
+                        tmpout << buffer;
+                        buffer = 0;
+                        bufferCounter = 0;
+                    }
+                    for (; counter > 0; counter--) {
+                        // tmpout << 1;
+                        buffer = buffer*10 + 1;
+                        bufferCounter++;
+                        if (bufferCounter == 8) {
+                            tmpout << buffer;
+                            buffer = 0;
+                            bufferCounter = 0;
+                        }
+                    }
                     counter = 0;
                 }
                 if (0.5 <= l) {
                     do_scaling = true;
                     l = 2*l - 1;
                     r = 2*r - 1;
-                    tmpout << 1;
-                    for (; counter > 0; counter--) tmpout << 0;
+                    // tmpout << 1;
+                    buffer = buffer*10 + 1;
+                    bufferCounter++;
+                    if (bufferCounter == 8) {
+                        tmpout << buffer;
+                        buffer = 0;
+                        bufferCounter = 0;
+                    }
+                    for (; counter > 0; counter--) {
+                        // tmpout << 0;
+                        buffer = buffer*10;
+                        bufferCounter++;
+                        if (bufferCounter == 8) {
+                            tmpout << buffer;
+                            buffer = 0;
+                            bufferCounter = 0;
+                        }
+                    }
                     counter = 0;
                 }
                 if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
