@@ -196,23 +196,88 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
     return new ArithmeticCode(n, tagDouble);
 }
 
+
+double bufferToDouble (double value, uchar buffer, int i) {
+    i += 8;
+    while (buffer > 0) {
+        if (buffer % 2 == 1) {
+            value += pow(2.0, -i);
+        }
+        i--;
+        buffer /= 2;
+    }
+    return value;
+}
+
+double shiftBuffer (double value, )
+
 uchar* decode (int n, string tag) {
     uchar* array = new uchar[n];
-    string buffer = "";
+    // string buffer = "";
+    uchar buffer, symbol;
     int bufferSize = 32;
-    double bufferTag, l = 0.0, r = 1.0;
-    int symbol;
+    double bufferTag, l = 0.0, r = 1.0, lj, rj, d;
+    int F, allOccs = 256, counter = 0, probCounter = 0;
     int* charOccs = initCharOccs(1);
+    bool do_scaling;
     // double v = pow(2.0, -32.0);
     // cout << "double: " << v << endl;
-    buffer = tag.substr(0, bufferSize);
-    bufferTag = stringToDouble(buffer);
-    // cout << "buffer = " << buffer << "; tag = " << bufferTag << endl;
+    bufferTag = 0.0;
+    for (int i = 0; i < 4; i++) {
+        buffer = tag.at(i);
+        bufferTag = bufferToDouble(bufferTag, buffer, 8*i);
+    }
+    // buffer = tag.substr(0, bufferSize);
+    // bufferTag = stringToDouble(buffer);
+    cout << "; tag = " << bufferTag << endl;
 
     for (int i = 0; i < n; i++) {
-        while (false) {
-            //
-        }
+        symbol = 0;
+        d = r - l;
+        do {
+            symbol++;
+            F = sumOfOccs(charOccs, symbol);
+            // r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;
+            l = l + ((double)F / (double)allOccs) * d;
+        } while (l + ((double)F / (double)allOccs) * d <= bufferTag);
+        symbol--;
+        array[i] = symbol;
+        F = sumOfOccs(charOccs, symbol);
+        r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;
+        l = l + ((double)F / (double)allOccs) * d;
+
+        do {
+            do_scaling = false;
+            if (r <= 0.5) {
+                do_scaling = true;
+                l = 2*l;
+                r = 2*r;
+                bufferTag = 2*bufferTag;
+                // tmpout << 0;
+                for (; counter > 0; counter--) {
+                    // tmpout << 1;
+                }
+                counter = 0;
+            }
+            if (0.5 <= l) {
+                do_scaling = true;
+                l = 2*l - 1;
+                r = 2*r - 1;
+                bufferTag = 2*bufferTag - 1;
+                // tmpout << 1;
+                for (; counter > 0; counter--) {
+                    // tmpout << 0;
+                }
+                counter = 0;
+            }
+            if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
+                do_scaling = true;
+                l = 2*l - 0.5;
+                r = 2*r - 0.5;
+                bufferTag = 2*bufferTag - 0.5;
+                counter++;
+            }
+        } while (do_scaling);
     }
 
     return array;
