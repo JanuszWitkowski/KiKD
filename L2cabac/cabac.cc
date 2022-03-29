@@ -241,7 +241,7 @@ uchar* decode (int n, string tag, int b) {
     int F, allOccs = 256, nextBit, modulo;
     int counter = 0, occsCounter = 0, fileCounter = 0, buffCounter = 0;
     long long int tagSize = tag.length();
-    bool do_scaling;
+    bool do_scaling = false;
     // double v = pow(2.0, -32.0);
     // cout << "double: " << v << endl;
     bufferTag = 0.0;
@@ -252,7 +252,7 @@ uchar* decode (int n, string tag, int b) {
     buffer = tag.at(fileCounter++);
     // buffer = tag.substr(0, bufferSize);
     // bufferTag = stringToDouble(buffer);
-    cout << "; tag = " << bufferTag << endl;
+    // cout << "; tag = " << bufferTag << endl;
 
     for (int i = 0; i < n; i++) {
         //cerr << "!!NEXT SYMBOL " << i << endl;
@@ -279,6 +279,7 @@ uchar* decode (int n, string tag, int b) {
         F = sumOfOccs(charOccs, symbol);
         r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;
         l = l + ((double)F / (double)allOccs) * d;
+        //cerr << "PRESCALE i=" << i << "; [" << l << ", " << r << "); TAG = " << bufferTag << endl;
 
         do {
             //cerr << "scaling " << i << endl;
@@ -299,9 +300,10 @@ uchar* decode (int n, string tag, int b) {
                 buffCounter++;
                 if (buffCounter == 8) {
                     buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                    buffCounter = 0;
                 }
                 //cerr << "-afterBufferCounter " << i << endl;
-                if (nextBit == 0) {
+                if (nextBit == 1) {
                     bufferTag += pow(2.0, -bufferSize);
                 }
                 //cerr << "-afterNextBit " << i << endl;
@@ -315,9 +317,10 @@ uchar* decode (int n, string tag, int b) {
                     buffCounter++;
                     if (buffCounter == 8) {
                         buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                        buffCounter = 0;
                     }
                     //cerr << "-post " << i << endl;
-                    if (nextBit == 0) {
+                    if (nextBit == 1) {
                         bufferTag += pow(2.0, -bufferSize);
                     }
                     //cerr << "-end " << i << endl;
@@ -340,9 +343,10 @@ uchar* decode (int n, string tag, int b) {
                 //cerr << "*afterBuffer " << i << endl;
                 if (buffCounter == 8) {
                     buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                    buffCounter = 0;
                 }
                 //cerr << "*preNextBit " << i << endl;
-                if (nextBit == 0) {
+                if (nextBit == 1) {
                     bufferTag += pow(2.0, -bufferSize);
                 }
                 //cerr << "*afterNextBit " << i << endl;
@@ -356,8 +360,9 @@ uchar* decode (int n, string tag, int b) {
                     buffCounter++;
                     if (buffCounter == 8) {
                         buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                        buffCounter = 0;
                     }
-                    if (nextBit == 0) {
+                    if (nextBit == 1) {
                         bufferTag += pow(2.0, -bufferSize);
                     }
                 }
@@ -374,7 +379,9 @@ uchar* decode (int n, string tag, int b) {
                 counter++;
             }
             //cerr << "scaling done " << i << endl;
+            //cerr << "-----> [" << l << ", " << r << "); TAG = " << bufferTag << endl;
         } while (do_scaling);
+        //cerr << "POSTSCALE i=" << i << "; [" << l << ", " << r << "); TAG = " << bufferTag << endl;
         //cerr << "!!SCALING COMPLETE " << i << endl;
     }
 
