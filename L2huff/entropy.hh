@@ -6,7 +6,8 @@
 #include <limits>
 #include <math.h>
 using namespace std;
-typedef unsigned char uchar;
+// typedef unsigned char uchar;
+typedef uint8_t uchar;
 
 uchar* fileToArray (string filename, int &n);
 
