@@ -230,7 +230,7 @@ int pow2 (int e) {
     return value;
 }
 
-uchar* decode (int n, string tag, int b) {
+uchar* decode (int n, uchar* tag, int tagSize, int b) {
     uchar* array = new uchar[n];
     int* charOccs = initCharOccs(1);
     int* tmpOccs = initCharOccs(0);
@@ -240,17 +240,17 @@ uchar* decode (int n, string tag, int b) {
     double bufferTag, l = 0.0, r = 1.0, d;
     int F, allOccs = 256, nextBit, modulo;
     int counter = 0, occsCounter = 0, fileCounter = 0, buffCounter = 0;
-    long long int tagSize = tag.length();
+    // long long int tagSize = tag.length();
     bool do_scaling = false;
     // double v = pow(2.0, -32.0);
     // cout << "double: " << v << endl;
     bufferTag = 0.0;
     for (fileCounter = 0; 8*fileCounter < bufferSize; fileCounter++) {
-        buffer = tag.at(fileCounter);
+        buffer = tag[fileCounter];
         cout << "bufferr: " << buffer << endl;
         bufferTag = bufferToDouble(bufferTag, buffer, 8*fileCounter);
     }
-    buffer = tag.at(fileCounter++);
+    buffer = tag[fileCounter++];
     cout << "bufferrr: " << buffer << endl;
     // buffer = tag.substr(0, bufferSize);
     // bufferTag = stringToDouble(buffer);
@@ -304,7 +304,7 @@ uchar* decode (int n, string tag, int b) {
                 buffCounter++;
                 if (i < 10) cerr << "buffer: " << buffer << endl;
                 if (buffCounter == 8) {
-                    buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                    buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                     buffCounter = 0;
                 }
                 //cerr << "-afterBufferCounter " << i << endl;
@@ -321,7 +321,7 @@ uchar* decode (int n, string tag, int b) {
                     buffer = modulo;
                     buffCounter++;
                     if (buffCounter == 8) {
-                        buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                        buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                         buffCounter = 0;
                     }
                     //cerr << "-post " << i << endl;
@@ -347,7 +347,7 @@ uchar* decode (int n, string tag, int b) {
                 buffCounter++;
                 //cerr << "*afterBuffer " << i << endl;
                 if (buffCounter == 8) {
-                    buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                    buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                     buffCounter = 0;
                 }
                 //cerr << "*preNextBit " << i << endl;
@@ -364,7 +364,7 @@ uchar* decode (int n, string tag, int b) {
                     buffer = modulo;
                     buffCounter++;
                     if (buffCounter == 8) {
-                        buffer = fileCounter < tagSize ? tag.at(fileCounter++) : 0;
+                        buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                         buffCounter = 0;
                     }
                     if (nextBit == 1) {
@@ -417,7 +417,7 @@ void compress (string filename, string codename) {
 void decompress (string codename, string filename) {
     int b = BLOCK_SIZE;
     std::cout << "DEKOMPRESJA " << codename << " DO PLIKU " << filename << endl;
-    int n;
+    int n, m = 0;
     // fdec tag;
     string tag;
     uchar* array;
@@ -427,10 +427,11 @@ void decompress (string codename, string filename) {
     fin >> n;
     fin >> tag;
     fin.close();
+    uchar* tagArray = fileToArray("temp.cps", m);
     // cout << "n = " << n << "; tag = " << tag << endl;
 
     auto start = chrono::steady_clock::now();
-    array = decode(n, tag, b);
+    array = decode(n, tagArray, m, b);
     auto end = chrono::steady_clock::now();
     std::cout << "Czas dekompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
     std::cout << "Czas dekompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
@@ -442,6 +443,7 @@ void decompress (string codename, string filename) {
     // }
     fout.close();
     delete array;
+    delete tagArray;
     std::cout << endl;
 }
 

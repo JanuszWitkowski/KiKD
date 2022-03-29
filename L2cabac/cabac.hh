@@ -68,7 +68,7 @@ int sumOfOccs (int* occs, uchar symbol);
 unsigned int countBuffer (int* occs, int n);
 
 ArithmeticCode *encode (uchar* array, int n, int b, string codename);
-uchar* decode (int n, string tag, int b);
+uchar* decode (int n, uchar* tag, int tagSize, int b);
 
 void compress (string filename, string codename);
 void decompress (string codename, string filename);
