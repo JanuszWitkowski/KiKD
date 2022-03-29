@@ -12,7 +12,8 @@ typedef uint8_t uchar;
 
 int main (int argc, char** argv) {
     string filename = "", newname = "newfile";
-    char* codename = "kikd.kkd";
+    // char* codename = "kikd.kkd";
+    string codename = "kikd.kkd";
     if (argc >= 2) {
         cerr << "!! 1" << endl;
         filename = argv[1];

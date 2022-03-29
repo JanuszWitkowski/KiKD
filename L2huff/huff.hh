@@ -19,6 +19,6 @@ typedef struct {
 } Node;
 
 map<uchar, string> createDict (int* charOccs);
-map<string, uchar> encode (uchar* array, int n, map<uchar, string> dict, char* codename);
+map<string, uchar> encode (uchar* array, int n, map<uchar, string> dict, string codename);
 
 #endif
