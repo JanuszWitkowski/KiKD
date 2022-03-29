@@ -15,8 +15,9 @@ using boost::multiprecision::cpp_dec_float_100;
 // using boost::multiprecision::cpp_dec_float;
 
 // typedef cpp_dec_float_50 dec;
-typedef cpp_dec_float_100 fdec;
+// typedef cpp_dec_float_100 fdec;
 // typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
+typedef double fdec;
 
 class ArithmeticCode {
 private:

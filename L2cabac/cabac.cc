@@ -14,8 +14,9 @@ using boost::multiprecision::cpp_dec_float_100;
 
 typedef unsigned char uchar;
 // typedef cpp_dec_float_50 fdec;
-typedef cpp_dec_float_100 fdec;
+// typedef cpp_dec_float_100 fdec;
 // typedef boost::multiprecision::number<cpp_dec_float<200> > fdec;
+typedef double fdec;
 
 ArithmeticCode::ArithmeticCode(int length, vector<fdec> vector) {
     setN(length);
@@ -63,6 +64,7 @@ ArithmeticCode *encode (uchar* array, int n, int b) {
     int allOccs = 256;
     string scale = "";      // co to znaczy "dolacz do KODU slowo 01^licznik" ???
     int counter = 0;
+    bool do_scaling = true;
 
     for (int i = 0; i < n; i += b) {
         block = setBlock(array, block, i, b, n);
@@ -74,34 +76,61 @@ ArithmeticCode *encode (uchar* array, int n, int b) {
             l = l + ((double)F / (double)allOccs) * d;                          // dzielenie!!!
             // cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
             // if (i == 0) cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
-            while (r <= 0.5) {
-                l = 2*l;
-                r = 2*r;
-                //
-                counter = 0;
-            }
-            while (0.5 <= l) {
-                l = 2*l - 1;
-                r = 2*r - 1;
-                //
-                counter = 0;
-            }
-            while (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
-                l = 2*l - 0.5;
-                r = 2*r - 0.5;
-                counter++;
-            }
+            // while (r <= 0.5) {
+            //     l = 2*l;
+            //     r = 2*r;
+            //     //
+            //     counter = 0;
+            // }
+            // while (0.5 <= l) {
+            //     l = 2*l - 1;
+            //     r = 2*r - 1;
+            //     //
+            //     counter = 0;
+            // }
+            // while (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
+            //     l = 2*l - 0.5;
+            //     r = 2*r - 0.5;
+            //     counter++;
+            // }
+            do {
+                do_scaling = false;
+                if (r <= 0.5) {
+                    do_scaling = true;
+                    l = 2*l;
+                    r = 2*r;
+                    //
+                    counter = 0;
+                }
+                if (0.5 <= l) {
+                    do_scaling = true;
+                    l = 2*l - 1;
+                    r = 2*r - 1;
+                    //
+                    counter = 0;
+                }
+                if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
+                    do_scaling = true;
+                    l = 2*l - 0.5;
+                    r = 2*r - 0.5;
+                    counter++;
+                }
+            } while (do_scaling);
+            // cout << "it: " << i << " : " << j << "; [" << fixed << setprecision(100) << l << ", " << r << ")" << endl;
+            // cout << "znacznik: " << fixed << setprecision(100) << (l + r) / 2 << endl;
+            // cout << "znacznik: " << (l + r) / 2 << endl;
             // if (l == r) cout << "!!!equal" << endl;
         }
         updateCharOccs(charOccs, block, b);
         allOccs += b;
-        tags.push_back((l + r) / 2);
-        l = 0; r = 1;
+        // tags.push_back((l + r) / 2);
+        // l = 0; r = 1;
     }
 
     delete block;
     delete charOccs;
 
+    tags.push_back((l + r) / 2);
     return new ArithmeticCode(n, tags);
 }
 
@@ -112,7 +141,7 @@ uchar* decode (int n, double tag) {
 
 
 void compress (string filename, string codename) {
-    int b = 64;
+    int b = 256;
     cout << "KOMPRESJA PLIKU " << filename << " --> " << codename << endl;
     ofstream fout;
     int n;
@@ -130,7 +159,8 @@ void compress (string filename, string codename) {
     fout << code->getN() << endl;
     int size = code->getTagsSize();
     for (int i = 0; i < size; i++) {
-        fout << fixed << setprecision(100) << code->getTag(i) << endl;
+        // fout << fixed << setprecision(100) << code->getTag(i) << endl;
+        fout << code->getTag(i) << endl;
     }
     fout.close();
     cout << endl;
