@@ -21,11 +21,15 @@ uchar* fileToArray (string filename, int &n) {
     return array;
 }
 
+void fillOccs (int* occs, int value) {
+    for (int i = 0; i < 256; i++) {
+        occs[i] = value;
+    }
+}
+
 int* initCharOccs (int value) {
     int* charOccs = new int[256];
-    for (int i = 0; i < 256; i++) {
-        charOccs[i] = value;
-    }
+    fillOccs(charOccs, value);
     return charOccs;
 }
 

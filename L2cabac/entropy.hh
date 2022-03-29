@@ -10,6 +10,7 @@ typedef unsigned char uchar;
 
 uchar* fileToArray (string filename, int &n);
 
+void fillOccs (int* occs, int value);
 int* initCharOccs (int value);
 int* countCharOccs (uchar* array, int n);
 int** countCharOccsCond (uchar* array, int n);
