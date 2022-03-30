@@ -13,6 +13,7 @@ using boost::multiprecision::cpp_dec_float_100;
 // using boost::multiprecision::cpp_dec_float;
 
 typedef unsigned char uchar;
+// typedef uint8_t uchar;
 // typedef cpp_dec_float_50 fdec;
 // typedef cpp_dec_float_100 fdec;
 typedef cpp_dec_float_100 bigfloat;
@@ -247,35 +248,27 @@ uchar* decode (int n, uchar* tag, int tagSize, int b) {
     bufferTag = 0.0;
     for (fileCounter = 0; 8*fileCounter < bufferSize; fileCounter++) {
         buffer = tag[fileCounter];
-        cout << "bufferr: " << buffer << endl;
+        // cout << "bufferr: " << buffer << endl;
         bufferTag = bufferToDouble(bufferTag, buffer, 8*fileCounter);
     }
     buffer = tag[fileCounter++];
-    cout << "bufferrr: " << buffer << endl;
-    // buffer = tag.substr(0, bufferSize);
-    // bufferTag = stringToDouble(buffer);
+    // cout << "bufferrr: " << buffer << endl;
     // cout << "; tag = " << bufferTag << endl;
 
     for (int i = 0; i < n; i++) {
-        //cerr << "!!NEXT SYMBOL " << i << endl;
         symbol = 0;
         d = r - l;
-        //cerr << "!!pre-DO " << i << endl;
         do {
             symbol++;
-            //cerr << "symbol = " << symbol << "; tag = " << bufferTag << "; " << i << endl;
             F = sumOfOccs(charOccs, symbol);
         } while (symbol > 0 && l + ((double)F / (double)allOccs) * d <= bufferTag);
-        //cerr << "!!post-DO " << i << endl;
 
         symbol--;
         array[i] = symbol;
-        // cerr << (int)symbol << endl;
 
         tmpOccs[symbol]++;
         occsCounter++;
         if (occsCounter == b) {
-            // cerr << "!!!OCCSCOUNTER" << endl;
             updateCharOccs(charOccs, tmpOccs);
             occsCounter = 0;
         }
@@ -283,39 +276,26 @@ uchar* decode (int n, uchar* tag, int tagSize, int b) {
         F = sumOfOccs(charOccs, symbol);
         r = l + (((double)F + (double)charOccs[symbol]) / (double)allOccs) * d;
         l = l + ((double)F / (double)allOccs) * d;
-        //cerr << "PRESCALE i=" << i << "; [" << l << ", " << r << "); TAG = " << bufferTag << endl;
 
         do {
-            //cerr << "scaling " << i << endl;
             do_scaling = false;
             if (r <= 0.5) {
-                //cerr << "case1 " << i << endl;
                 do_scaling = true;
                 l = 2*l;
                 r = 2*r;
                 bufferTag = 2*bufferTag;
-                // tmpout << 0;
-                //cerr << "-nextBit1 " << i << endl;
-                // nextBit = buffer / (int)pow(2.0, 7 - buffCounter);
                 modulo = buffer % pow2(buffCounter);
                 nextBit = buffer - modulo;
                 buffer = modulo;
-                //cerr << "-nextBit2 " << i << endl;
                 buffCounter++;
-                if (i < 10) cerr << "buffer: " << buffer << endl;
                 if (buffCounter == 8) {
                     buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                     buffCounter = 0;
                 }
-                //cerr << "-afterBufferCounter " << i << endl;
                 if (nextBit == 1) {
                     bufferTag += pow(2.0, -bufferSize);
                 }
-                //cerr << "-afterNextBit " << i << endl;
                 for (; counter > 0; counter--) {
-                    // tmpout << 1;
-                    //cerr << "-pre " << i << endl;
-                    // nextBit = buffer / (int)pow(2.0, 7 - buffCounter);
                     modulo = buffer % pow2(buffCounter);
                     nextBit = buffer - modulo;
                     buffer = modulo;
@@ -324,41 +304,29 @@ uchar* decode (int n, uchar* tag, int tagSize, int b) {
                         buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                         buffCounter = 0;
                     }
-                    //cerr << "-post " << i << endl;
                     if (nextBit == 1) {
                         bufferTag += pow(2.0, -bufferSize);
                     }
-                    //cerr << "-end " << i << endl;
                 }
-                //cerr << "-afterFor " << i << endl;
                 counter = 0;
             }
             if (0.5 <= l) {
-                //cerr << "case2 " << i << endl;
                 do_scaling = true;
                 l = 2*l - 1;
                 r = 2*r - 1;
                 bufferTag = 2*bufferTag - 1;
-                // tmpout << 1;
-                // nextBit = buffer / (int)pow(2.0, 7 - buffCounter);
                 modulo = buffer % pow2(buffCounter);
                 nextBit = buffer - modulo;
                 buffer = modulo;
                 buffCounter++;
-                //cerr << "*afterBuffer " << i << endl;
                 if (buffCounter == 8) {
                     buffer = fileCounter < tagSize ? tag[fileCounter++] : 0;
                     buffCounter = 0;
                 }
-                //cerr << "*preNextBit " << i << endl;
                 if (nextBit == 1) {
                     bufferTag += pow(2.0, -bufferSize);
                 }
-                //cerr << "*afterNextBit " << i << endl;
                 for (; counter > 0; counter--) {
-                    //cerr << "*forCounter " << i << " counter=" << counter << endl;
-                    // tmpout << 0;
-                    // nextBit = buffer / (int)pow(2.0, 7 - buffCounter);
                     modulo = buffer % pow2(buffCounter);
                     nextBit = buffer - modulo;
                     buffer = modulo;
@@ -371,28 +339,23 @@ uchar* decode (int n, uchar* tag, int tagSize, int b) {
                         bufferTag += pow(2.0, -bufferSize);
                     }
                 }
-                //cerr << "*afterForCounter " << i << endl;
                 counter = 0;
-                //cerr << "*counter=0 " << i << endl;
             }
             if (l < 0.5 && 0.5 < r && 0.25 <= l && r <= 0.75) {
-                //cerr << "case3 " << i << endl;
                 do_scaling = true;
                 l = 2*l - 0.5;
                 r = 2*r - 0.5;
                 bufferTag = 2*bufferTag - 0.5;
                 counter++;
             }
-            //cerr << "scaling done " << i << endl;
-            //cerr << "-----> [" << l << ", " << r << "); TAG = " << bufferTag << endl;
         } while (do_scaling);
-        // cerr << "POSTSCALE i=" << i << "; [" << l << ", " << r << "); TAG = " << bufferTag << endl;
-        // if (i < 1000) cerr << "i=" << i << "; [" << l << ", " << r << "); TAG = " << bufferTag << endl;
-        //cerr << "!!SCALING COMPLETE " << i << endl;
-        // cerr << "it=" << i << endl;
     }
     cerr << endl;
     return array;
+}
+
+double CR (int nieskompresowany, int skompresowany) {
+    return 100 * (1.0 - ((double)skompresowany / (double)nieskompresowany));
 }
 
 
@@ -408,6 +371,9 @@ void compress (string filename, string codename) {
     auto end = chrono::steady_clock::now();
     std::cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
     std::cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
+    int skompresowany = 0;
+    uchar* array_skompresowany = fileToArray(codename, skompresowany);
+    std::cout << "Wskaznik kompresji: " << CR(n, skompresowany) << endl;
 
     delete array;
     std::cout << endl;

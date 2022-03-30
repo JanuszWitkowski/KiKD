@@ -10,6 +10,7 @@
 #include "entropy.hh"
 using namespace std;
 typedef unsigned char uchar;
+// typedef uint8_t uchar;
 // using boost::multiprecision::cpp_dec_float_50;
 using boost::multiprecision::cpp_dec_float_100;
 // using boost::multiprecision::cpp_dec_float;
