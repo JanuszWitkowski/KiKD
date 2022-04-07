@@ -4,12 +4,18 @@
 #include <iostream>
 #include <string>
 using namespace std;
-typedef unsigned char uchar;
+typedef unsigned int uint;
 
-// string decToBin (int x);
-string eliasGamma (int x);
-string eliasDelta (int x);
-string eliasOmega (int x);
-string fibonacci (int x);
+string eliasGamma (uint x);
+uint eliasGamma (string s);
+
+string eliasDelta (uint x);
+uint eliasDelta (string s);
+
+string eliasOmega (uint x);
+uint eliasOmega (string s);
+
+string fibonacci (uint x);
+uint fibonacci (string s);
 
 #endif
