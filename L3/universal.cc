@@ -25,6 +25,7 @@ uint binToDec (string b) {
     return x;
 }
 
+
 string eliasGamma (uint x) {
     string b = decToBin(x);
     size_t n = b.length();
@@ -40,6 +41,7 @@ uint eliasGamma (string s) {
     return binToDec(s.substr(k, k+1));
 }
 
+
 string eliasDelta (uint x) {
     string b = decToBin(x);
     size_t n = b.length();
@@ -54,6 +56,7 @@ uint eliasDelta (string s) {
     n = binToDec(s.substr(k, k+1));
     return binToDec('1' + s.substr(k+k+1, n-1));
 }
+
 
 string eliasOmega (uint x) {
     string s = "0", b;

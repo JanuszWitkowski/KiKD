@@ -1,13 +1,13 @@
 all: clean main
 
-main: main.o entropy.o universal.o
-	g++ main.o entropy.o universal.o -o main
+main: main.o stats.o universal.o
+	g++ main.o stats.o universal.o -o main
 
 main.o:
 	g++ -c main.cc
 
-entropy.o: entropy.cc entropy.hh
-	g++ -c entropy.cc
+stats.o: stats.cc stats.hh
+	g++ -c stats.cc
 
 universal.o: universal.cc universal.hh
 	g++ -c universal.cc

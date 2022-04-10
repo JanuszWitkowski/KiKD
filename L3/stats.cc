@@ -3,7 +3,7 @@
 #include <limits>
 #include <math.h>
 
-#include "entropy.hh"
+#include "stats.hh"
 using namespace std;
 typedef unsigned char uchar;
 // typedef uint8_t uchar;

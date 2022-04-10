@@ -1,5 +1,5 @@
-#ifndef __ENTROPY_H
-#define __ENTROPY_H
+#ifndef __STATS_H
+#define __STATS_H
 
 #include <iostream>
 #include <fstream>
@@ -18,5 +18,10 @@ int** countCharOccsCond (uchar* array, int n);
 
 double entropy (int* charOccs);
 double entropyCond (int** charOccsCond);
+
+double rate (string filename, string codename);
+double avgCodeLength (string filename);
+
+void summary (string filename, string codename);
 
 #endif
