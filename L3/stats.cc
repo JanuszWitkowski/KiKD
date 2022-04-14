@@ -8,20 +8,6 @@ using namespace std;
 typedef unsigned char uchar;
 // typedef uint8_t uchar;
 
-uchar* fileToArray (string filename, int &n) {
-    ifstream fin;
-    // int n;
-    fin.open(filename, ios::in|ios::binary);
-    streampos start = fin.tellg();
-    fin.ignore(numeric_limits<streamsize>::max());
-    n = fin.gcount();
-    fin.seekg(start,ios_base::beg);
-    uchar* array = new uchar[n];
-    fin.read((char *)array, n);
-    fin.close();
-    return array;
-}
-
 void fillOccs (int* occs, int value) {
     for (int i = 0; i < 256; i++) {
         occs[i] = value;

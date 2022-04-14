@@ -1,10 +1,13 @@
 all: clean main
 
-main: main.o stats.o universal.o
-	g++ main.o stats.o universal.o -o main
+main: main.o bitrw.o stats.o universal.o
+	g++ main.o bitrw.o stats.o universal.o -o main
 
 main.o:
 	g++ -c main.cc
+
+bitrw.o:
+	g++ -c bitrw.cc
 
 stats.o: stats.cc stats.hh
 	g++ -c stats.cc
