@@ -25,7 +25,7 @@ uchar* fileToArray (string filename, size_t &n) {
 // HANDLER
 BitHandler::BitHandler() {
     byteBuffer = 0;
-    byteBufferIndex = -1;
+    byteBufferIndex = 0;
 }
 
 // READER
@@ -39,13 +39,25 @@ BitReader::~BitReader (void) {
 }
 
 bool BitReader::isNextBitOne () {
-    if (byteBufferIndex < 0) {
+    // cout << "nextBit " << byteBufferIndex << endl;
+    if (byteBufferIndex == 0) {
+        // cout << "bytBuffer: " << fileIndex << endl;
         byteBuffer = file[fileIndex];
         fileIndex++;
-        byteBufferIndex = 7;
+        byteBufferIndex = 8;
     }
+    // if ((byteBuffer >> (byteBufferIndex - 1)) & 1 > 0) {
+    //     cout << "nextBit: " << ((byteBuffer >> (byteBufferIndex - 1)) & 1) << endl;
+    // }
+    byteBufferIndex--;
     return (byteBuffer >> byteBufferIndex) & 1 > 0;
 }
+
+void BitReader::printArray (void) {
+      for (size_t i = 0; i < fileSize; i++) {
+          cout << file[i] << " ";
+      }
+  }
 
 // WRITER
 BitWriter::BitWriter (string filename) {
@@ -59,21 +71,22 @@ BitWriter::~BitWriter (void) {
 
 void BitWriter::clearBuffer () {
     byteBuffer = 0;
-    byteBufferIndex = 7;
+    byteBufferIndex = 8;
 }
 
 void BitWriter::writeBit (int bit) {
-    if (byteBufferIndex < 0) {
+    if (byteBufferIndex == 0) {
         file << byteBuffer;
+        // cerr << byteBuffer << endl;
         clearBuffer();
     }
-    byteBuffer = byteBuffer*10 + bit;
+    byteBuffer = (byteBuffer << 1) + bit;
     byteBufferIndex--;
 }
 
 void BitWriter::padWithZeros () {
-    while (byteBufferIndex >= 0) {
-        byteBuffer *= 10;
+    while (byteBufferIndex > 0) {
+        byteBuffer << 1;
         byteBufferIndex--;
     }
     file << byteBuffer;

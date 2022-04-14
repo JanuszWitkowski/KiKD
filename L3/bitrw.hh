@@ -27,6 +27,7 @@ public:
     BitReader(string filename);
     virtual ~BitReader (void);
     bool isNextBitOne();
+    void printArray();
 
     uchar* getFileArray () {
         return file;

@@ -2,6 +2,7 @@ all: clean main
 
 main: main.o bitrw.o stats.o universal.o
 	g++ main.o bitrw.o stats.o universal.o -o main
+	rm *.o
 
 main.o:
 	g++ -c main.cc

@@ -6,6 +6,8 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 
 int main () {
+    string filename, newname;
+
     uint n = 654;
     string g = eliasGamma(n);
     string d = eliasDelta(n);
@@ -18,10 +20,16 @@ int main () {
     cout << d << " == " << nd << "\n";
     cout << o << " == " << no << "\n";
 
-    BitReader *reader = new BitReader("testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt");
-    BitWriter *writer = new BitWriter("output/test0.txt");
+    filename = "testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt";
+    newname = "output/test0.txt";
+    // filename = "testy/test2.bin";
+    // newname = "output/test2.bin";
+
+    BitReader *reader = new BitReader(filename);
+    reader->printArray();
+    BitWriter *writer = new BitWriter(newname);
     int bit = 0;
-    for (int i = 0; i < reader->getFileSize(); i++) {
+    for (size_t i = 0; i < reader->getFileSize() * 8; i++) {
         bit = reader->isNextBitOne() ? 1:0;
         writer->writeBit(bit);
     }
