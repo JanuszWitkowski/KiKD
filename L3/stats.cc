@@ -75,29 +75,3 @@ double entropyCond (int* charOccs, int** charOccsCond, int n) {
     return H / n;
 }
 
-// void printArray (uchar* array, int n) {
-//     for (int i = 0; i < n; i++) {
-//         cout << array[i] << " ";
-//     }
-// }
-
-// void printBytesOccurances (int* charOccs) {
-//     for (int i = 0; i < 256; i++) {
-//         cout << i << ": " << charOccs[i] << endl;
-//     }
-// }
-
-// void printCharacterOccurances (int* charOccs) {
-//     for (int i = 0; i < 256; i++) {
-//         cout << (char)i << " " << charOccs[i] << endl;
-//     }
-// }
-
-// void printBytesCondOccurances (int** charOccsCond) {
-//     for (int i = 0; i < 256; i++) {
-//         for (int j = 0; j < 256; j++) {
-//             cout << charOccsCond[i][j] << " ";
-//         }
-//         cout << endl;
-//     }
-// }

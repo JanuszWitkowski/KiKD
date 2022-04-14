@@ -39,16 +39,11 @@ BitReader::~BitReader (void) {
 }
 
 bool BitReader::isNextBitOne () {
-    // cout << "nextBit " << byteBufferIndex << endl;
     if (byteBufferIndex == 0) {
-        // cout << "bytBuffer: " << fileIndex << endl;
         byteBuffer = file[fileIndex];
         fileIndex++;
         byteBufferIndex = 8;
     }
-    // if ((byteBuffer >> (byteBufferIndex - 1)) & 1 > 0) {
-    //     cout << "nextBit: " << ((byteBuffer >> (byteBufferIndex - 1)) & 1) << endl;
-    // }
     byteBufferIndex--;
     return (byteBuffer >> byteBufferIndex) & 1 > 0;
 }
@@ -77,7 +72,6 @@ void BitWriter::clearBuffer () {
 void BitWriter::writeBit (int bit) {
     if (byteBufferIndex == 0) {
         file << byteBuffer;
-        // cerr << byteBuffer << endl;
         clearBuffer();
     }
     byteBuffer = (byteBuffer << 1) + bit;

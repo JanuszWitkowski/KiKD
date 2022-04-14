@@ -26,7 +26,6 @@ int main () {
     // newname = "output/test2.bin";
 
     BitReader *reader = new BitReader(filename);
-    reader->printArray();
     BitWriter *writer = new BitWriter(newname);
     int bit = 0;
     for (size_t i = 0; i < reader->getFileSize() * 8; i++) {

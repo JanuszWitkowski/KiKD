@@ -1,20 +1,20 @@
 all: clean main
 
 main: main.o bitrw.o stats.o universal.o
-	g++ main.o bitrw.o stats.o universal.o -o main
+	g++ -ggdb3 main.o bitrw.o stats.o universal.o -o main
 	rm *.o
 
 main.o:
-	g++ -c main.cc
+	g++ -ggdb3 -c main.cc
 
 bitrw.o:
-	g++ -c bitrw.cc
+	g++ -ggdb3 -c bitrw.cc
 
 stats.o: stats.cc stats.hh
-	g++ -c stats.cc
+	g++ -ggdb3 -c stats.cc
 
 universal.o: universal.cc universal.hh
-	g++ -c universal.cc
+	g++ -ggdb3 -c universal.cc
 
 # test: main testy/test3.bin
 # 	clear
