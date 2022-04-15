@@ -36,15 +36,16 @@ int main () {
     // delete(reader);
     // delete(writer);
 
-    uint tab[] = {654321, 1, 1, 0, 0, 137, 42, 5, 0, 1, 777};
-    size_t tabSize = 11;
+    uint tab[] = {137, 1, 1, 0, 0, 1234567890, 48, 5, 654};
+    size_t tabSize = 9;
     BitWriter *writer = new BitWriter(outputname);
     for (size_t i = 0; i < tabSize; i++) {
         cout << tab[i] << " ";
         eliasGamma(tab[i], writer);
     }
     cout << endl;
-    // writer->padWithZeros();
+    writer->padWithZeros();
+    // writer->padWithZerosByte();
     delete(writer);
     BitReader *reader = new BitReader(outputname);
     for (size_t i = 0; i < tabSize; i++) {

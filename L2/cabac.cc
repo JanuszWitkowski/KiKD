@@ -355,7 +355,7 @@ uchar* decode (int n, uchar* tag, int tagSize, int b) {
 }
 
 double CR (int nieskompresowany, int skompresowany) {
-    return 100 * (1.0 - ((double)skompresowany / (double)nieskompresowany));
+    return 100.0 * (1.0 - ((double)skompresowany / (double)nieskompresowany));
 }
 
 

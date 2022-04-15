@@ -57,6 +57,7 @@ public:
     virtual ~BitWriter (void);
     void writeBit(int bit);
     void padWithZeros();
+    void padWithZerosByte();
     void closeFile();
 };
 

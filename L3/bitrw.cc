@@ -90,11 +90,20 @@ void BitWriter::writeBit (int bit) {
 }
 
 void BitWriter::padWithZeros () {
-    while (byteBufferIndex > 0) {
-        byteBuffer << 1;
-        byteBufferIndex--;
+    if (byteBufferIndex != 8) {
+        while (byteBufferIndex > 0) {
+            byteBuffer << 1;
+            byteBufferIndex--;
+        }
+        file << byteBuffer;
     }
-    file << byteBuffer;
+}
+
+void BitWriter::padWithZerosByte () {
+    if (byteBufferIndex < 8)
+        padWithZeros();
+    file << 0;
+    // file << endl;
 }
 
 void BitWriter::closeFile () {

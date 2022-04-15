@@ -41,16 +41,17 @@ void eliasGamma (uint x, BitWriter* writer) {
     }
     else {
         size_t n = bitIndex + 1;
-        // cout << "Size: " << n;
+        cout <<"; Size: " << n;
         for (; n > 1; n--)
             writer->writeBit(0);
-        // cout << "; number = ";
+        cout << "; number = ";
         for (; bitIndex > 0; bitIndex--) {
             writer->writeBit((x >> bitIndex) & 1);
-            // cout << ((x >> bitIndex) & 1);
+            cout << ((x >> bitIndex) & 1);
         }
-        // cout << endl;
         writer->writeBit(x & 1);
+        cout << (x & 1);
+        cout << endl;
     }
 }
 
@@ -66,9 +67,12 @@ uint eliasGamma (BitReader* reader) {
         else return 0;
     }
     uint x = 1;
+    cout << ";; Size: " << n+1 << " NewNumber = 1";
     for (; n > 0; n--) {
         x = (x << 1) + reader->getNextBit();
+        cout << reader->getCurrentBit();
     }
+    cout << endl;
     return x;
 }
 

@@ -14,11 +14,11 @@ int* initCharOccs (int value);
 int* countCharOccs (uchar* array, int n);
 int** countCharOccsCond (uchar* array, int n);
 
-double entropy (int* charOccs);
-double entropyCond (int** charOccsCond);
+double entropy (int* charOccs, size_t n);
+double entropyCond (int* charOccs, int** charOccsCond, size_t n);
 
-double rate (string filename, string codename);
-double avgCodeLength (string filename);
+double compressionRate (size_t fileSize, size_t codeSize);
+double avgCodeLength (size_t fileSize, size_t codeSize);
 
 void summary (string filename, string codename);
 
