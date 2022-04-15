@@ -27,6 +27,11 @@ uint binToDec (string b) {
     return x;
 }
 
+List::List(uint v, List* p) {
+    value = v;
+    prev = p;
+}
+
 
 // FILE-STREAM METHODS NEEDED FOR COMPLETING THE TASK
 void eliasGamma (uint x, BitWriter* writer) {
@@ -41,17 +46,17 @@ void eliasGamma (uint x, BitWriter* writer) {
     }
     else {
         size_t n = bitIndex + 1;
-        cout <<"; Size: " << n;
+        // cout <<"; Size: " << n;
         for (; n > 1; n--)
             writer->writeBit(0);
-        cout << "; number = ";
+        // cout << "; number = ";
         for (; bitIndex > 0; bitIndex--) {
             writer->writeBit((x >> bitIndex) & 1);
-            cout << ((x >> bitIndex) & 1);
+            // cout << ((x >> bitIndex) & 1);
         }
         writer->writeBit(x & 1);
-        cout << (x & 1);
-        cout << endl;
+        // cout << (x & 1);
+        // cout << endl;
     }
 }
 
@@ -67,12 +72,137 @@ uint eliasGamma (BitReader* reader) {
         else return 0;
     }
     uint x = 1;
-    cout << ";; Size: " << n+1 << " NewNumber = 1";
+    // cout << ";; Size: " << n+1 << " NewNumber = 1";
     for (; n > 0; n--) {
         x = (x << 1) + reader->getNextBit();
-        cout << reader->getCurrentBit();
+        // cout << reader->getCurrentBit();
     }
-    cout << endl;
+    // cout << endl;
+    return x;
+}
+
+
+void eliasDelta (uint x, BitWriter* writer) {
+    size_t xBitIndex = 31;
+    while (((x >> xBitIndex) & 1) == 0 && xBitIndex > 0) {
+        xBitIndex--;
+    }
+    // 0 -> 10, 1 -> 11
+    if (xBitIndex == 0) {
+        writer->writeBit(1);
+        writer->writeBit(x & 1);
+    }
+    else {
+        size_t n = xBitIndex + 1;
+        size_t nBitIndex = 31;
+        while (((n >> nBitIndex) & 1) == 0 && nBitIndex > 0) {
+            nBitIndex--;
+        }
+        size_t k = nBitIndex + 1;
+        for (; k > 1; k--) {
+            writer->writeBit(0);
+        }
+        for (; nBitIndex > 0; nBitIndex--) {
+            writer->writeBit((n >> nBitIndex) & 1);
+        }
+        writer->writeBit(n & 1);
+        for (; xBitIndex > 0; xBitIndex--) {
+            writer->writeBit((x >> xBitIndex) & 1);
+        }
+        writer->writeBit(x & 1);
+    }
+}
+
+uint eliasDelta (BitReader* reader) {
+    size_t k = 0;
+    while (!(reader->isNextBitOne())) {
+        k++;
+    }
+    if (k == 0) {
+        if (reader->isNextBitOne()) {
+            return 1;
+        }
+        else return 0;
+    }
+    size_t n = 1;
+    for (; k > 0; k--) {
+        n = (n << 1) + reader->getNextBit();
+    }
+    uint x = 0;
+    for (; n > 0; n--) {
+        x = (x << 1) + reader->getNextBit();
+    }
+    return x;
+}
+
+
+void eliasOmega (uint x, BitWriter* writer) {
+    if (x < 2) {
+        writer->writeBit(0);
+        writer->writeBit(x & 1);
+    }
+    else {
+        uint k = x;
+        List* current = nullptr;
+        while (k > 1) {
+            List* next = new List(k, current);
+            current = next;
+            size_t bitIndex = 31;
+            while (((k >> bitIndex) & 1) == 0 && bitIndex > 0) {
+                bitIndex--;
+            }
+            k = bitIndex;
+        }
+        List* list = current;
+        while (current != nullptr) {
+            size_t bitIndex = 31;
+            while (((current->value >> bitIndex) & 1) == 0 && bitIndex > 0) {
+                bitIndex--;
+            }
+            while (bitIndex > 0) {
+                writer->writeBit((current->value >> bitIndex) & 1);
+                bitIndex--;
+            }
+            writer->writeBit((current->value) & 1);
+            current = current->prev;
+        }
+        writer->writeBit(0);
+        delete list;
+    }
+}
+
+uint eliasOmega (BitReader* reader) {
+    // uint n = 1, prev;
+    // size_t i = 0;
+    // while (s[i] != '0') {
+    //     prev = n + 1;
+    //     n = binToDec(s.substr(i, prev));
+    //     i += prev;
+    // }
+    // return n;
+    uint n = 1, length;
+    while (reader->isNextBitOne()) {
+        length = n;
+        n = 1;
+        for (size_t i = 0; i < length; i++) {
+            n = (n << 1) + reader->getNextBit();
+        }
+    }
+    if (n == 1) {
+        if (reader->isNextBitOne())
+            return 1;
+        return 0;
+    }
+    return n;
+}
+
+
+void fibonacci (uint x, BitWriter* writer) {
+    //
+}
+
+uint fibonacci (BitReader* reader) {
+    uint x = 0;
     return x;
 }
 

@@ -36,22 +36,28 @@ int main () {
     // delete(reader);
     // delete(writer);
 
-    uint tab[] = {137, 1, 1, 0, 0, 1234567890, 48, 5, 654};
-    size_t tabSize = 9;
+    uint tab[] = {137, 1, 0, 1234567890, 654};
+    size_t tabSize = 5;
     BitWriter *writer = new BitWriter(outputname);
     for (size_t i = 0; i < tabSize; i++) {
         cout << tab[i] << " ";
         eliasGamma(tab[i], writer);
+        cout << tab[i] << " ";
+        eliasDelta(tab[i], writer);
+        cout << tab[i] << " ";
+        eliasOmega(tab[i], writer);
     }
     cout << endl;
     writer->padWithZeros();
-    // writer->padWithZerosByte();
-    delete(writer);
+    delete writer;
     BitReader *reader = new BitReader(outputname);
     for (size_t i = 0; i < tabSize; i++) {
         cout << eliasGamma(reader) << " ";
+        cout << eliasDelta(reader) << " ";
+        cout << eliasOmega(reader) << " ";
     }
     cout << endl;
+    delete reader;
 
     return 0;
 }
