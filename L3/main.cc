@@ -6,9 +6,9 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 
 int main () {
-    string filename, newname;
+    // string filename, newname;
 
-    uint n = 654;
+    uint n = 137;
     string g = eliasGamma(n);
     string d = eliasDelta(n);
     string o = eliasOmega(n);
@@ -20,20 +20,37 @@ int main () {
     cout << d << " == " << nd << "\n";
     cout << o << " == " << no << "\n";
 
-    filename = "testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt";
-    newname = "output/test0.txt";
+    // filename = "testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt";
+    // newname = "output/test0.txt";
     // filename = "testy/test2.bin";
     // newname = "output/test2.bin";
+    string outputname = "output/gamma.txt";
 
-    BitReader *reader = new BitReader(filename);
-    BitWriter *writer = new BitWriter(newname);
-    int bit = 0;
-    for (size_t i = 0; i < reader->getFileSize() * 8; i++) {
-        bit = reader->isNextBitOne() ? 1:0;
-        writer->writeBit(bit);
+    // BitReader *reader = new BitReader(filename);
+    // BitWriter *writer = new BitWriter(newname);
+    // int bit = 0;
+    // for (size_t i = 0; i < reader->getFileSize() * 8; i++) {
+    //     bit = reader->isNextBitOne() ? 1:0;
+    //     writer->writeBit(bit);
+    // }
+    // delete(reader);
+    // delete(writer);
+
+    uint tab[] = {654321, 1, 1, 0, 0, 137, 42, 5, 0, 1, 777};
+    size_t tabSize = 11;
+    BitWriter *writer = new BitWriter(outputname);
+    for (size_t i = 0; i < tabSize; i++) {
+        cout << tab[i] << " ";
+        eliasGamma(tab[i], writer);
     }
-    delete(reader);
+    cout << endl;
+    // writer->padWithZeros();
     delete(writer);
+    BitReader *reader = new BitReader(outputname);
+    for (size_t i = 0; i < tabSize; i++) {
+        cout << eliasGamma(reader) << " ";
+    }
+    cout << endl;
 
     return 0;
 }

@@ -124,7 +124,7 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
                     l = 2*l;
                     r = 2*r;
                     // tmpout << 0;
-                    buffer = buffer*10;
+                    buffer = buffer << 1;
                     bufferCounter++;
                     if (bufferCounter == 8) {
                         tmpout << buffer;
@@ -133,7 +133,7 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
                     }
                     for (; counter > 0; counter--) {
                         // tmpout << 1;
-                        buffer = buffer*10 + 1;
+                        buffer = (buffer << 1) + 1;
                         bufferCounter++;
                         if (bufferCounter == 8) {
                             tmpout << buffer;
@@ -148,7 +148,7 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
                     l = 2*l - 1;
                     r = 2*r - 1;
                     // tmpout << 1;
-                    buffer = buffer*10 + 1;
+                    buffer = (buffer << 1) + 1;
                     bufferCounter++;
                     if (bufferCounter == 8) {
                         tmpout << buffer;
@@ -157,7 +157,7 @@ ArithmeticCode *encode (uchar* array, int n, int b, string codename) {
                     }
                     for (; counter > 0; counter--) {
                         // tmpout << 0;
-                        buffer = buffer*10;
+                        buffer = buffer << 1;
                         bufferCounter++;
                         if (bufferCounter == 8) {
                             tmpout << buffer;

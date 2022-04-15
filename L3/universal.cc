@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
+#include <math.h>
 #include "universal.hh"
 using namespace std;
 typedef unsigned int uint;
 
+// HELPER FUNCTIONS
 string decToBin (uint x) {
     string b = "";
     while (x > 0) {
@@ -20,12 +22,58 @@ uint binToDec (string b) {
         if (b[i] == '1') {
             x += p;
         }
-        p *= 2;
+        p <<= 1;
     }
     return x;
 }
 
 
+// FILE-STREAM METHODS NEEDED FOR COMPLETING THE TASK
+void eliasGamma (uint x, BitWriter* writer) {
+    size_t bitIndex = 31;
+    while (((x >> bitIndex) & 1) == 0 && bitIndex > 0) {
+        bitIndex--;
+    }
+    // 0 -> 10, 1 -> 11
+    if (bitIndex == 0) {
+        writer->writeBit(1);
+        writer->writeBit(x & 1);
+    }
+    else {
+        size_t n = bitIndex + 1;
+        // cout << "Size: " << n;
+        for (; n > 1; n--)
+            writer->writeBit(0);
+        // cout << "; number = ";
+        for (; bitIndex > 0; bitIndex--) {
+            writer->writeBit((x >> bitIndex) & 1);
+            // cout << ((x >> bitIndex) & 1);
+        }
+        // cout << endl;
+        writer->writeBit(x & 1);
+    }
+}
+
+uint eliasGamma (BitReader* reader) {
+    size_t n = 0;
+    while (!(reader->isNextBitOne())) {
+        n++;
+    }
+    if (n == 0) {
+        if (reader->isNextBitOne()) {
+            return 1;
+        }
+        else return 0;
+    }
+    uint x = 1;
+    for (; n > 0; n--) {
+        x = (x << 1) + reader->getNextBit();
+    }
+    return x;
+}
+
+
+// SINGLE-USE TESTING METHODS
 string eliasGamma (uint x) {
     string b = decToBin(x);
     size_t n = b.length();

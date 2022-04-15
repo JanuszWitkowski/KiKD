@@ -38,14 +38,25 @@ BitReader::~BitReader (void) {
     delete file;
 }
 
+uchar BitReader::getNextByte () {
+    fileIndex++;
+    if (fileIndex > fileSize) return 0;
+    return file[fileIndex - 1];
+}
+
 bool BitReader::isNextBitOne () {
     if (byteBufferIndex == 0) {
+        // cout << 8*fileIndex + 8 - byteBufferIndex << " " ; 
         byteBuffer = file[fileIndex];
         fileIndex++;
         byteBufferIndex = 8;
     }
     byteBufferIndex--;
     return (byteBuffer >> byteBufferIndex) & 1 > 0;
+}
+
+uint BitReader::getNextBit () {
+    return isNextBitOne() ? 1 : 0;
 }
 
 void BitReader::printArray (void) {

@@ -26,8 +26,18 @@ private:
 public:
     BitReader(string filename);
     virtual ~BitReader (void);
+    uchar getNextByte();
     bool isNextBitOne();
+    uint getNextBit();
     void printArray();
+
+    uint getCurrentBit () {
+        return (byteBuffer >> byteBufferIndex) & 1;
+    }
+
+    uchar getByte (size_t index) {
+        return file[index];
+    }
 
     uchar* getFileArray () {
         return file;
