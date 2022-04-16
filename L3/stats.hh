@@ -20,6 +20,4 @@ double entropyCond (int* charOccs, int** charOccsCond, size_t n);
 double compressionRate (size_t fileSize, size_t codeSize);
 double avgCodeLength (size_t fileSize, size_t codeSize);
 
-void summary (string filename, string codename);
-
 #endif

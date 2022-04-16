@@ -81,41 +81,7 @@ double compressionRate (size_t fileSize, size_t codeSize) {
     return 100.0 * (1.0 - (m / n));
 }
 
-double avgCodeLenght (size_t fileSize, size_t codeSize) {
+double avgCodeLength (size_t fileSize, size_t codeSize) {
     double n = 1.0 * fileSize, m = 1.0 * codeSize;
     return (8.0 * m) / n;
-}
-
-void summary (string filename, string codename) {
-    uchar *file, *code;
-    size_t fileSize, codeSize;
-    double rate, fileEntropy, codeEntropy, avgLength;
-    int *fileOccs, *codeOccs;
-    
-    file = fileToArray(filename, fileSize);
-    code = fileToArray(codename, codeSize);
-    fileOccs = countCharOccs(file, fileSize);
-    codeOccs = countCharOccs(code, codeSize);
-    rate = compressionRate(fileSize, codeSize);
-    fileEntropy = entropy(fileOccs, fileSize);
-    codeEntropy = entropy(codeOccs, codeSize);
-    avgLength = avgCodeLenght(fileSize, codeSize);
-
-    delete(file);
-    delete(code);
-    delete(fileOccs);
-    delete(codeOccs);
-
-    cout << "---------------PODSUMOWANIE---------------" << endl;
-    cout << "Plik kodowany: " << filename << endl;
-    cout << "Plik skompresowany: " << codename << endl;
-    cout << "=========================================" << endl;
-    cout << "Dlugosc pliku kodowanego: " << fileSize << endl;
-    cout << "Dlugosc pliku po kompresji: " << codeSize << endl;
-    cout << "Stopien kompresji: " << rate << endl;
-    cout << "=========================================" << endl;
-    cout << "Entropia pliku kodowanego: " << fileEntropy << endl;
-    cout << "Entropia pliku po kompresji: " << codeEntropy << endl;
-    cout << "Srednia dlugosc kodu: " << avgLength << endl;
-    cout << "------------------------------------------" << endl;
 }

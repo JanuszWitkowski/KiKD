@@ -12,13 +12,16 @@ int main () {
     string g = eliasGamma(n);
     string d = eliasDelta(n);
     string o = eliasOmega(n);
+    string f = fibonacci(n);
     uint ng = eliasGamma(g);
     uint nd = eliasDelta(d);
     uint no = eliasOmega(o);
+    uint nf = fibonacci(f);
     cout << n << "\n";
     cout << g << " == " << ng << "\n";
     cout << d << " == " << nd << "\n";
     cout << o << " == " << no << "\n";
+    cout << f << " == " << nf << "\n";
 
     // filename = "testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt";
     // newname = "output/test0.txt";
@@ -46,6 +49,8 @@ int main () {
         eliasDelta(tab[i], writer);
         cout << tab[i] << " ";
         eliasOmega(tab[i], writer);
+        cout << tab[i] << " ";
+        fibonacci(tab[i], writer);
     }
     cout << endl;
     writer->padWithZeros();
@@ -55,6 +60,7 @@ int main () {
         cout << eliasGamma(reader) << " ";
         cout << eliasDelta(reader) << " ";
         cout << eliasOmega(reader) << " ";
+        cout << fibonacci(reader) << " ";
     }
     cout << endl;
     delete reader;

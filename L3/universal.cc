@@ -245,3 +245,14 @@ uint eliasOmega (string s) {
     }
     return n;
 }
+
+
+string fibonacci (uint x) {
+    string s = "1";
+    return s;
+}
+
+uint fibonacci (string s) {
+    uint x = 0;
+    return x;
+}
