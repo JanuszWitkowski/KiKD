@@ -7,6 +7,13 @@
 using namespace std;
 typedef unsigned int uint;
 
+enum UniversalCodingType {
+    GAMMA,
+    DELTA,
+    OMEGA,
+    FIBONACCI
+};
+
 class List {
 public:
     uint value;
