@@ -1,12 +1,32 @@
 #include <iostream>
+#include <string.h>
 #include "bitrw.hh"
 #include "universal.hh"
+#include "lzw.hh"
 using namespace std;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-int main () {
-    // string filename, newname;
+int main (int argc, char* argv[]) {
+    if (argc >= 2) {
+        string filename = "testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt";
+        string codename = "output/kikd.kkd";
+        UniversalCodingType type = OMEGA;
+        for (size_t i = 1; i < argc; i++) {
+            if (strcmp(argv[i], "-f") == 0 && ++i < argc)
+                filename = argv[i];
+            else if (strcmp(argv[i], "-u") == 0 && ++i < argc) {
+                if (strcmp(argv[i], "gamma") == 0) type = GAMMA;
+                else if (strcmp(argv[i], "delta") == 0) type = DELTA;
+                else if (strcmp(argv[i], "fib") == 0) type = FIBONACCI;
+                else type = OMEGA;
+            }
+        }
+        string newname = "output/" + filename;
+
+        LZW_encode(filename, codename, type);
+        LZW_decode(codename, newname);
+    }
 
     uint n = 137;
     string g = eliasGamma(n);
@@ -23,25 +43,14 @@ int main () {
     cout << o << " == " << no << "\n";
     cout << f << " == " << nf << "\n";
 
-    // filename = "testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt";
-    // newname = "output/test0.txt";
-    // filename = "testy/test2.bin";
-    // newname = "output/test2.bin";
-    string outputname = "output/gamma.txt";
-
-    // BitReader *reader = new BitReader(filename);
-    // BitWriter *writer = new BitWriter(newname);
-    // int bit = 0;
-    // for (size_t i = 0; i < reader->getFileSize() * 8; i++) {
-    //     bit = reader->isNextBitOne() ? 1:0;
-    //     writer->writeBit(bit);
-    // }
-    // delete(reader);
-    // delete(writer);
+    string eliasname = "output/elias.txt";
+    string inname = "testy/test1.bin";
+    string kkdname = "output/test1.kkd";
+    string outname = "output/test1.bin";
 
     uint tab[] = {137, 1, 0, 1234567890, 654};
     size_t tabSize = 5;
-    BitWriter *writer = new BitWriter(outputname);
+    BitWriter *writer = new BitWriter(eliasname);
     for (size_t i = 0; i < tabSize; i++) {
         cout << tab[i] << " ";
         eliasGamma(tab[i], writer);
@@ -55,7 +64,7 @@ int main () {
     cout << endl;
     writer->padWithZeros();
     delete writer;
-    BitReader *reader = new BitReader(outputname);
+    BitReader *reader = new BitReader(eliasname);
     for (size_t i = 0; i < tabSize; i++) {
         cout << eliasGamma(reader) << " ";
         cout << eliasDelta(reader) << " ";

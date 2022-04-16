@@ -110,6 +110,7 @@ void LZW_encode (string filename, string codename, UniversalCodingType type) {
     delete(fileOccs);
     delete(codeOccs);
 
+    cout << "==========================================" << endl;
     cout << "KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM '" << universal_code_name << "'" << endl;
     cout << filename << " --LZW-> " << codename << endl;
     cout << "------------------------------------------" << endl;
@@ -131,6 +132,7 @@ void LZW_decode (string codename, string filename) {
     decode(codename, filename);
     auto end = chrono::steady_clock::now();
 
+    cout << "==========================================" << endl;
     cout << "DEKOMPRESJA 'LZW'" << endl;
     cout << codename << " --(LZW)'-> " << filename << endl;
     cout << "------------------------------------------" << endl;
