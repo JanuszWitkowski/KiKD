@@ -1,8 +1,22 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
 #include <chrono>
 #include "lzw.hh"
 #include "stats.hh"
+
+double percents = 0.0;
+
+void progressBar (size_t iterations, size_t size) {
+    double it = 1.0 * iterations;
+    double s = 1.0 * size;
+    if ((100 * it / s) >= percents + 1) {
+        cout << floor(100 * it / s) << "%" << endl;
+        percents++;
+    }
+}
 
 void encode (string filename, string codename, UniversalCodingType type) {
     BitReader* reader = new BitReader(filename);
@@ -40,10 +54,45 @@ void encode (string filename, string codename, UniversalCodingType type) {
     size_t fileSize = reader->getFileSize();
     (*universal)(fileSize, writer);
 
-    vector<uchar*> dict;
+    // vector<string> dict;
+    map<string, size_t> dict;
+    uchar character;
+    string currSequence;
     for (size_t i = 0; i < 256; i++) {
-        dict.push_back(i);
+        character = i;
+        currSequence = "";
+        currSequence.push_back(character);
+        // dict.push_back(currSequence);     // there must be a better way!
+        dict.insert({currSequence, i});
     }
+    character = reader->getByte(0);
+    currSequence = "";
+    currSequence.push_back(character);
+
+    for (size_t i = 1; i < fileSize; i++) {
+        progressBar(i, fileSize);
+        character = reader->getByte(i);
+        string nextSequence = currSequence;
+        nextSequence.push_back(character);
+        // vector<string>::iterator next_itr = find(dict.begin(), dict.end(), nextSequence);
+        map<string, size_t>::iterator next_itr = dict.find(nextSequence);
+        if (next_itr != dict.end())
+            currSequence = nextSequence;
+        else {
+            // vector<string>::iterator curr_itr = find(dict.begin(), dict.end(), currSequence);
+            map<string, size_t>::iterator curr_itr = dict.find(currSequence);
+            // (*universal)(curr_itr - dict.begin(), writer);
+            (*universal)(curr_itr->second, writer);
+            // dict.push_back(nextSequence);
+            dict.insert({nextSequence, dict.size()});
+            currSequence = "";
+            currSequence.push_back(character);
+        }
+    }
+    // vector<string>::iterator curr_itr = find(dict.begin(), dict.end(), currSequence);
+    map<string, size_t>::iterator curr_itr = dict.find(currSequence);
+    // (*universal)(curr_itr - dict.begin(), writer);
+    (*universal)(curr_itr->second, writer);
 
     writer->padWithZeros();
     delete reader;

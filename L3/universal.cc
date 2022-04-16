@@ -130,6 +130,7 @@ uint eliasDelta (BitReader* reader) {
 
 void eliasOmega (uint x, BitWriter* writer) {
     if (x <= 1) {
+        // 0 -> 00, 1 -> 01
         writer->writeBit(0);
         writer->writeBit(x & 1);
     }
