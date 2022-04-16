@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <chrono>
 #include "lzw.hh"
 #include "stats.hh"
@@ -36,7 +37,15 @@ void encode (string filename, string codename, UniversalCodingType type) {
     }
     writer->writeBit(bit0);
     writer->writeBit(bit1);
+    size_t fileSize = reader->getFileSize();
+    (*universal)(fileSize, writer);
 
+    vector<uchar*> dict;
+    for (size_t i = 0; i < 256; i++) {
+        dict.push_back(i);
+    }
+
+    writer->padWithZeros();
     delete reader;
     delete writer;
 }
@@ -56,6 +65,7 @@ void decode (string codename, string filename) {
         if (bit1 == 0) universal = eliasOmega;
         else universal = fibonacci;
     }
+    size_t fileSize = (*universal)(reader);
 
     //
 
