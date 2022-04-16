@@ -56,6 +56,8 @@ public:
     BitWriter(string filename);
     virtual ~BitWriter (void);
     void writeBit(int bit);
+    void writeByte(uchar byte);
+    void writeString(string text);
     void padWithZeros();
     void padWithZerosByte();
     void closeFile();

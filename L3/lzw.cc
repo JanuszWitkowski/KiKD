@@ -1,7 +1,5 @@
 #include <iostream>
-#include <vector>
 #include <string>
-#include <algorithm>
 #include <map>
 #include <chrono>
 #include "lzw.hh"
@@ -19,6 +17,7 @@ void progressBar (size_t iterations, size_t size) {
 }
 
 void encode (string filename, string codename, UniversalCodingType type) {
+    percents = 0.0;
     BitReader* reader = new BitReader(filename);
     BitWriter* writer = new BitWriter(codename);
 
@@ -54,7 +53,6 @@ void encode (string filename, string codename, UniversalCodingType type) {
     size_t fileSize = reader->getFileSize();
     (*universal)(fileSize, writer);
 
-    // vector<string> dict;
     map<string, size_t> dict;
     uchar character;
     string currSequence;
@@ -62,7 +60,6 @@ void encode (string filename, string codename, UniversalCodingType type) {
         character = i;
         currSequence = "";
         currSequence.push_back(character);
-        // dict.push_back(currSequence);     // there must be a better way!
         dict.insert({currSequence, i});
     }
     character = reader->getByte(0);
@@ -74,24 +71,18 @@ void encode (string filename, string codename, UniversalCodingType type) {
         character = reader->getByte(i);
         string nextSequence = currSequence;
         nextSequence.push_back(character);
-        // vector<string>::iterator next_itr = find(dict.begin(), dict.end(), nextSequence);
         map<string, size_t>::iterator next_itr = dict.find(nextSequence);
         if (next_itr != dict.end())
             currSequence = nextSequence;
         else {
-            // vector<string>::iterator curr_itr = find(dict.begin(), dict.end(), currSequence);
             map<string, size_t>::iterator curr_itr = dict.find(currSequence);
-            // (*universal)(curr_itr - dict.begin(), writer);
             (*universal)(curr_itr->second, writer);
-            // dict.push_back(nextSequence);
             dict.insert({nextSequence, dict.size()});
             currSequence = "";
             currSequence.push_back(character);
         }
     }
-    // vector<string>::iterator curr_itr = find(dict.begin(), dict.end(), currSequence);
     map<string, size_t>::iterator curr_itr = dict.find(currSequence);
-    // (*universal)(curr_itr - dict.begin(), writer);
     (*universal)(curr_itr->second, writer);
 
     writer->padWithZeros();
@@ -100,6 +91,7 @@ void encode (string filename, string codename, UniversalCodingType type) {
 }
 
 void decode (string codename, string filename) {
+    percents = 0.0;
     BitReader* reader = new BitReader(codename);
     BitWriter* writer = new BitWriter(filename);
 
@@ -116,7 +108,16 @@ void decode (string codename, string filename) {
     }
     size_t fileSize = (*universal)(reader);
 
-    //
+    map<string, size_t> dict;
+    size_t pk;
+    string currSequence;
+    for (size_t i = 0; i < 256; i++) {
+        pk = i;
+        currSequence = "";
+        currSequence.push_back(pk);
+        dict.insert({currSequence, i});
+    }
+    pk = (*universal)(reader);
 
     delete reader;
     delete writer;

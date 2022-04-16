@@ -19,9 +19,17 @@ universal.o: universal.cc universal.hh
 lzw.o: lzw.cc lzw.hh
 	g++ -ggdb3 -c lzw.cc
 
-# test: main testy/test3.bin
-# 	clear
-# 	./main testy/test3.bin
+test0: main
+	./main -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+
+test1: main
+	./main -f testy/test1.bin
+
+test2: main
+	./main -f testy/test2.bin
+
+test3: main
+	./main -f testy/test3.bin
 
 clean:
 	rm -rf main *.o

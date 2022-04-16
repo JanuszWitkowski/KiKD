@@ -89,6 +89,24 @@ void BitWriter::writeBit (int bit) {
     byteBufferIndex--;
 }
 
+void BitWriter::writeByte (uchar byte) {
+    if (byteBufferIndex == 8) file << byte;
+    else for (size_t i = 0; i < 8; i++)
+        writeBit((byte >> (7 - i)) & 1);
+}
+
+void BitWriter::writeString (string text) {
+    size_t size = text.length();
+    if (byteBufferIndex == 8) {
+        for (size_t i = 0; i < size; i++) {
+            file << text.at(i);
+        }
+    }
+    else for (size_t j = 0; j < size; j++)
+        for (size_t i = 0; i < 8; i++)
+            writeBit((text.at(j) >> (7 - i)) & 1);
+}
+
 void BitWriter::padWithZeros () {
     if (byteBufferIndex != 8) {
         while (byteBufferIndex > 0) {
