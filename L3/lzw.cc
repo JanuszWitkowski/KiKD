@@ -1,9 +1,14 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
 #include <chrono>
+// #include <boost/bimap.hpp>
+#include <fstream>
 #include "lzw.hh"
 #include "stats.hh"
+
+// typedef boost::bimap< string, size_t > dictionary_bimap;
 
 double percents = 0.0;
 
@@ -20,6 +25,9 @@ void encode (string filename, string codename, UniversalCodingType type) {
     percents = 0.0;
     BitReader* reader = new BitReader(filename);
     BitWriter* writer = new BitWriter(codename);
+
+    //DEBUG
+    ofstream fout("output/dbg_encode");
 
     void (*universal)(uint, BitWriter*);
     uint bit0, bit1;
@@ -67,7 +75,6 @@ void encode (string filename, string codename, UniversalCodingType type) {
     currSequence.push_back(character);
 
     for (size_t i = 1; i < fileSize; i++) {
-        progressBar(i, fileSize);
         character = reader->getByte(i);
         string nextSequence = currSequence;
         nextSequence.push_back(character);
@@ -77,6 +84,8 @@ void encode (string filename, string codename, UniversalCodingType type) {
         else {
             map<string, size_t>::iterator curr_itr = dict.find(currSequence);
             (*universal)(curr_itr->second, writer);
+            //DEBUG
+            fout << curr_itr->second << endl;
             dict.insert({nextSequence, dict.size()});
             currSequence = "";
             currSequence.push_back(character);
@@ -84,16 +93,23 @@ void encode (string filename, string codename, UniversalCodingType type) {
     }
     map<string, size_t>::iterator curr_itr = dict.find(currSequence);
     (*universal)(curr_itr->second, writer);
+    //DEBUG
+    fout << curr_itr->second << endl;
 
     writer->padWithZeros();
     delete reader;
     delete writer;
+    //DEBUG
+    fout.close();
 }
 
 void decode (string codename, string filename) {
     percents = 0.0;
     BitReader* reader = new BitReader(codename);
     BitWriter* writer = new BitWriter(filename);
+
+    //DEBUG
+    ofstream fout("output/dbg_decode");
 
     uint (*universal)(BitReader*);
     uint bit0 = reader->getNextBit();
@@ -107,20 +123,51 @@ void decode (string codename, string filename) {
         else universal = fibonacci;
     }
     size_t fileSize = (*universal)(reader);
+    cout << "fileSize: " << fileSize << endl;
 
-    map<string, size_t> dict;
+    // dictionary_bimap dict;
+    // map<string, size_t> dict_codes;
+    vector<string> dict_strings;
     size_t pk;
     string currSequence;
     for (size_t i = 0; i < 256; i++) {
         pk = i;
         currSequence = "";
         currSequence.push_back(pk);
-        dict.insert({currSequence, i});
+        // dict_codes.insert({currSequence, i});
+        dict_strings.push_back(currSequence);
     }
     pk = (*universal)(reader);
+    //DEBUG
+    fout << pk << endl;
+    writer->writeString(dict_strings.at(pk));
+    size_t numberOfCharsRead = dict_strings.at(pk).length();
+    while (numberOfCharsRead < fileSize) {
+        // progressBar(i, fileSize);
+        size_t k = (*universal)(reader);
+        //DEBUG
+        fout << k << endl;
+        string pc = dict_strings.at(pk);
+        // cout << "Wielkosc slownika: " << dict_strings.size() << "; obecny indeks: " << k << endl;
+        if (k < dict_strings.size()) {
+            pc.push_back(dict_strings.at(k).at(0));
+            dict_strings.push_back(pc);
+            writer->writeString(dict_strings.at(k));
+            numberOfCharsRead += dict_strings.at(k).length();
+        }
+        else {
+            pc.push_back(pc.at(0));
+            dict_strings.push_back(pc);
+            writer->writeString(pc);
+            numberOfCharsRead += pc.length();
+        }
+        pk = k;
+    }
 
     delete reader;
     delete writer;
+    //DEBUG
+    fout.close();
 }
 
 

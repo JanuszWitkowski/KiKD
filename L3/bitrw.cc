@@ -22,6 +22,12 @@ uchar* fileToArray (string filename, size_t &n) {
     return array;
 }
 
+void printArray (uchar* array, size_t n) {
+    for (size_t i = 0; i < n; i++) {
+        cout << array[i] << " ";
+    }
+}
+
 // HANDLER
 BitHandler::BitHandler() {
     byteBuffer = 0;

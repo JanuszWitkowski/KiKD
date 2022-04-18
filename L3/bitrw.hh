@@ -64,5 +64,6 @@ public:
 };
 
 uchar* fileToArray (string filename, size_t &n);
+void printArray (uchar* array, size_t n);
 
 #endif
