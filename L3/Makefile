@@ -21,15 +21,19 @@ lzw.o: lzw.cc lzw.hh
 
 test0: main
 	./main -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
 
 test1: main
 	./main -f testy/test1.bin
+	diff testy/test1.bin output/testy/test1.bin
 
 test2: main
 	./main -f testy/test2.bin
+	diff testy/test2.bin output/testy/test2.bin
 
 test3: main
 	./main -f testy/test3.bin
+	diff testy/test3.bin output/testy/test3.bin
 
 clean:
 	@ rm -rf main *.o

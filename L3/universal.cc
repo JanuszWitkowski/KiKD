@@ -183,11 +183,64 @@ uint eliasOmega (BitReader* reader) {
 
 
 void fibonacci (uint x, BitWriter* writer) {
-    //
+    if (x <= 1) {
+        writer->writeBit(1);
+        writer->writeBit(1);
+        writer->writeBit(x & 1);
+    }
+    else {
+        uint fib0 = 0, fib1 = 1, fib2 = fib0 + fib1;
+        size_t itr = 1;
+        while (fib2 <= x) {
+            fib0 = fib1;
+            fib1 = fib2;
+            fib2 = fib0 + fib1;
+            itr++;
+        }
+        size_t size = itr;
+        bool components[size] = {false};
+        fib2 = fib1;
+        fib1 = fib0;
+        fib0 = fib2 - fib1;
+        itr--;
+        while (x > 0 && fib2 > 0) {
+            if (x >= fib2) {
+                components[itr] = true;
+                x -= fib2;
+            }
+            fib2 = fib1;
+            fib1 = fib0;
+            fib0 = fib2 - fib1;
+            itr--;
+        }
+        for (itr = 1; itr < size; itr++)
+            if (components[itr]) writer->writeBit(1);
+            else writer->writeBit(0);
+        writer->writeBit(1);
+    }
 }
 
 uint fibonacci (BitReader* reader) {
     uint x = 0;
+    uint fib0 = 0, fib1 = 1, fib2 = fib0 + fib1;
+    size_t i = 0, oneGuard = 0;
+    bool wasPrevBitOne = false;
+    uint nextBit = reader->getNextBit();
+    while (!(nextBit == 1 && wasPrevBitOne)) {
+        if (nextBit == 1) {
+            x += fib2;
+            wasPrevBitOne = true;
+        }
+        else wasPrevBitOne = false;
+        oneGuard++;
+        fib0 = fib1;
+        fib1 = fib2;
+        fib2 = fib0 + fib1;
+        nextBit = reader->getNextBit();
+    }
+    if (oneGuard <= 1) {
+        return reader->isNextBitOne() ? 1 : 0;
+    }
     return x;
 }
 

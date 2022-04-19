@@ -111,7 +111,6 @@ void decode (string codename, string filename) {
         else universal = fibonacci;
     }
     size_t fileSize = (*universal)(reader);
-    cout << "fileSize: " << fileSize << endl;
 
     vector<string> dict;
     size_t pk;

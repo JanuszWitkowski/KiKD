@@ -27,52 +27,11 @@ int main (int argc, char* argv[]) {
         LZW_encode(filename, codename, type);
         LZW_decode(codename, newname);
     }
-
-    uint n = 88;
-    string g = eliasGamma(n);
-    string d = eliasDelta(n);
-    string o = eliasOmega(n);
-    string f = fibonacci(n);
-    uint ng = eliasGamma(g);
-    uint nd = eliasDelta(d);
-    uint no = eliasOmega(o);
-    uint nf = fibonacci(f);
-    cout << n << "\n";
-    cout << g << " == " << ng << "\n";
-    cout << d << " == " << nd << "\n";
-    cout << o << " == " << no << "\n";
-    cout << f << " == " << nf << "\n";
-
-    string eliasname = "output/elias.txt";
-    string inname = "testy/test1.bin";
-    string kkdname = "output/test1.kkd";
-    string outname = "output/test1.bin";
-
-    uint tab[] = {137, 1, 0, 1234567890, 654};
-    size_t tabSize = 5;
-    BitWriter *writer = new BitWriter(eliasname);
-    for (size_t i = 0; i < tabSize; i++) {
-        cout << tab[i] << " ";
-        eliasGamma(tab[i], writer);
-        cout << tab[i] << " ";
-        eliasDelta(tab[i], writer);
-        cout << tab[i] << " ";
-        eliasOmega(tab[i], writer);
-        cout << tab[i] << " ";
-        fibonacci(tab[i], writer);
+    else {
+        cout << "Sposob wywolania: " << endl;
+        cout << "./main -f <nazwa_pliku> [-u gamma/delta/omega/fib]" << endl;
     }
-    cout << endl;
-    writer->padWithZeros();
-    delete writer;
-    BitReader *reader = new BitReader(eliasname);
-    for (size_t i = 0; i < tabSize; i++) {
-        cout << eliasGamma(reader) << " ";
-        cout << eliasDelta(reader) << " ";
-        cout << eliasOmega(reader) << " ";
-        cout << fibonacci(reader) << " ";
-    }
-    cout << endl;
-    delete reader;
 
+    cout << "Sukces!" << endl;
     return 0;
 }
