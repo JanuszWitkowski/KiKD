@@ -28,7 +28,7 @@ int main (int argc, char* argv[]) {
         LZW_decode(codename, newname);
     }
 
-    uint n = 137;
+    uint n = 88;
     string g = eliasGamma(n);
     string d = eliasDelta(n);
     string o = eliasOmega(n);

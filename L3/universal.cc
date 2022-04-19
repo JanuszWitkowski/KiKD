@@ -249,11 +249,51 @@ uint eliasOmega (string s) {
 
 
 string fibonacci (uint x) {
+    if (x == 0) return "110";
+    else if (x == 1) return "111";
     string s = "1";
+    uint fib0 = 0, fib1 = 1, fib2 = fib0 + fib1;
+    while (fib2 <= x) {
+        fib0 = fib1;
+        fib1 = fib2;
+        fib2 = fib0 + fib1;
+    }
+    fib2 = fib1;
+    fib1 = fib0;
+    fib0 = fib2 - fib1;
+    while (x > 0 && fib2 > 0) {
+        if (x >= fib2) {
+            s = "1" + s;
+            x -= fib2;
+        }
+        else {
+            s = "0" + s;
+        }
+        fib2 = fib1;
+        fib1 = fib0;
+        fib0 = fib2 - fib1;
+    }
     return s;
 }
 
 uint fibonacci (string s) {
     uint x = 0;
+    uint fib0 = 0, fib1 = 1, fib2 = fib0 + fib1;
+    size_t i = 0;
+    bool wasPrevOne = false;
+    while (!(s.at(i) == '1' && wasPrevOne)) {
+        if (s.at(i) == '1') {
+            x += fib2;
+            wasPrevOne = true;
+        }
+        else wasPrevOne = false;
+        fib0 = fib1;
+        fib1 = fib2;
+        fib2 = fib0 + fib1;
+        i++;
+    }
+    if (fib2 == 1) {
+        return s.at(2) == '0' ? 0 : 1;
+    }
     return x;
 }
