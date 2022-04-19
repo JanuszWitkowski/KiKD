@@ -10,24 +10,12 @@
 
 // typedef boost::bimap< string, size_t > dictionary_bimap;
 
-double percents = 0.0;
-
-void progressBar (size_t iterations, size_t size) {
-    double it = 1.0 * iterations;
-    double s = 1.0 * size;
-    if ((100 * it / s) >= percents + 1) {
-        cout << floor(100 * it / s) << "%" << endl;
-        percents++;
-    }
-}
-
 void encode (string filename, string codename, UniversalCodingType type) {
-    percents = 0.0;
     BitReader* reader = new BitReader(filename);
     BitWriter* writer = new BitWriter(codename);
 
     //DEBUG
-    ofstream fout("output/dbg_encode");
+    // ofstream fout("output/dbg_encode");
 
     void (*universal)(uint, BitWriter*);
     uint bit0, bit1;
@@ -85,7 +73,7 @@ void encode (string filename, string codename, UniversalCodingType type) {
             map<string, size_t>::iterator curr_itr = dict.find(currSequence);
             (*universal)(curr_itr->second, writer);
             //DEBUG
-            fout << curr_itr->second << endl;
+            // fout << curr_itr->second << endl;
             dict.insert({nextSequence, dict.size()});
             currSequence = "";
             currSequence.push_back(character);
@@ -94,22 +82,22 @@ void encode (string filename, string codename, UniversalCodingType type) {
     map<string, size_t>::iterator curr_itr = dict.find(currSequence);
     (*universal)(curr_itr->second, writer);
     //DEBUG
-    fout << curr_itr->second << endl;
+    // fout << curr_itr->second << endl;
 
+    (*universal)(10, writer);   // mechanizm zabezpieczenia
     writer->padWithZeros();
     delete reader;
     delete writer;
     //DEBUG
-    fout.close();
+    // fout.close();
 }
 
 void decode (string codename, string filename) {
-    percents = 0.0;
     BitReader* reader = new BitReader(codename);
     BitWriter* writer = new BitWriter(filename);
 
     //DEBUG
-    ofstream fout("output/dbg_decode");
+    // ofstream fout("output/dbg_decode");
 
     uint (*universal)(BitReader*);
     uint bit0 = reader->getNextBit();
@@ -125,39 +113,34 @@ void decode (string codename, string filename) {
     size_t fileSize = (*universal)(reader);
     cout << "fileSize: " << fileSize << endl;
 
-    // dictionary_bimap dict;
-    // map<string, size_t> dict_codes;
-    vector<string> dict_strings;
+    vector<string> dict;
     size_t pk;
     string currSequence;
     for (size_t i = 0; i < 256; i++) {
         pk = i;
         currSequence = "";
         currSequence.push_back(pk);
-        // dict_codes.insert({currSequence, i});
-        dict_strings.push_back(currSequence);
+        dict.push_back(currSequence);
     }
     pk = (*universal)(reader);
     //DEBUG
-    fout << pk << endl;
-    writer->writeString(dict_strings.at(pk));
-    size_t numberOfCharsRead = dict_strings.at(pk).length();
+    // fout << pk << endl;
+    writer->writeString(dict.at(pk));
+    size_t numberOfCharsRead = dict.at(pk).length();
     while (numberOfCharsRead < fileSize) {
-        // progressBar(i, fileSize);
         size_t k = (*universal)(reader);
         //DEBUG
-        fout << k << endl;
-        string pc = dict_strings.at(pk);
-        // cout << "Wielkosc slownika: " << dict_strings.size() << "; obecny indeks: " << k << endl;
-        if (k < dict_strings.size()) {
-            pc.push_back(dict_strings.at(k).at(0));
-            dict_strings.push_back(pc);
-            writer->writeString(dict_strings.at(k));
-            numberOfCharsRead += dict_strings.at(k).length();
+        // fout << k << endl;
+        string pc = dict.at(pk);
+        if (k < dict.size()) {
+            pc.push_back(dict.at(k).at(0));
+            dict.push_back(pc);
+            writer->writeString(dict.at(k));
+            numberOfCharsRead += dict.at(k).length();
         }
         else {
             pc.push_back(pc.at(0));
-            dict_strings.push_back(pc);
+            dict.push_back(pc);
             writer->writeString(pc);
             numberOfCharsRead += pc.length();
         }
@@ -167,7 +150,7 @@ void decode (string codename, string filename) {
     delete reader;
     delete writer;
     //DEBUG
-    fout.close();
+    // fout.close();
 }
 
 
