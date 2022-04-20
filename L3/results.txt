@@ -1,0 +1,423 @@
+GAMMA
+./main -u gamma -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Gamma'
+testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 450289366ns
+------------------------------------------
+Dlugosc pliku kodowanego: 482542
+Dlugosc pliku po kompresji: 366556
+Stopien kompresji: 24.0365
+------------------------------------------
+Entropia pliku kodowanego: 5.03922
+Entropia pliku po kompresji: 6.21362
+Srednia dlugosc kodu: 6.07708
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 65960344ns
+==========================================
+Sukces!
+
+./main -u gamma -f testy/test1.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Gamma'
+testy/test1.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 518836560ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 3550
+Stopien kompresji: 99.6614
+------------------------------------------
+Entropia pliku kodowanego: 0
+Entropia pliku po kompresji: 6.28005
+Srednia dlugosc kodu: 0.0270844
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test1.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 35419750ns
+==========================================
+Sukces!
+
+./main -u gamma -f testy/test2.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Gamma'
+testy/test2.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 595229491ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 75920
+Stopien kompresji: 92.7597
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 6.12133
+Srednia dlugosc kodu: 0.579224
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test2.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 47375385ns
+==========================================
+Sukces!
+
+./main -u gamma -f testy/test3.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Gamma'
+testy/test3.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 1s
+Czas kompresji: 1297776238ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 1511393
+Stopien kompresji: -44.1377
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 6.13871
+Srednia dlugosc kodu: 11.531
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test3.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 205922852ns
+==========================================
+Sukces!
+
+diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+diff testy/test1.bin output/testy/test1.bin
+diff testy/test2.bin output/testy/test2.bin
+diff testy/test3.bin output/testy/test3.bin
+
+DELTA
+./main -u delta -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Delta'
+testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 510888480ns
+------------------------------------------
+Dlugosc pliku kodowanego: 482542
+Dlugosc pliku po kompresji: 292896
+Stopien kompresji: 39.3014
+------------------------------------------
+Entropia pliku kodowanego: 5.03922
+Entropia pliku po kompresji: 7.80859
+Srednia dlugosc kodu: 4.85588
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 84342095ns
+==========================================
+Sukces!
+
+./main -u delta -f testy/test1.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Delta'
+testy/test1.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 562383447ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 3134
+Stopien kompresji: 99.7011
+------------------------------------------
+Entropia pliku kodowanego: 0
+Entropia pliku po kompresji: 6.91365
+Srednia dlugosc kodu: 0.0239105
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test1.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 28902783ns
+==========================================
+Sukces!
+
+./main -u delta -f testy/test2.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Delta'
+testy/test2.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 609340846ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 59733
+Stopien kompresji: 94.3034
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 7.70143
+Srednia dlugosc kodu: 0.455727
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test2.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 44371964ns
+==========================================
+Sukces!
+
+./main -u delta -f testy/test3.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Delta'
+testy/test3.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 1s
+Czas kompresji: 1250106590ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 1201056
+Stopien kompresji: -14.5416
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 7.71693
+Srednia dlugosc kodu: 9.16333
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test3.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 204316460ns
+==========================================
+Sukces!
+
+diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+diff testy/test1.bin output/testy/test1.bin
+diff testy/test2.bin output/testy/test2.bin
+diff testy/test3.bin output/testy/test3.bin
+
+OMEGA
+./main -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Omega'
+testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 520975186ns
+------------------------------------------
+Dlugosc pliku kodowanego: 482542
+Dlugosc pliku po kompresji: 289750
+Stopien kompresji: 39.9534
+------------------------------------------
+Entropia pliku kodowanego: 5.03922
+Entropia pliku po kompresji: 7.83277
+Srednia dlugosc kodu: 4.80373
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 83695421ns
+==========================================
+Sukces!
+
+./main -f testy/test1.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Omega'
+testy/test1.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 553080321ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 3134
+Stopien kompresji: 99.7011
+------------------------------------------
+Entropia pliku kodowanego: 0
+Entropia pliku po kompresji: 6.87611
+Srednia dlugosc kodu: 0.0239105
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test1.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 38488453ns
+==========================================
+Sukces!
+
+./main -f testy/test2.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Omega'
+testy/test2.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 613820712ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 59725
+Stopien kompresji: 94.3042
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 7.64143
+Srednia dlugosc kodu: 0.455666
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test2.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 47266768ns
+==========================================
+Sukces!
+
+./main -f testy/test3.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Elias Omega'
+testy/test3.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 1s
+Czas kompresji: 1377548452ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 1241987
+Stopien kompresji: -18.4451
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 7.71997
+Srednia dlugosc kodu: 9.47561
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test3.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 207005964ns
+==========================================
+Sukces!
+
+diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+diff testy/test1.bin output/testy/test1.bin
+diff testy/test2.bin output/testy/test2.bin
+diff testy/test3.bin output/testy/test3.bin
+
+FIB
+./main -u fib -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Fibonacci'
+testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 514172462ns
+------------------------------------------
+Dlugosc pliku kodowanego: 482542
+Dlugosc pliku po kompresji: 279952
+Stopien kompresji: 41.9839
+------------------------------------------
+Entropia pliku kodowanego: 5.03922
+Entropia pliku po kompresji: 7.0292
+Srednia dlugosc kodu: 4.64129
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 77627084ns
+==========================================
+Sukces!
+
+./main -u fib -f testy/test1.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Fibonacci'
+testy/test1.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 558078362ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 2763
+Stopien kompresji: 99.7365
+------------------------------------------
+Entropia pliku kodowanego: 0
+Entropia pliku po kompresji: 6.92512
+Srednia dlugosc kodu: 0.02108
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test1.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 34435149ns
+==========================================
+Sukces!
+
+./main -u fib -f testy/test2.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Fibonacci'
+testy/test2.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 0s
+Czas kompresji: 601212000ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 58029
+Stopien kompresji: 94.4659
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 7.01094
+Srednia dlugosc kodu: 0.442726
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test2.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 48643021ns
+==========================================
+Sukces!
+
+./main -u fib -f testy/test3.bin
+==========================================
+KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM 'Fibonacci'
+testy/test3.bin --LZW-> output/kikd.kkd
+------------------------------------------
+Czas kompresji: 1s
+Czas kompresji: 1343582116ns
+------------------------------------------
+Dlugosc pliku kodowanego: 1048576
+Dlugosc pliku po kompresji: 1147665
+Stopien kompresji: -9.44986
+------------------------------------------
+Entropia pliku kodowanego: 8
+Entropia pliku po kompresji: 6.97873
+Srednia dlugosc kodu: 8.75599
+==========================================
+==========================================
+DEKOMPRESJA 'LZW'
+output/kikd.kkd --(LZW)'-> output/testy/test3.bin
+------------------------------------------
+Czas dekompresji: 0s
+Czas dekompresji: 229790634ns
+==========================================
+Sukces!
+
+diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+diff testy/test1.bin output/testy/test1.bin
+diff testy/test2.bin output/testy/test2.bin
+diff testy/test3.bin output/testy/test3.bin

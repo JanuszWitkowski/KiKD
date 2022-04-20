@@ -84,7 +84,7 @@ void encode (string filename, string codename, UniversalCodingType type) {
     //DEBUG
     // fout << curr_itr->second << endl;
 
-    (*universal)(10, writer);   // mechanizm zabezpieczenia
+    (*universal)(100, writer);   // mechanizm zabezpieczenia
     writer->padWithZeros();
     delete reader;
     delete writer;

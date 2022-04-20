@@ -35,5 +35,47 @@ test3: main
 	./main -f testy/test3.bin
 	diff testy/test3.bin output/testy/test3.bin
 
+stats: gamma delta omega fib
+
+gamma: main
+	./main -u gamma -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	./main -u gamma -f testy/test1.bin
+	./main -u gamma -f testy/test2.bin
+	./main -u gamma -f testy/test3.bin
+	diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	diff testy/test1.bin output/testy/test1.bin
+	diff testy/test2.bin output/testy/test2.bin
+	diff testy/test3.bin output/testy/test3.bin
+
+delta: main
+	./main -u delta -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	./main -u delta -f testy/test1.bin
+	./main -u delta -f testy/test2.bin
+	./main -u delta -f testy/test3.bin
+	diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	diff testy/test1.bin output/testy/test1.bin
+	diff testy/test2.bin output/testy/test2.bin
+	diff testy/test3.bin output/testy/test3.bin
+
+omega: main
+	./main -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	./main -f testy/test1.bin
+	./main -f testy/test2.bin
+	./main -f testy/test3.bin
+	diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	diff testy/test1.bin output/testy/test1.bin
+	diff testy/test2.bin output/testy/test2.bin
+	diff testy/test3.bin output/testy/test3.bin
+
+fib: main
+	./main -u fib -f testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	./main -u fib -f testy/test1.bin
+	./main -u fib -f testy/test2.bin
+	./main -u fib -f testy/test3.bin
+	diff testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt
+	diff testy/test1.bin output/testy/test1.bin
+	diff testy/test2.bin output/testy/test2.bin
+	diff testy/test3.bin output/testy/test3.bin
+
 clean:
 	@ rm -rf main *.o
