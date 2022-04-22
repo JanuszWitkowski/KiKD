@@ -7,7 +7,6 @@
 #include "bitrw.hh"
 using namespace std;
 typedef unsigned char uchar;
-// typedef uint8_t uchar;
 
 void fillOccs (int* occs, int value) {
     for (int i = 0; i < 256; i++) {
