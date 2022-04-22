@@ -41,7 +41,7 @@ BitReader::BitReader (string filename) : BitHandler() {
 }
 
 BitReader::~BitReader (void) {
-    delete file;
+    delete[] file;
 }
 
 uchar BitReader::getNextByte () {

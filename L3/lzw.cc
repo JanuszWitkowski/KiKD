@@ -194,10 +194,10 @@ void LZW_encode (string filename, string codename, UniversalCodingType type) {
     codeEntropy = entropy(codeOccs, codeSize);
     avgLength = avgCodeLength(fileSize, codeSize);
 
-    delete(file);
-    delete(code);
-    delete(fileOccs);
-    delete(codeOccs);
+    delete[] file;
+    delete[] code;
+    delete[] fileOccs;
+    delete[] codeOccs;
 
     cout << "==========================================" << endl;
     cout << "KOMPRESJA 'LZW' Z KODOWANIEM UNIWERSALNYM '" << universal_code_name << "'" << endl;
