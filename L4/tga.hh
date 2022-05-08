@@ -6,17 +6,6 @@
 
 using namespace std;
 
-class TGA {
-private:
-    TGAHeader Header;
-
-    uint8_t* imageID;
-    uint8_t* colorMapData;
-    uint8_t* imageData;
-public:
-    TGA(uchar* file);
-};
-
 class TGAHeader {
 private:
     uint8_t idLength;
@@ -38,6 +27,11 @@ private:
 
 public:
     TGAHeader(uchar* file);
+    virtual ~TGAHeader();
+    uint8_t getIdLength() { return idLength; }
+    uint8_t getColorMapLength() { return colorMapLength; }
+    uint8_t getImageWidth() { return imageWidth; }
+    uint8_t getImageHeight() { return imageHeight; }
 };
 
 class TGAFooter {
@@ -45,7 +39,20 @@ private:
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
 public:
-    //
+    TGAFooter();
+    virtual ~TGAFooter();
+};
+
+class TGA {
+private:
+    TGAHeader* Header;
+
+    uint8_t* imageID;
+    uint8_t* colorMapData;
+    uint8_t* imageData;
+public:
+    TGA(uchar* file);
+    virtual ~TGA();
 };
 
 #endif
