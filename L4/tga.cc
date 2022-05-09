@@ -1,5 +1,18 @@
 #include "tga.hh"
 
+uint8_t*** bitmapToBGR(uint8_t* array, size_t n, size_t width, size_t height) {
+    size_t arrayIndex = 0;
+    uint8_t*** BGR = new uint8_t**[height];
+    for (size_t i = 0; i < height; i++) {
+        BGR[i] = new uint8_t*[width];
+        for (size_t j = 0; j < width; j++) {
+            BGR[i][j] = new uint8_t[3];
+            // BGR[i][j][BLUE] = array[]
+        }
+    }
+    return BGR;
+}
+
 TGA::TGA(uchar* file, size_t n) {
     Header = new TGAHeader(file);
     size_t idLength = Header->getIdLength();

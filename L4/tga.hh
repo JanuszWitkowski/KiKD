@@ -6,6 +6,14 @@
 
 using namespace std;
 
+enum ColorBGRType {
+    BLUE,
+    GREEN,
+    RED
+};
+
+uint8_t*** bitmapToBGR(uint8_t* array, size_t n, size_t width, size_t height);
+
 class TGAHeader {
 private:
     uint8_t idLength;
@@ -79,6 +87,7 @@ public:
     void printSimpleTGA();
     TGAHeader* getHeader() { return Header; }
     uint8_t* getBitMap() { return bitMap; }
+    size_t getBitMapSize() { return bitMapSize; }
     TGAFooter* getFooter() { return Footer; }
 };
 
