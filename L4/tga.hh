@@ -28,6 +28,7 @@ private:
 public:
     TGAHeader(uchar* file);
     virtual ~TGAHeader();
+    void printTGAHeader();
     uint8_t getIdLength() { return idLength; }
     uint8_t getColorMapLength() { return colorMapLength; }
     uint8_t getImageWidth() { return imageWidth; }
@@ -38,9 +39,13 @@ class TGAFooter {
 private:
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
+    __uint128_t signature;
+    uint8_t end_dot;
+    uint8_t end_nul;
 public:
-    TGAFooter();
+    TGAFooter(uchar* file, size_t n);
     virtual ~TGAFooter();
+    void printTGAFooter();
 };
 
 class TGA {
@@ -50,9 +55,31 @@ private:
     uint8_t* imageID;
     uint8_t* colorMapData;
     uint8_t* imageData;
+
+    TGAFooter* Footer;
 public:
-    TGA(uchar* file);
+    TGA(uchar* file, size_t n);
     virtual ~TGA();
+    void printTGA();
+    TGAHeader* getHeader() { return Header; }
+    uint8_t* getImageID() { return imageID; }
+    uint8_t* getColorMapData() { return colorMapData; }
+    uint8_t* getImageData() { return imageData; }
+};
+
+class SimpleTGA {
+private:
+    TGAHeader* Header;
+    size_t bitMapSize;
+    uint8_t* bitMap;
+    TGAFooter* Footer;
+public:
+    SimpleTGA(uchar* file, size_t n);
+    virtual ~SimpleTGA();
+    void printSimpleTGA();
+    TGAHeader* getHeader() { return Header; }
+    uint8_t* getBitMap() { return bitMap; }
+    TGAFooter* getFooter() { return Footer; }
 };
 
 #endif

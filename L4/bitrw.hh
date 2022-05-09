@@ -7,8 +7,8 @@
 #include <math.h>
 using namespace std;
 
-typedef unsigned char uchar;
-// typedef uint8_t uchar;
+// typedef unsigned char uchar;
+typedef uint8_t uchar;
 
 class BitHandler {
 protected:

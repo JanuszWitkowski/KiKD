@@ -5,8 +5,8 @@
 
 #include "bitrw.hh"
 using namespace std;
-typedef unsigned char uchar;
-// typedef uint8_t uchar;
+// typedef unsigned char uchar;
+typedef uint8_t uchar;
 
 // TODO: zastanowic sie czy by nie wrzucic tej funkcji do BitReadera
 uchar* fileToArray (string filename, size_t &n) {
