@@ -12,6 +12,7 @@ typedef uint8_t uchar;
 void fillOccs (int* occs, int value);
 int* initCharOccs (int value);
 int* countCharOccs (uchar* array, int n);
+int* countCharOccsWithIncrement (uchar* array, int n, size_t starting_point, size_t inc);
 int** countCharOccsCond (uchar* array, int n);
 
 double entropy (int* charOccs, size_t n);

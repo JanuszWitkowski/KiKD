@@ -29,6 +29,14 @@ int* countCharOccs (uchar* array, int n) {
     return charOccs;
 }
 
+int* countCharOccsWithIncrement (uchar* array, int n, size_t starting_point, size_t inc) {
+    int* charOccs = initCharOccs(0);
+    for (int i = starting_point; i < n; i += inc) {
+        charOccs[array[i]]++;
+    }
+    return charOccs;
+}
+
 int** countCharOccsCond (uchar* array, int n) {
     int** charOccsCond = new int*[256];
     for (int i = 0; i < 256; i++) {
