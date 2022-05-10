@@ -61,28 +61,50 @@ void TGA::printTGA() {
 }
 
 SimpleTGA::SimpleTGA(uchar* file, size_t n) {
-    Header = new TGAHeader(file);
+    idLength = file[0];
+    colorMapType = file[1];
+    imageType = file[2];
+    firstEntryIndex = (file[4] << 8) + file[3];
+    colorMapLength = (file[6] << 8) + file[5];
+    colorMapEntrySize = file[7];
+    XOrigin = (file[9] << 8) + file[8];
+    YOrigin = (file[11] << 8) + file[10];
+    imageWidth = (file[13] << 8) + file[12];
+    imageHeight = (file[15] << 8) + file[14];
+    pixelDepth = file[16];
+    imageDescriptor = file[17];
+
     size_t offset = 18;
     bitMapSize = n - 18 - 26;
     bitMap = new uint8_t[bitMapSize];
     for (size_t i = 18; i < bitMapSize; i++)
         bitMap[i] = file[offset++];
-    Footer = new TGAFooter(file, n);
+    
+    offset = n - 26;
+    extensionOffset = 0;
+    for (size_t i = 0; i < 4; i++)
+        extensionOffset = (extensionOffset << 8) + file[offset++];
+    developerAreaOffset = 0;
+    for (size_t i = 0; i < 4; i++)
+        developerAreaOffset = (developerAreaOffset << 8) + file[offset++];
+    signature = 0;
+    for (size_t j = 0; j < 16; j++)
+        signature = (signature << 8) + file[offset++];
+    end_dot = file[offset++];
+    end_nul = file[offset++];
 }
 
 SimpleTGA::~SimpleTGA() {
-    delete Header;
     delete[] bitMap;
-    delete Footer;
 }
 
 void SimpleTGA::printSimpleTGA() {
-    Header->printTGAHeader();
+    // Header->printTGAHeader();
     cout << "---BITMAP---" << endl;
     for (size_t i = 0; i < bitMapSize; i++)
         cout << bitMap[i] << " ";
     cout << endl;
-    Footer->printTGAFooter();
+    // Footer->printTGAFooter();
 }
 
 TGAHeader::TGAHeader(uchar* file) {

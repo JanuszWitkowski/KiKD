@@ -1,11 +1,13 @@
 #include "jpeg-ls.hh"
 
-uint8_t** BGRToPredictionCodes (uint8_t*** array, size_t width, size_t height, uint8_t (*pred)(uint8_t***, size_t, size_t, ColorBGRType)) {
+uint8_t BGRToPredictionCodes (uint8_t*** array, size_t width, size_t height, uint8_t (*pred)(uint8_t***, size_t, size_t, ColorBGRType)) {
+    // cout << width << " " << height << " " << endl;
     size_t n = width*height;
     uint8_t** codes = new uint8_t*[3];
-    codes[BLUE] = new uint8_t[n/3];
-    codes[GREEN] = new uint8_t[n/3];
-    codes[RED] = new uint8_t[n/3];
+    codes[BLUE] = new uint8_t[n];
+    codes[GREEN] = new uint8_t[n];
+    codes[RED] = new uint8_t[n];
+    // uint8_t codes[3][n];
     size_t m = 0, i = 0, j = 0;
     while (i < height) {
         while (j < width) {

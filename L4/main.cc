@@ -8,23 +8,22 @@ using namespace std;
 
 int main (int argc, char* argv[]) {
     // size_t n;
-    // string filename = "testy/example0.tga";
+    // string filename = "testy/example1.tga";
     // uchar* array = fileToArray(filename, n);
 
     // TGA *tga = new TGA(array, n);
-    // // tga->printTGA();
-    // // printArray(array, 18);
-    // // cout << endl;
+    // tga->printTGA();
+    // printArray(array, 18);
+    // cout << endl;
 
     // SimpleTGA *stga = new SimpleTGA(array, n);
     // int* occs = countCharOccs(stga->getBitMap(), n);
     // cout <<"Entropia mapy bitowej pliku " << filename << endl;
     // cout << entropy(occs, n) << endl;
     // cout << n << endl;
+    // cout << stga->imageWidth << " " << stga->imageHeight << endl;
     // cout << tga->getHeader()->getImageHeight() * tga->getHeader()->getImageWidth() << endl;
     // cout << stga->getBitMapSize() << endl;
-    // stga->getHeader()->printTGAHeader();
-    // stga->getFooter()->printTGAFooter();
     // uint8_t a = 1, b = 2, c = a-b;
 
     if (argc < 2) return 1;
@@ -38,8 +37,8 @@ int main (int argc, char* argv[]) {
         SimpleTGA* stga = new SimpleTGA(array, n);
         uint8_t* bitmap = stga->getBitMap();
         size_t bitmapSize = stga->getBitMapSize();
-        size_t width = stga->getHeader()->getImageWidth();
-        size_t height = stga->getHeader()->getImageHeight();
+        size_t width = stga->imageWidth;
+        size_t height = stga->imageHeight;
         cout <<"!!" << bitmapSize << "-!!" << width << "-!!" << height << endl;
         uint8_t*** BGR = bitmapToBGR(bitmap, bitmapSize, width, height);
 

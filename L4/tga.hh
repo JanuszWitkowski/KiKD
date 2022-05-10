@@ -77,18 +77,34 @@ public:
 
 class SimpleTGA {
 private:
-    TGAHeader* Header;
     size_t bitMapSize;
     uint8_t* bitMap;
-    TGAFooter* Footer;
 public:
     SimpleTGA(uchar* file, size_t n);
     virtual ~SimpleTGA();
     void printSimpleTGA();
-    TGAHeader* getHeader() { return Header; }
+
+    uint8_t idLength;
+    uint8_t colorMapType;
+    uint8_t imageType;
+    uint16_t firstEntryIndex;
+    uint16_t colorMapLength;
+    uint8_t colorMapEntrySize;
+    uint16_t XOrigin;
+    uint16_t YOrigin;
+    uint16_t imageWidth;
+    uint16_t imageHeight;
+    uint8_t pixelDepth;
+    uint8_t imageDescriptor;
+
     uint8_t* getBitMap() { return bitMap; }
     size_t getBitMapSize() { return bitMapSize; }
-    TGAFooter* getFooter() { return Footer; }
+
+    uint32_t extensionOffset;
+    uint32_t developerAreaOffset;
+    __uint128_t signature;
+    uint8_t end_dot;
+    uint8_t end_nul;
 };
 
 #endif
