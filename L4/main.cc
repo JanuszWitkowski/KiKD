@@ -39,10 +39,10 @@ int main (int argc, char* argv[]) {
         size_t bitmapSize = stga->getBitMapSize();
         size_t width = stga->imageWidth;
         size_t height = stga->imageHeight;
-        cout <<"!!" << bitmapSize << "-!!" << width << "-!!" << height << endl;
+        // cout <<"!!" << bitmapSize << "-!!" << width << "-!!" << height << endl;
         uint8_t*** BGR = bitmapToBGR(bitmap, bitmapSize, width, height);
 
-        uint8_t** predCodes[9];
+        uint8_t*** predCodes = new uint8_t**[9];
         predCodes[0] = BGRToPredictionCodes(BGR, width, height, pred0);
         predCodes[1] = BGRToPredictionCodes(BGR, width, height, pred1);
         predCodes[2] = BGRToPredictionCodes(BGR, width, height, pred2);
@@ -55,15 +55,34 @@ int main (int argc, char* argv[]) {
         // cout << "!!" << predCodes[0][0] << endl;
         size_t entropies[9][4];
         for (size_t i = 0; i < 9; i++) {
-            int* occs = countCharOccsWithIncrement(predCodes[i][BLUE], bitmapSize, BLUE, 3);
-            entropies[i][BLUE] = entropy(occs, bitmapSize);
+            int* occsBlue = countCharOccsWithIncrement(predCodes[i][BLUE], bitmapSize, BLUE, 3);
+            entropies[i][BLUE] = entropy(occsBlue, bitmapSize);
+            delete[] occsBlue;
         }
 
         for (size_t i = 0; i < 9; i++) {
             cout << "PREDYKTOR " << i << endl;
             cout << "Entropia BLUE: " << entropies[i][BLUE] << endl;
         }
+
+        delete stga;
+        for (size_t i = 0; i < 9; i++) {
+            for (size_t j = 0; j < 3; j++) {
+                delete[] predCodes[i][j];
+            }
+            delete[] predCodes[i];
+        }
+        delete[] predCodes;
+        for (size_t i = 0; i < height; i++) {
+            for (size_t j = 0; j < width; j++) {
+                delete[] BGR[i][j];
+            }
+            delete[] BGR[i];
+        }
+        delete[] BGR;
     }
+
+    delete[] array;
 
     // for (size_t i = 0; i < stga->getBitMapSize(); i++) {
     //     if (tga->getImageID()[i] != stga->getBitMap()[i]) {
