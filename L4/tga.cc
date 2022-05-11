@@ -77,7 +77,7 @@ SimpleTGA::SimpleTGA(uchar* file, size_t n) {
     size_t offset = 18;
     bitMapSize = n - 18 - 26;
     bitMap = new uint8_t[bitMapSize];
-    for (size_t i = 18; i < bitMapSize; i++)
+    for (size_t i = 0; i < bitMapSize; i++)
         bitMap[i] = file[offset++];
     
     offset = n - 26;

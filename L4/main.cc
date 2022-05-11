@@ -7,25 +7,6 @@
 using namespace std;
 
 int main (int argc, char* argv[]) {
-    // size_t n;
-    // string filename = "testy/example1.tga";
-    // uchar* array = fileToArray(filename, n);
-
-    // TGA *tga = new TGA(array, n);
-    // tga->printTGA();
-    // printArray(array, 18);
-    // cout << endl;
-
-    // SimpleTGA *stga = new SimpleTGA(array, n);
-    // int* occs = countCharOccs(stga->getBitMap(), n);
-    // cout <<"Entropia mapy bitowej pliku " << filename << endl;
-    // cout << entropy(occs, n) << endl;
-    // cout << n << endl;
-    // cout << stga->imageWidth << " " << stga->imageHeight << endl;
-    // cout << tga->getHeader()->getImageHeight() * tga->getHeader()->getImageWidth() << endl;
-    // cout << stga->getBitMapSize() << endl;
-    // uint8_t a = 1, b = 2, c = a-b;
-
     if (argc < 2) return 1;
     string filename = argv[1];
     size_t n;
@@ -44,6 +25,13 @@ int main (int argc, char* argv[]) {
 
         uint8_t*** predCodes = new uint8_t**[9];
         predCodes[0] = BGRToPredictionCodes(BGR, width, height, pred0);
+        // for (size_t i = 0; i < 3; i++) {
+        //     for (size_t j = 0; j < bitmapSize; j++) {
+        //         cout << predCodes[0][i][j] << " ";
+        //     }
+        //     cout << endl;
+        // }
+        // cout << endl;
         predCodes[1] = BGRToPredictionCodes(BGR, width, height, pred1);
         predCodes[2] = BGRToPredictionCodes(BGR, width, height, pred2);
         predCodes[3] = BGRToPredictionCodes(BGR, width, height, pred3);
@@ -81,19 +69,6 @@ int main (int argc, char* argv[]) {
         }
         delete[] BGR;
     }
-
     delete[] array;
-
-    // for (size_t i = 0; i < stga->getBitMapSize(); i++) {
-    //     if (tga->getImageID()[i] != stga->getBitMap()[i]) {
-    //         cout << "Niezgoda dla i = " << i << endl;
-    //         break;
-    //     }
-    // }
-
-    // delete tga;
-    // delete stga;
-    // delete[] array;
-    // delete[] occs;
     return 0;
 }

@@ -13,7 +13,10 @@ uint8_t** BGRToPredictionCodes (uint8_t*** array, size_t width, size_t height, u
     while (i < height) {
         while (j < width) {
             // cout << "2!!" << m << endl;
+            // cout << "!!!" << (int)(*pred)(array, i, j, BLUE) << endl << ";;" << (int)(array[i][j][BLUE]) << endl;
+            // cout << "!!!!" << (int)(array[i][j][BLUE] - (*pred)(array, i, j, BLUE))%256 << endl;
             codes[BLUE][m] = (array[i][j][BLUE] - (*pred)(array, i, j, BLUE))%256;
+            // cout << "!!!!!" << (int)codes[BLUE][m] << endl;
             codes[GREEN][m] = (array[i][j][GREEN] - (*pred)(array, i, j, GREEN))%256;
             codes[RED][m] = (array[i][j][RED] - (*pred)(array, i, j, RED))%256;
             m++;
