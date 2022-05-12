@@ -9,10 +9,12 @@ using namespace std;
 enum ColorBGRType {
     BLUE,
     GREEN,
-    RED
+    RED,
+    ALL
 };
 
 uint8_t*** bitmapToBGR(uint8_t* array, size_t n, size_t width, size_t height);
+uint8_t* codesToBitmap(uint8_t** array, size_t colorSize);
 
 class TGAHeader {
 private:

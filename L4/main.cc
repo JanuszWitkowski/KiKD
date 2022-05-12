@@ -18,6 +18,7 @@ int main (int argc, char* argv[]) {
         SimpleTGA* stga = new SimpleTGA(array, n);
         uint8_t* bitmap = stga->getBitMap();
         size_t bitmapSize = stga->getBitMapSize();
+        // cout << bitmapSize/3 << endl;
         size_t width = stga->imageWidth;
         size_t height = stga->imageHeight;
         // cout <<"!!" << bitmapSize << "-!!" << width << "-!!" << height << endl;
@@ -25,13 +26,6 @@ int main (int argc, char* argv[]) {
 
         uint8_t*** predCodes = new uint8_t**[9];
         predCodes[0] = BGRToPredictionCodes(BGR, width, height, pred0);
-        // for (size_t i = 0; i < 3; i++) {
-        //     for (size_t j = 0; j < bitmapSize; j++) {
-        //         cout << predCodes[0][i][j] << " ";
-        //     }
-        //     cout << endl;
-        // }
-        // cout << endl;
         predCodes[1] = BGRToPredictionCodes(BGR, width, height, pred1);
         predCodes[2] = BGRToPredictionCodes(BGR, width, height, pred2);
         predCodes[3] = BGRToPredictionCodes(BGR, width, height, pred3);
@@ -40,17 +34,29 @@ int main (int argc, char* argv[]) {
         predCodes[6] = BGRToPredictionCodes(BGR, width, height, pred6);
         predCodes[7] = BGRToPredictionCodes(BGR, width, height, pred7);
         predCodes[8] = BGRToPredictionCodes(BGR, width, height, pred8);
-        // cout << "!!" << predCodes[0][0] << endl;
-        size_t entropies[9][4];
+        double entropies[9][4];
         for (size_t i = 0; i < 9; i++) {
-            int* occsBlue = countCharOccsWithIncrement(predCodes[i][BLUE], bitmapSize, BLUE, 3);
-            entropies[i][BLUE] = entropy(occsBlue, bitmapSize);
-            delete[] occsBlue;
+            size_t colorSize = bitmapSize/3;
+            int** occs = new int*[4];
+            for (size_t j = 0; j < 3; j++) {
+                occs[j] = countCharOccs(predCodes[i][j], colorSize);
+                entropies[i][j] = entropy(occs[j], colorSize);
+            }
+            // uint8_t* newBitmap = codesToBitmap(predCodes[i], colorSize);
+            // occs[4] = countCharOccs(newBitmap, colorSize*3);
+            // entropies[i][3] = entropy(occs[4], colorSize*3);
+            for (size_t j = 0; j < 4; j++) {
+                delete[] occs[j];
+            }
+            delete[] occs;
         }
 
         for (size_t i = 0; i < 9; i++) {
             cout << "PREDYKTOR " << i << endl;
             cout << "Entropia BLUE: " << entropies[i][BLUE] << endl;
+            cout << "Entropia GREEN: " << entropies[i][GREEN] << endl;
+            cout << "Entropia RED: " << entropies[i][RED] << endl;
+            cout << endl;
         }
 
         delete stga;

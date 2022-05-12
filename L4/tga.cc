@@ -16,6 +16,18 @@ uint8_t*** bitmapToBGR(uint8_t* array, size_t n, size_t width, size_t height) {
     return BGR;
 }
 
+uint8_t* codesToBitmap(uint8_t** array, size_t colorSize) {
+    size_t bitmapSize = 3*colorSize, i = 0, j = 0;
+    uint8_t* bitmap = new uint8_t[bitmapSize];
+    while (i < bitmapSize) {
+        bitmap[i++] = array[j][BLUE];
+        bitmap[i++] = array[j][GREEN];
+        bitmap[i++] = array[j][RED];
+        j++;
+    }
+    return bitmap;
+}
+
 TGA::TGA(uchar* file, size_t n) {
     Header = new TGAHeader(file);
     size_t idLength = Header->getIdLength();
