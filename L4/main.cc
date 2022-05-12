@@ -18,10 +18,8 @@ int main (int argc, char* argv[]) {
         SimpleTGA* stga = new SimpleTGA(array, n);
         uint8_t* bitmap = stga->getBitMap();
         size_t bitmapSize = stga->getBitMapSize();
-        // cout << bitmapSize/3 << endl;
         size_t width = stga->imageWidth;
         size_t height = stga->imageHeight;
-        // cout <<"!!" << bitmapSize << "-!!" << width << "-!!" << height << endl;
         uint8_t*** BGR = bitmapToBGR(bitmap, bitmapSize, width, height);
 
         uint8_t*** predCodes = new uint8_t**[9];
@@ -42,13 +40,14 @@ int main (int argc, char* argv[]) {
                 occs[j] = countCharOccs(predCodes[i][j], colorSize);
                 entropies[i][j] = entropy(occs[j], colorSize);
             }
-            // uint8_t* newBitmap = codesToBitmap(predCodes[i], colorSize);
-            // occs[4] = countCharOccs(newBitmap, colorSize*3);
-            // entropies[i][3] = entropy(occs[4], colorSize*3);
+            uint8_t* newBitmap = codesToBitmap(predCodes[i], colorSize);
+            occs[ALL] = countCharOccs(newBitmap, bitmapSize);
+            entropies[i][ALL] = entropy(occs[ALL], bitmapSize);
             for (size_t j = 0; j < 4; j++) {
                 delete[] occs[j];
             }
             delete[] occs;
+            delete[] newBitmap;
         }
 
         for (size_t i = 0; i < 9; i++) {
@@ -56,6 +55,7 @@ int main (int argc, char* argv[]) {
             cout << "Entropia BLUE: " << entropies[i][BLUE] << endl;
             cout << "Entropia GREEN: " << entropies[i][GREEN] << endl;
             cout << "Entropia RED: " << entropies[i][RED] << endl;
+            cout << "Entropia całkowita: " << entropies[ALL] << endl;
             cout << endl;
         }
 
