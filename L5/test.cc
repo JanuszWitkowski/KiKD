@@ -10,7 +10,11 @@ int main (void) {
     size_t n;
     uchar* file = fileToArray(filename, n);
     SimpleTGA* tga = new SimpleTGA(file, n);
-    PixelBitmap* BGR = new PixelBitmap(tga->getBitMap(), tga->imageWidth, tga->imageHeight);
+    PixelBitmap* BGR = new PixelBitmap(tga->getBitmap(), tga->imageWidth, tga->imageHeight);
+
+    tga->printSimpleTGA();
+    string tganame = "test.tga";
+    buildImageTGA(tganame, tga->getBitmap(), tga->getBitmapSize(), tga->imageWidth, tga->imageHeight);
 
     delete BGR;
     delete tga;

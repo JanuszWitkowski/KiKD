@@ -1,6 +1,7 @@
 #ifndef __TGA_H
 #define __TGA_H
 
+#include <fstream>
 #include "def.hh"
 #include "bitrw.hh"
 #include "pixel.hh"
@@ -14,7 +15,8 @@ enum ColorBGRType {
     ALL
 };
 
-Pixel** bitmapToBGR(const uchar* array, size_t n, size_t width, size_t height);
+uchar* invertBitmap(const uchar bitmap, size_t n, size_t width, size_t height);
+void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSize, size_t width, size_t height);
 
 class TGAHeader {
 private:
@@ -49,9 +51,9 @@ class TGAFooter {
 private:
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
-    __uint128_t signature;
-    uchar end_dot;
-    uchar end_nul;
+    uint8_t signature[16];
+    uint8_t end_dot;
+    uint8_t end_nul;
 public:
     TGAFooter(const uchar* file, size_t n);
     virtual ~TGAFooter();
@@ -79,34 +81,34 @@ public:
 
 class SimpleTGA {
 private:
-    size_t bitMapSize;
-    uchar* bitMap;
+    size_t bitmapSize;
+    uchar* bitmap;
 public:
     SimpleTGA(const uchar* file, size_t n);
     virtual ~SimpleTGA();
     void printSimpleTGA();
 
-    uchar idLength;
-    uchar colorMapType;
-    uchar imageType;
+    uint8_t idLength;
+    uint8_t colorMapType;
+    uint8_t imageType;
     uint16_t firstEntryIndex;
     uint16_t colorMapLength;
-    uchar colorMapEntrySize;
+    uint8_t colorMapEntrySize;
     uint16_t XOrigin;
     uint16_t YOrigin;
     uint16_t imageWidth;
     uint16_t imageHeight;
-    uchar pixelDepth;
-    uchar imageDescriptor;
+    uint8_t pixelDepth;
+    uint8_t imageDescriptor;
 
-    uchar* getBitMap() { return bitMap; }
-    size_t getBitMapSize() { return bitMapSize; }
+    uint8_t* getBitmap() { return bitmap; }
+    size_t getBitmapSize() { return bitmapSize; }
 
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
-    __uint128_t signature;
-    uchar end_dot;
-    uchar end_nul;
+    uint8_t signature[16];
+    uint8_t end_dot;
+    uint8_t end_nul;
 };
 
 #endif

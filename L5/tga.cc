@@ -1,18 +1,47 @@
 #include "tga.hh"
 
-Pixel** bitmapToBGR(const uchar* array, size_t n, size_t width, size_t height) {
-    size_t arrayIndex = 0;
-    Pixel** BGR = new Pixel*[height];
-    size_t m = 0;
+uchar* invertBitmap(const uchar bitmap[], size_t n, size_t width, size_t height) {
+    uchar* inverted = new uchar[n];
+    size_t invIndex = 0;
     for (size_t i = 0; i < height; i++) {
-        BGR[i] = new Pixel[width];
         for (size_t j = 0; j < width; j++) {
-            BGR[i][j].B(array[m++]);
-            BGR[i][j].G(array[m++]);
-            BGR[i][j].R(array[m++]);
+            inverted[invIndex++] = bitmap[n-3];
+            inverted[invIndex++] = bitmap[n-2];
+            inverted[invIndex++] = bitmap[n-1];
+            n -= 3;
         }
     }
-    return BGR;
+    return inverted;
+}
+
+void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSize, size_t width, size_t height) {
+    uint8_t zero1 = 0, two1 = 2, twenty_four1 = 24, dot1 = 46;
+    uint16_t width2 = (uint16_t)width, height2 = (uint16_t)height;
+    uint32_t zero4 = (uint32_t)0;
+    ofstream f(filename);
+    f << zero1;
+    f << zero1;
+    f << two1;
+    f << zero1; f << zero1;
+    f << zero1; f << zero1;
+    f << zero1;
+    f << zero1; f << zero1;
+    f << zero1; f << zero1;
+    f << width2;
+    f << height2;
+    f << twenty_four1;
+    f << zero1;
+
+    for (size_t i = 0; i < bitmapSize; i++)
+        f << bitmap[i];
+    
+    f << zero4;
+    f << zero4;
+    f << 'T'; f << 'R'; f << 'U'; f << 'E'; f << 'V'; f << 'I'; f << 'S'; f << 'I';
+    f << 'O'; f << 'N'; f << '-'; f << 'X'; f << 'F'; f << 'I'; f << 'L'; f << 'E';
+    f << dot1;
+    f << zero1;
+    f.close();
 }
 
 
@@ -75,10 +104,12 @@ SimpleTGA::SimpleTGA(const uchar* file, size_t n) {
     imageDescriptor = file[17];
 
     size_t offset = 18;
-    bitMapSize = n - 18 - 26;
-    bitMap = new uchar[bitMapSize];
-    for (size_t i = 0; i < bitMapSize; i++)
-        bitMap[i] = file[offset++];
+    bitmapSize = n - 18 - 26;
+    uchar tmpBitmap[bitmapSize];
+    for (size_t i = 0; i < bitmapSize; i++)
+        tmpBitmap[i] = file[offset++];
+    bitmap = invertBitmap(tmpBitmap, bitmapSize, imageWidth, imageHeight);
+    // delete[] tmpBitmap;
     
     offset = n - 26;
     extensionOffset = 0;
@@ -87,24 +118,48 @@ SimpleTGA::SimpleTGA(const uchar* file, size_t n) {
     developerAreaOffset = 0;
     for (size_t i = 0; i < 4; i++)
         developerAreaOffset = (developerAreaOffset << 8) + file[offset++];
-    signature = 0;
     for (size_t j = 0; j < 16; j++)
-        signature = (signature << 8) + file[offset++];
+        signature[j] = file[offset++];
     end_dot = file[offset++];
     end_nul = file[offset++];
 }
 
 SimpleTGA::~SimpleTGA() {
-    delete[] bitMap;
+    delete[] bitmap;
 }
 
 void SimpleTGA::printSimpleTGA() {
-    // Header->printTGAHeader();
-    cout << "---BITMAP---" << endl;
-    for (size_t i = 0; i < bitMapSize; i++)
-        cout << bitMap[i] << " ";
+    // uint8_t zero = 0;
+    // cout << zero << endl;
+    // cout << (int)zero << endl;
+    cout << "---HEADER---" << endl;
+    cout << "ID Length: " << (int)idLength << endl;
+    cout << "Color Map Type: " << (int)colorMapType << endl;
+    cout << "Image Type: " << (int)imageType << endl;
+    cout << "First Entry Index: " << (int)firstEntryIndex << endl;
+    cout << "Color Map Length: " << (int)colorMapLength << endl;
+    cout << "Color Map Entry Size: " << (int)colorMapEntrySize << endl;
+    cout << "X Origin: " << (int)XOrigin << endl;
+    cout << "Y Origin: " << (int)YOrigin << endl;
+    cout << "Image Width: " << (int)imageWidth << endl;
+    cout << "Image Height: " << (int)imageHeight << endl;
+    cout << "Pixel Depth: " << (int)pixelDepth << endl;
+    cout << "Image Descriptor: " << (int)imageDescriptor << endl;
+
+    // cout << "---BITMAP---" << endl;
+    // for (size_t i = 0; i < bitmapSize; i++)
+    //     cout << bitmap[i] << " ";
+    // cout << endl;
+
+    cout << "---FOOTER---" << endl;
+    cout << "Extension Offset: " << (int)extensionOffset << endl;
+    cout << "Developer Area Offset: " << (int)developerAreaOffset << endl;
+    cout << "Signature:";
+    for (size_t i = 0; i < 16; i++)
+        cout << " " << signature[i];
     cout << endl;
-    // Footer->printTGAFooter();
+    cout << "End Dot: " << (int)end_dot << endl;
+    cout << "End Null: " << (int)end_nul << endl;
 }
 
 TGAHeader::TGAHeader(const uchar* file) {
@@ -150,9 +205,8 @@ TGAFooter::TGAFooter(const uchar* file, size_t n) {
     developerAreaOffset = 0;
     for (size_t i = 0; i < 4; i++)
         developerAreaOffset = (developerAreaOffset << 8) + file[offset++];
-    signature = 0;
     for (size_t j = 0; j < 16; j++)
-        signature = (signature << 8) + file[offset++];
+        signature[j] = file[offset++];
     end_dot = file[offset++];
     end_nul = file[offset++];
 }
@@ -163,4 +217,12 @@ TGAFooter::~TGAFooter() {
 
 void TGAFooter::printTGAFooter() {
     cout << "---FOOTER---" << endl;
+    cout << "Extension Offset: " << extensionOffset << endl;
+    cout << "Developer Area Offset: " << developerAreaOffset << endl;
+    cout << "Signature:";
+    for (size_t i = 0; i < 16; i++)
+        cout << " " << signature[i];
+    cout << endl;
+    cout << "End Dot: " << end_dot << endl;
+    cout << "End Null: " << end_nul << endl;
 }
