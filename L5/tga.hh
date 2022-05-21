@@ -14,7 +14,7 @@ enum ColorBGRType {
     ALL
 };
 
-Pixel** bitmapToBGR(uchar* array, size_t n, size_t width, size_t height);
+Pixel** bitmapToBGR(const uchar* array, size_t n, size_t width, size_t height);
 
 class TGAHeader {
 private:
@@ -36,7 +36,7 @@ private:
     uchar imageDescriptor;
 
 public:
-    TGAHeader(uchar* file);
+    TGAHeader(const uchar* file);
     virtual ~TGAHeader();
     void printTGAHeader();
     uchar getIdLength() { return idLength; }
@@ -53,7 +53,7 @@ private:
     uchar end_dot;
     uchar end_nul;
 public:
-    TGAFooter(uchar* file, size_t n);
+    TGAFooter(const uchar* file, size_t n);
     virtual ~TGAFooter();
     void printTGAFooter();
 };
@@ -68,7 +68,7 @@ private:
 
     TGAFooter* Footer;
 public:
-    TGA(uchar* file, size_t n);
+    TGA(const uchar* file, size_t n);
     virtual ~TGA();
     void printTGA();
     TGAHeader* getHeader() { return Header; }
@@ -82,7 +82,7 @@ private:
     size_t bitMapSize;
     uchar* bitMap;
 public:
-    SimpleTGA(uchar* file, size_t n);
+    SimpleTGA(const uchar* file, size_t n);
     virtual ~SimpleTGA();
     void printSimpleTGA();
 

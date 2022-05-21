@@ -9,7 +9,7 @@ using namespace std;
 typedef uint8_t uchar;
 
 // TODO: zastanowic sie czy by nie wrzucic tej funkcji do BitReadera
-uchar* fileToArray (string filename, size_t &n) {
+uchar* fileToArray (const string filename, size_t &n) {
     ifstream fin;
     fin.open(filename, ios::in|ios::binary);
     streampos start = fin.tellg();
@@ -22,7 +22,7 @@ uchar* fileToArray (string filename, size_t &n) {
     return array;
 }
 
-void printArray (uchar* array, size_t n) {
+void printArray (const uchar* array, size_t n) {
     for (size_t i = 0; i < n; i++) {
         cout << array[i] << " ";
     }
@@ -35,7 +35,7 @@ BitHandler::BitHandler() {
 }
 
 // READER
-BitReader::BitReader (string filename) : BitHandler() {
+BitReader::BitReader (const string filename) : BitHandler() {
     file = fileToArray(filename, fileSize);
     fileIndex = 0;
 }
@@ -69,10 +69,10 @@ void BitReader::printArray (void) {
       for (size_t i = 0; i < fileSize; i++) {
           cout << file[i] << " ";
       }
-  }
+}
 
 // WRITER
-BitWriter::BitWriter (string filename) {
+BitWriter::BitWriter (const string filename) {
     clearBuffer();
     file.open(filename);
 }
@@ -101,7 +101,7 @@ void BitWriter::writeByte (uchar byte) {
         writeBit((byte >> (7 - i)) & 1);
 }
 
-void BitWriter::writeString (string text) {
+void BitWriter::writeString (const string text) {
     size_t size = text.length();
     if (byteBufferIndex == 8) {
         for (size_t i = 0; i < size; i++) {

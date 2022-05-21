@@ -28,7 +28,7 @@ PixelBitmap::PixelBitmap(size_t _width, size_t _height) {
     }
 }
 
-PixelBitmap::PixelBitmap(uchar _file[], size_t _width, size_t _height) {
+PixelBitmap::PixelBitmap(const uchar _file[], size_t _width, size_t _height) {
     width = _width;
     height = _height;
     size_t fileIndex = 0;

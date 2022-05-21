@@ -15,9 +15,9 @@ public:
     uchar R() { return red; }
     uchar G() { return green; }
     uchar B() { return blue; }
-    void R(uchar v) { red = v; }
-    void G(uchar v) { green = v; }
-    void B(uchar v) { blue = v; }
+    void R(const uchar v) { red = v; }
+    void G(const uchar v) { green = v; }
+    void B(const uchar v) { blue = v; }
 };
 
 class PixelBitmap {
@@ -27,7 +27,7 @@ private:
     Pixel*** bitmap;
 public:
     PixelBitmap(size_t _width, size_t _height);
-    PixelBitmap(uchar _file[], size_t _width, size_t _height);
+    PixelBitmap(const uchar _file[], size_t _width, size_t _height);
     virtual ~PixelBitmap();
     Pixel* pixel(size_t i, size_t j) { return bitmap[i][j]; }
 };

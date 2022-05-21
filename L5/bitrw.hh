@@ -24,7 +24,7 @@ private:
     size_t fileSize;
     size_t fileIndex;
 public:
-    BitReader(string filename);
+    BitReader(const string filename);
     virtual ~BitReader (void);
     uchar getNextByte();
     bool isNextBitOne();
@@ -53,17 +53,17 @@ private:
     ofstream file;
     void clearBuffer();
 public:
-    BitWriter(string filename);
+    BitWriter(const string filename);
     virtual ~BitWriter (void);
     void writeBit(int bit);
     void writeByte(uchar byte);
-    void writeString(string text);
+    void writeString(const string text);
     void padWithZeros();
     void padWithZerosByte();
     void closeFile();
 };
 
-uchar* fileToArray (string filename, size_t &n);
-void printArray (uchar* array, size_t n);
+uchar* fileToArray (const string filename, size_t &n);
+void printArray (const uchar* array, size_t n);
 
 #endif

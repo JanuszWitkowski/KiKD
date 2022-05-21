@@ -1,6 +1,6 @@
 #include "tga.hh"
 
-Pixel** bitmapToBGR(uchar* array, size_t n, size_t width, size_t height) {
+Pixel** bitmapToBGR(const uchar* array, size_t n, size_t width, size_t height) {
     size_t arrayIndex = 0;
     Pixel** BGR = new Pixel*[height];
     size_t m = 0;
@@ -15,7 +15,8 @@ Pixel** bitmapToBGR(uchar* array, size_t n, size_t width, size_t height) {
     return BGR;
 }
 
-TGA::TGA(uchar* file, size_t n) {
+
+TGA::TGA(const uchar* file, size_t n) {
     Header = new TGAHeader(file);
     size_t idLength = Header->getIdLength();
     size_t colorMapLength = Header->getColorMapLength();
@@ -59,7 +60,7 @@ void TGA::printTGA() {
     cout << endl;
 }
 
-SimpleTGA::SimpleTGA(uchar* file, size_t n) {
+SimpleTGA::SimpleTGA(const uchar* file, size_t n) {
     idLength = file[0];
     colorMapType = file[1];
     imageType = file[2];
@@ -106,7 +107,7 @@ void SimpleTGA::printSimpleTGA() {
     // Footer->printTGAFooter();
 }
 
-TGAHeader::TGAHeader(uchar* file) {
+TGAHeader::TGAHeader(const uchar* file) {
     idLength = file[0];
     colorMapType = file[1];
     imageType = file[2];
@@ -141,7 +142,7 @@ void TGAHeader::printTGAHeader() {
     cout << "Image Descriptor: " << imageDescriptor << endl;
 }
 
-TGAFooter::TGAFooter(uchar* file, size_t n) {
+TGAFooter::TGAFooter(const uchar* file, size_t n) {
     size_t offset = n - 26;
     extensionOffset = 0;
     for (size_t i = 0; i < 4; i++)

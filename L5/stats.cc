@@ -9,7 +9,7 @@ using namespace std;
 // typedef unsigned char uchar;
 typedef uint8_t uchar;
 
-void fillOccs (int* occs, int value) {
+void fillOccs (int occs[], int value) {
     for (int i = 0; i < 256; i++) {
         occs[i] = value;
     }
@@ -21,7 +21,7 @@ int* initCharOccs (int value) {
     return charOccs;
 }
 
-int* countCharOccs (uchar* array, int n) {
+int* countCharOccs (const uchar array[], int n) {
     int* charOccs = initCharOccs(0);
     for (int i = 0; i < n; i++) {
         charOccs[array[i]]++;
@@ -29,7 +29,7 @@ int* countCharOccs (uchar* array, int n) {
     return charOccs;
 }
 
-int* countCharOccsWithIncrement (uchar* array, int n, size_t starting_point, size_t inc) {
+int* countCharOccsWithIncrement (const uchar array[], int n, size_t starting_point, size_t inc) {
     int* charOccs = initCharOccs(0);
     for (int i = starting_point; i < n; i += inc) {
         charOccs[array[i]]++;
@@ -37,7 +37,7 @@ int* countCharOccsWithIncrement (uchar* array, int n, size_t starting_point, siz
     return charOccs;
 }
 
-int** countCharOccsCond (uchar* array, int n) {
+int** countCharOccsCond (const uchar array[], int n) {
     int** charOccsCond = new int*[256];
     for (int i = 0; i < 256; i++) {
         charOccsCond[i] = new int[256];
@@ -54,7 +54,7 @@ int** countCharOccsCond (uchar* array, int n) {
 }
 
 // na iteracje: 1 sprawdzenie, 1 logarytm, 1 mnozenie, 1 odejmowanie
-double entropy (int* charOccs, size_t n) {
+double entropy (const int charOccs[], size_t n) {
     double H = 0.0;
     double logOfN = log2(n);
     double p, i;
@@ -66,7 +66,7 @@ double entropy (int* charOccs, size_t n) {
     return H / n;
 }
 
-double entropyCond (int* charOccs, int** charOccsCond, size_t n) {
+double entropyCond (const int charOccs[], const int** charOccsCond, size_t n) {
     double H = 0.0;
     double HCond, logOfX;
     for (size_t j = 0; j < 256; j++) {   // 1 sprawdzenie, 1 logarytm, 1 konwersja, 1 dodawanie, 256 iteracji

@@ -9,14 +9,14 @@ using namespace std;
 // typedef unsigned char uchar;
 typedef uint8_t uchar;
 
-void fillOccs (int* occs, int value);
+void fillOccs (int occs[], int value);
 int* initCharOccs (int value);
-int* countCharOccs (uchar* array, int n);
-int* countCharOccsWithIncrement (uchar* array, int n, size_t starting_point, size_t inc);
-int** countCharOccsCond (uchar* array, int n);
+int* countCharOccs (const uchar array[], int n);
+int* countCharOccsWithIncrement (const uchar array[], int n, size_t starting_point, size_t inc);
+int** countCharOccsCond (const uchar array[], int n);
 
-double entropy (int* charOccs, size_t n);
-double entropyCond (int* charOccs, int** charOccsCond, size_t n);
+double entropy (const int charOccs[], size_t n);
+double entropyCond (int charOccs[], const int** charOccsCond, size_t n);
 
 double compressionRate (size_t fileSize, size_t codeSize);
 double avgCodeLength (size_t fileSize, size_t codeSize);
