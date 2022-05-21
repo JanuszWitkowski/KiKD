@@ -18,6 +18,8 @@ public:
     void R(const uchar v) { red = v; }
     void G(const uchar v) { green = v; }
     void B(const uchar v) { blue = v; }
+    void set(uchar b, uchar g, uchar r) { R(r); G(g); B(b); }
+    void set(Pixel* pixel);
 };
 
 class PixelBitmap {
@@ -29,7 +31,11 @@ public:
     PixelBitmap(size_t _width, size_t _height);
     PixelBitmap(const uchar _file[], size_t _width, size_t _height);
     virtual ~PixelBitmap();
+    size_t getWidth() { return width; }
+    size_t getHeight() { return height; }
     Pixel* pixel(size_t i, size_t j) { return bitmap[i][j]; }
 };
+
+uchar* pixelbitmapToArray(PixelBitmap* bitmap);
 
 #endif

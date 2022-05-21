@@ -16,6 +16,12 @@ Pixel::~Pixel() {
     //
 }
 
+void Pixel::set(Pixel* pixel) {
+    blue = pixel->B();
+    green = pixel->G();
+    red = pixel->R();
+}
+
 
 PixelBitmap::PixelBitmap(size_t _width, size_t _height) {
     width = _width;
@@ -48,4 +54,8 @@ PixelBitmap::~PixelBitmap() {
         delete[] bitmap[i];
     }
     delete[] bitmap;
+}
+
+uchar* pixelbitmapToArray(PixelBitmap* bitmap) {
+    size_t width = bitmap->getWidth(), height = bitmap->getHeight();
 }

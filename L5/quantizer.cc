@@ -5,7 +5,10 @@ Quantizer::Quantizer() {
 }
 
 Quantizer::Quantizer(uchar* file, size_t n, int colorsNumber) {
-    //
+    tga = new SimpleTGA(file, n);
+    codebookSize = colorsNumber;
+    codebook = generateCodebook();
+    bitmap = new PixelBitmap(file, tga->imageWidth, tga->imageHeight);
 }
 
 Quantizer::~Quantizer() {
@@ -13,18 +16,21 @@ Quantizer::~Quantizer() {
     for (size_t i = 0; i < codebookSize; i++)
         delete codebook[i];
     delete codebook;
-    for (size_t i = 0; i < bitmapHeight; i++) {
-        for (size_t j = 0; j < bitmapWidth; j++) {
-            delete bitmap[i][j];
-        }
-        delete[] bitmap[i];
-    }
-    delete[] bitmap;
+    delete bitmap;
 }
 
 uchar* Quantizer::encode() {
-    uchar* output = new uchar[1];
-    return output;
+    for (size_t i = 0; i < bitmap->getHeight(); i++) {
+        for (size_t j = 0; j < bitmap->getWidth(); j++) {
+            double diffs[codebookSize];
+            PixelBitmap* pixelBitmap = new PixelBitmap(tga->getBitmap(), bitmap->getWidth(), bitmap->getHeight());
+            for (size_t k = 0; k < codebookSize; k++) {
+                diffs[k] = euclidSquared(getPixelAsDoubleArray(pixelBitmap->pixel(i, j)), getPixelAsDoubleArray(codebook[k]));
+            }
+            bitmap->pixel(i, j)->set(codebook[minIndexFromDoubles(diffs, codebookSize)]);
+        }
+    }
+    return tga->arrayToTGA(pixelbitmapToArray(bitmap), bitmap->getWidth() * bitmap->getHeight());
 }
 
 double Quantizer::mse() {
@@ -40,6 +46,18 @@ double Quantizer::snr() {
 Pixel** Quantizer::generateCodebook() {
     Pixel** cb = new Pixel*[1];
     return cb;
+}
+
+size_t minIndexFromDoubles(double array[], size_t n) {
+    size_t index = 0;
+    uchar min = -1;
+    for (size_t i = 0; i < n; i++) {
+        if (array[i] < min) {
+            min = array[i];
+            index = i;
+        }
+    }
+    return index;
 }
 
 double** Quantizer::bitmapToVectors(Pixel*** bitmap) {

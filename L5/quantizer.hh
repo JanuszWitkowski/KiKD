@@ -9,12 +9,11 @@
 class Quantizer {
 private:
     size_t codebookSize;
-    size_t bitmapWidth;
-    size_t bitmapHeight;
     SimpleTGA* tga;
     Pixel** codebook;
-    Pixel*** bitmap;
+    PixelBitmap* bitmap;
     Pixel** generateCodebook();
+    size_t minIndexFromDoubles(double array[], size_t n);
     double** bitmapToVectors(Pixel*** bitmap);
     Pixel** vectorsToBitmap(double** vectors);
     double* avgVectorOfVectors(double** vectors);
@@ -33,7 +32,7 @@ public:
     double snr();
     SimpleTGA* getTGA() { return tga; }
     Pixel** getCodebook() { return codebook; }
-    Pixel*** getBitmap() { return bitmap; }
+    PixelBitmap* getBitmap() { return bitmap; }
 };
 
 #endif

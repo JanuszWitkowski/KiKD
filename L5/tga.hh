@@ -15,7 +15,7 @@ enum ColorBGRType {
     ALL
 };
 
-uchar* invertBitmap(const uchar bitmap, size_t n, size_t width, size_t height);
+uchar* invertBitmap(const uchar bitmap[], size_t n, size_t width, size_t height);
 void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSize, size_t width, size_t height);
 
 class TGAHeader {
@@ -83,10 +83,13 @@ class SimpleTGA {
 private:
     size_t bitmapSize;
     uchar* bitmap;
+    uchar header[18];
+    uchar footer[26];
 public:
-    SimpleTGA(const uchar* file, size_t n);
+    SimpleTGA(const uchar file[], size_t n);
     virtual ~SimpleTGA();
     void printSimpleTGA();
+    uchar* arrayToTGA(uchar* array, size_t size);
 
     uint8_t idLength;
     uint8_t colorMapType;

@@ -89,7 +89,10 @@ void TGA::printTGA() {
     cout << endl;
 }
 
-SimpleTGA::SimpleTGA(const uchar* file, size_t n) {
+SimpleTGA::SimpleTGA(const uchar file[], size_t n) {
+    for (size_t i = 0; i < 18; i++)
+        header[i] = file[i];
+
     idLength = file[0];
     colorMapType = file[1];
     imageType = file[2];
@@ -110,6 +113,9 @@ SimpleTGA::SimpleTGA(const uchar* file, size_t n) {
         tmpBitmap[i] = file[offset++];
     bitmap = invertBitmap(tmpBitmap, bitmapSize, imageWidth, imageHeight);
     // delete[] tmpBitmap;
+
+    for (size_t i = 0; i < 26; i++)
+        footer[i] = file[n - 26 + i];
     
     offset = n - 26;
     extensionOffset = 0;
@@ -160,6 +166,19 @@ void SimpleTGA::printSimpleTGA() {
     cout << endl;
     cout << "End Dot: " << (int)end_dot << endl;
     cout << "End Null: " << (int)end_nul << endl;
+}
+
+uchar* SimpleTGA::arrayToTGA(uchar* array, size_t size) {
+    size_t n = 18 + size + 26;
+    uchar* tga = new uchar[n];
+    for (size_t i = 0; i < 18; i++)
+        tga[i] = footer[i];
+    
+    for (size_t i = 0; i < size; i++)
+        tga[18 + i] = array[i];
+    
+    for (size_t i = 0; i < 26; i++)
+        tga[n - 26 + i] = footer[i];
 }
 
 TGAHeader::TGAHeader(const uchar* file) {
