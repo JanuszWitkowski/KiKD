@@ -1,31 +1,18 @@
 #include "tga.hh"
 
-uint8_t*** bitmapToBGR(uint8_t* array, size_t n, size_t width, size_t height) {
+Pixel** bitmapToBGR(uchar* array, size_t n, size_t width, size_t height) {
     size_t arrayIndex = 0;
-    uint8_t*** BGR = new uint8_t**[height];
+    Pixel** BGR = new Pixel*[height];
     size_t m = 0;
     for (size_t i = 0; i < height; i++) {
-        BGR[i] = new uint8_t*[width];
+        BGR[i] = new Pixel[width];
         for (size_t j = 0; j < width; j++) {
-            BGR[i][j] = new uint8_t[3];
-            BGR[i][j][BLUE] = array[m++];
-            BGR[i][j][GREEN] = array[m++];
-            BGR[i][j][RED] = array[m++];
+            BGR[i][j].B(array[m++]);
+            BGR[i][j].G(array[m++]);
+            BGR[i][j].R(array[m++]);
         }
     }
     return BGR;
-}
-
-uint8_t* codesToBitmap(uint8_t** array, size_t colorSize) {
-    size_t bitmapSize = 3*colorSize, i = 0, j = 0;
-    uint8_t* bitmap = new uint8_t[bitmapSize];
-    while (i < bitmapSize) {
-        bitmap[i++] = array[BLUE][j];
-        bitmap[i++] = array[GREEN][j];
-        bitmap[i++] = array[RED][j];
-        j++;
-    }
-    return bitmap;
 }
 
 TGA::TGA(uchar* file, size_t n) {
@@ -36,9 +23,9 @@ TGA::TGA(uchar* file, size_t n) {
     size_t imageHeight = Header->getImageHeight();
     size_t imageSize = imageWidth * imageHeight;
     size_t offset = 18;
-    imageID = new uint8_t[idLength];
-    colorMapData = new uint8_t[colorMapLength];
-    imageData = new uint8_t[imageSize];
+    imageID = new uchar[idLength];
+    colorMapData = new uchar[colorMapLength];
+    imageData = new uchar[imageSize];
     for (size_t i = 0; i < idLength; i++)
         imageID[i] = file[offset++];
     for (size_t i = 0; i < colorMapLength; i++)
@@ -88,7 +75,7 @@ SimpleTGA::SimpleTGA(uchar* file, size_t n) {
 
     size_t offset = 18;
     bitMapSize = n - 18 - 26;
-    bitMap = new uint8_t[bitMapSize];
+    bitMap = new uchar[bitMapSize];
     for (size_t i = 0; i < bitMapSize; i++)
         bitMap[i] = file[offset++];
     

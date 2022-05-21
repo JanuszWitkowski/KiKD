@@ -1,8 +1,9 @@
 #ifndef __TGA_H
 #define __TGA_H
 
-#include <iostream>
+#include "def.hh"
 #include "bitrw.hh"
+#include "pixel.hh"
 
 using namespace std;
 
@@ -13,36 +14,35 @@ enum ColorBGRType {
     ALL
 };
 
-uint8_t*** bitmapToBGR(uint8_t* array, size_t n, size_t width, size_t height);
-uint8_t* codesToBitmap(uint8_t** array, size_t colorSize);
+Pixel** bitmapToBGR(uchar* array, size_t n, size_t width, size_t height);
 
 class TGAHeader {
 private:
-    uint8_t idLength;
+    uchar idLength;
 
-    uint8_t colorMapType;
+    uchar colorMapType;
 
-    uint8_t imageType;
+    uchar imageType;
 
     uint16_t firstEntryIndex;
     uint16_t colorMapLength;
-    uint8_t colorMapEntrySize;
+    uchar colorMapEntrySize;
 
     uint16_t XOrigin;
     uint16_t YOrigin;
     uint16_t imageWidth;
     uint16_t imageHeight;
-    uint8_t pixelDepth;
-    uint8_t imageDescriptor;
+    uchar pixelDepth;
+    uchar imageDescriptor;
 
 public:
     TGAHeader(uchar* file);
     virtual ~TGAHeader();
     void printTGAHeader();
-    uint8_t getIdLength() { return idLength; }
-    uint8_t getColorMapLength() { return colorMapLength; }
-    uint8_t getImageWidth() { return imageWidth; }
-    uint8_t getImageHeight() { return imageHeight; }
+    uchar getIdLength() { return idLength; }
+    uchar getColorMapLength() { return colorMapLength; }
+    uchar getImageWidth() { return imageWidth; }
+    uchar getImageHeight() { return imageHeight; }
 };
 
 class TGAFooter {
@@ -50,8 +50,8 @@ private:
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
     __uint128_t signature;
-    uint8_t end_dot;
-    uint8_t end_nul;
+    uchar end_dot;
+    uchar end_nul;
 public:
     TGAFooter(uchar* file, size_t n);
     virtual ~TGAFooter();
@@ -62,9 +62,9 @@ class TGA {
 private:
     TGAHeader* Header;
 
-    uint8_t* imageID;
-    uint8_t* colorMapData;
-    uint8_t* imageData;
+    uchar* imageID;
+    uchar* colorMapData;
+    uchar* imageData;
 
     TGAFooter* Footer;
 public:
@@ -72,41 +72,41 @@ public:
     virtual ~TGA();
     void printTGA();
     TGAHeader* getHeader() { return Header; }
-    uint8_t* getImageID() { return imageID; }
-    uint8_t* getColorMapData() { return colorMapData; }
-    uint8_t* getImageData() { return imageData; }
+    uchar* getImageID() { return imageID; }
+    uchar* getColorMapData() { return colorMapData; }
+    uchar* getImageData() { return imageData; }
 };
 
 class SimpleTGA {
 private:
     size_t bitMapSize;
-    uint8_t* bitMap;
+    uchar* bitMap;
 public:
     SimpleTGA(uchar* file, size_t n);
     virtual ~SimpleTGA();
     void printSimpleTGA();
 
-    uint8_t idLength;
-    uint8_t colorMapType;
-    uint8_t imageType;
+    uchar idLength;
+    uchar colorMapType;
+    uchar imageType;
     uint16_t firstEntryIndex;
     uint16_t colorMapLength;
-    uint8_t colorMapEntrySize;
+    uchar colorMapEntrySize;
     uint16_t XOrigin;
     uint16_t YOrigin;
     uint16_t imageWidth;
     uint16_t imageHeight;
-    uint8_t pixelDepth;
-    uint8_t imageDescriptor;
+    uchar pixelDepth;
+    uchar imageDescriptor;
 
-    uint8_t* getBitMap() { return bitMap; }
+    uchar* getBitMap() { return bitMap; }
     size_t getBitMapSize() { return bitMapSize; }
 
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
     __uint128_t signature;
-    uint8_t end_dot;
-    uint8_t end_nul;
+    uchar end_dot;
+    uchar end_nul;
 };
 
 #endif
