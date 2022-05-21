@@ -34,11 +34,12 @@ int main (int argc, char* argv[]) {
             // outFile = quantizer->encode();
             auto end = chrono::steady_clock::now();
             // double MSError = quantizer->mse();
+            // double SNR = quantizer->snr(MSError);
             cout << cBlue << "-------[KWANTYZACJA WEKTOROWA PLIKU " << inName << "]-------" << endl;
             cout << "Czas kwantyzacji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
             cout << "Czas kwantyzacji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
             // cout << "Błąd średniokwadratowy: " << MSError << endl;
-            // cout << "Stosunek sygnału do szumu: " << quantizer->snr(MSError) << endl;
+            // cout << "Stosunek sygnału do szumu: " << quantizer->SNR << endl;
             cout << "--------------------------------------------------------------" << cReset << endl;
             // delete quantizer;
         }
