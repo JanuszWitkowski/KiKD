@@ -112,7 +112,6 @@ SimpleTGA::SimpleTGA(const uchar file[], size_t n) {
     for (size_t i = 0; i < bitmapSize; i++)
         tmpBitmap[i] = file[offset++];
     bitmap = invertBitmap(tmpBitmap, bitmapSize, imageWidth, imageHeight);
-    delete[] tmpBitmap;
     pixels = new PixelBitmap(bitmap, imageWidth, imageHeight);
 
     for (size_t i = 0; i < 26; i++)
@@ -133,8 +132,6 @@ SimpleTGA::SimpleTGA(const uchar file[], size_t n) {
 
 SimpleTGA::~SimpleTGA() {
     delete[] bitmap;
-    delete[] header;
-    delete[] footer;
     delete pixels;
 }
 
@@ -183,6 +180,7 @@ uchar* SimpleTGA::arrayToTGA(uchar* array, size_t size) {
     
     for (size_t i = 0; i < 26; i++)
         tga[n - 26 + i] = footer[i];
+    return tga;
 }
 
 TGAHeader::TGAHeader(const uchar* file) {

@@ -164,7 +164,7 @@ vector<double*> Quantizer::splitCodebook(vector<double*> data, vector<double*> c
 }
 
 double* Quantizer::newVector(double vector[], double epsilon) {
-    double newVector[3];
+    double* newVector = new double[3];
     for (size_t i = 0; i < 3; i++) {
         newVector[i] = vector[i] * (1.0 + epsilon);
     }
@@ -172,7 +172,7 @@ double* Quantizer::newVector(double vector[], double epsilon) {
 }
 
 double* Quantizer::getPixelAsDoubleArray(Pixel* a) {
-    double x[3];
+    double* x = new double[3];
     x[0] = (double)(a->B());
     x[1] = (double)(a->G());
     x[2] = (double)(a->R());
