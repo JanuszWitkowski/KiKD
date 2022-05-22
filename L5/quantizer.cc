@@ -24,7 +24,10 @@ uchar* Quantizer::encode() {
             double diffs[codebook->getSize()];
             PixelBitmap* pixelBitmap = new PixelBitmap(tga->getBitmap(), bitmap->getWidth(), bitmap->getHeight());
             for (size_t k = 0; k < codebook->getSize(); k++) {
-                diffs[k] = euclidSquared(getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j)), getPixelAsDoubleArray(codebook->pixel(k)));
+                double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
+                double* pixelNew = getPixelAsDoubleArray(bitmap->pixel(i, j));
+                diffs[k] = euclidSquared(pixelOld, pixelNew);
+                delete pixelOld, pixelNew;
             }
             bitmap->pixel(i, j)->set(codebook->pixel(minIndexFromDoubles(diffs, codebook->getSize())));
         }
@@ -36,7 +39,10 @@ double Quantizer::mse() {
     double sum = 0.0;
     for (size_t i = 0; i < tga->imageHeight; i++) {
         for (size_t j = 0; j < tga->imageWidth; j++) {
-            sum += euclidSquared(getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j)), getPixelAsDoubleArray(bitmap->pixel(i, j)));
+            double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
+            double* pixelNew = getPixelAsDoubleArray(bitmap->pixel(i, j));
+            sum += euclidSquared(pixelOld, pixelNew);
+            delete pixelOld, pixelNew;
         }
     }
     return sum / (tga->imageWidth * tga->imageHeight);
@@ -68,7 +74,15 @@ PixelArray* Quantizer::generateCodebook() {
         cb = splitCodebook(data, cb, epsilon, avgDist, x);
         avgDist = x;
     }
-    return castCodebook(cb);
+    PixelArray* newCB = castCodebook(cb);
+
+    /* CLEANUP */
+    for (size_t i = 0; i < cb.size(); i++)
+        delete[] cb.at(i);
+    for (size_t i = 0; i < data.size(); i++)
+        delete[] data.at(i);
+    
+    return newCB;
 }
 
 vector<double*> Quantizer::castBitmapToVectors(PixelBitmap* bitmap) {
@@ -147,8 +161,8 @@ vector<double*> Quantizer::splitCodebook(vector<double*> data, vector<double*> c
     size_t dataSize = data.size();
     vector<double*> newCB;
     for (size_t i = 0; i < cb.size(); i++) {
-        newCB.push_back(newVector(cb.at(i), epsilon));
-        newCB.push_back(newVector(cb.at(i), -epsilon));
+        newCB.push_back(newVector(cb.at(i), epsilon));  // NEEDS CLEENUP!
+        newCB.push_back(newVector(cb.at(i), -epsilon)); // NEEDS CLEANUP!
     }
     cb = newCB;
 

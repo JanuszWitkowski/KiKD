@@ -16,8 +16,6 @@ private:
     vector<double*> castBitmapToVectors(PixelBitmap* bitmap);
     PixelArray* castCodebook(vector<double*> vectors);
     size_t minIndexFromDoubles(double array[], size_t n);
-    double** bitmapToVectors(Pixel*** bitmap);
-    Pixel** vectorsToBitmap(double** vectors);
     double* avgVectorOfVectors(vector<double*> vectors);
     double avgDistortion(double* vector0, vector<double*> vectors, size_t size);
     double avgDistortion(vector<double*> vectorsA, vector<double*> vectorsB, size_t size);
