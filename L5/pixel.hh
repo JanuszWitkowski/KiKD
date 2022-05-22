@@ -2,6 +2,7 @@
 #define __PIXEL_H
 
 #include "def.hh"
+#include <vector>
 
 class Pixel {
 private:
@@ -20,6 +21,18 @@ public:
     void B(const uchar v) { blue = v; }
     void set(uchar b, uchar g, uchar r) { R(r); G(g); B(b); }
     void set(Pixel* pixel);
+};
+
+class PixelArray {
+private:
+    size_t length;
+    Pixel** pixels;
+public:
+    PixelArray();
+    PixelArray(size_t size);
+    virtual ~PixelArray();
+    size_t getSize() { return length; }
+    Pixel* pixel(size_t i) { return pixels[i]; }
 };
 
 class PixelBitmap {

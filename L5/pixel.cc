@@ -23,6 +23,20 @@ void Pixel::set(Pixel* pixel) {
 }
 
 
+PixelArray::PixelArray(size_t size) {
+    length = size;
+    pixels = new Pixel*[length];
+    for (size_t i = 0; i < length; i++)
+        pixels[i] = new Pixel();
+}
+
+PixelArray::~PixelArray() {
+    for (size_t i = 0; i < length; i++)
+        delete pixels[i];
+    delete[] pixels;
+}
+
+
 PixelBitmap::PixelBitmap(size_t _width, size_t _height) {
     width = _width;
     height = _height;
@@ -58,4 +72,15 @@ PixelBitmap::~PixelBitmap() {
 
 uchar* pixelbitmapToArray(PixelBitmap* bitmap) {
     size_t width = bitmap->getWidth(), height = bitmap->getHeight();
+    size_t arraySize = width * height * 3;
+    uchar* array = new uchar[arraySize];
+    size_t arrayIndex = 0;
+    for (size_t i = 0; i < height; i++) {
+        for (size_t j = 0; j < width; j++) {
+            array[arrayIndex++] = bitmap->pixel(i, j)->B();
+            array[arrayIndex++] = bitmap->pixel(i, j)->G();
+            array[arrayIndex++] = bitmap->pixel(i, j)->R();
+        }
+    }
+    return array;
 }

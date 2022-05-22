@@ -83,6 +83,7 @@ class SimpleTGA {
 private:
     size_t bitmapSize;
     uchar* bitmap;
+    PixelBitmap* pixels;
     uchar header[18];
     uchar footer[26];
 public:
@@ -106,6 +107,7 @@ public:
 
     uint8_t* getBitmap() { return bitmap; }
     size_t getBitmapSize() { return bitmapSize; }
+    PixelBitmap* getPixelBitmap() { return pixels; }
 
     uint32_t extensionOffset;
     uint32_t developerAreaOffset;
