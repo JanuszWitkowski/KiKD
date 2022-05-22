@@ -22,7 +22,6 @@ uchar* Quantizer::encode() {
     for (size_t i = 0; i < bitmap->getHeight(); i++) {
         for (size_t j = 0; j < bitmap->getWidth(); j++) {
             double diffs[codebook->getSize()];
-            PixelBitmap* pixelBitmap = new PixelBitmap(tga->getBitmap(), bitmap->getWidth(), bitmap->getHeight());
             for (size_t k = 0; k < codebook->getSize(); k++) {
                 double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
                 double* pixelNew = getPixelAsDoubleArray(bitmap->pixel(i, j));
