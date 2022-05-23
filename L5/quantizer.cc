@@ -131,21 +131,27 @@ double* Quantizer::avgVectorOfVectors(vector<double*> vectors) {
 }
 
 double Quantizer::avgDistortion(double* vector0, vector<double*> vectors, size_t size) {
-    vector<double> vectorsEuclid;
-    vectorsEuclid.push_back(0.0);
+    double distortion = 0.0;
+    // vector<double> vectorsEuclid;
+    // vectorsEuclid.push_back(0.0);
     for (size_t i = 0; i < vectors.size(); i++) {
-        vectorsEuclid.push_back(euclidSquared(vector0, vectors.at(i)));
+        // vectorsEuclid.push_back(euclidSquared(vector0, vectors.at(i)));
+        distortion += euclidSquared(vector0, vectors.at(i));
     }
-    // return vectorsEuclid ???
+    return distortion/size;
+    // return vectorsEuclid.stream().reduce((s, d) -> s + d / size).get(); ???
 }
 
 double Quantizer::avgDistortion(vector<double*> vectorsA, vector<double*> vectorsB, size_t size) {
-    vector<double> vectorsEuclid;
-    vectorsEuclid.push_back(0.0);
+    double distortion = 0.0;
+    // vector<double> vectorsEuclid;
+    // vectorsEuclid.push_back(0.0);
     for (size_t i = 0; i < vectorsA.size(); i++) {
-        vectorsEuclid.push_back(euclidSquared(vectorsA.at(i), vectorsB.at(i)));
+        // vectorsEuclid.push_back(euclidSquared(vectorsA.at(i), vectorsB.at(i)));
+        distortion += euclidSquared(vectorsA.at(i), vectorsB.at(i));
     }
-    // return vectorsEuclid ???
+    return distortion/size;
+    // return vectorsEuclid.stream().reduce((s, d) -> s + d / size).get(); ???
 }
 
 double Quantizer::euclidSquared(double a[], double b[]) {

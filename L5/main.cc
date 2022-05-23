@@ -42,6 +42,7 @@ int main (int argc, char* argv[]) {
             cout << "Stosunek sygnału do szumu: " << SNR << endl;
             cout << "--------------------------------------------------------------" << cReset << endl;
             delete quantizer;
+            delete[] inFile, outFile;
         }
     }
     return 0;
