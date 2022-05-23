@@ -24,7 +24,7 @@ uchar* Quantizer::encode(string codename) {
         for (size_t j = 0; j < bitmap->getWidth(); j++) {
             double diffs[codebook->getSize()];
             for (size_t k = 0; k < codebook->getSize(); k++) {
-                double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
+                double* pixelOld = getPixelAsDoubleArray(bitmap->pixel(i, j));
                 double* pixelNew = getPixelAsDoubleArray(codebook->pixel(k));
                 diffs[k] = euclidSquared(pixelOld, pixelNew);
                 delete[] pixelOld;
@@ -70,6 +70,7 @@ double Quantizer::snr(double error) {
 }
 
 PixelArray* Quantizer::generateCodebook(int codebookSize) {
+    cout << "generateCodebook" << endl;
     double epsilon = 0.00001;
     vector<double*> cb;
     vector<double*> data = castBitmapToVectors(tga->getPixelBitmap());
@@ -78,11 +79,16 @@ PixelArray* Quantizer::generateCodebook(int codebookSize) {
 
     double avgDist  = avgDistortion(c0, data, data.size());
 
+    size_t counter = 0;
+    cout << "Splitting" << endl;
     while (cb.size() < codebookSize) {
+        counter++;
         double x;
+        cout << "Split " << counter << endl;
         cb = splitCodebook(data, cb, epsilon, avgDist, x);
         avgDist = x;
     }
+    cout << counter << "-" << cb.size() << endl;
     PixelArray* newCB = castCodebook(cb);
 
     /* CLEANUP */
@@ -142,14 +148,10 @@ double* Quantizer::avgVectorOfVectors(vector<double*> vectors) {
 
 double Quantizer::avgDistortion(double* vector0, vector<double*> vectors, size_t size) {
     double distortion = 0.0;
-    // vector<double> vectorsEuclid;
-    // vectorsEuclid.push_back(0.0);
     for (size_t i = 0; i < vectors.size(); i++) {
-        // vectorsEuclid.push_back(euclidSquared(vector0, vectors.at(i)));
         distortion += euclidSquared(vector0, vectors.at(i));
     }
     return distortion/size;
-    // return vectorsEuclid.stream().reduce((s, d) -> s + d / size).get(); ???
 }
 
 double Quantizer::avgDistortion(vector<double*> vectorsA, vector<double*> vectorsB, size_t size) {

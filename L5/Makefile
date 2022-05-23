@@ -13,11 +13,11 @@ run0: main
 	python3 create_png.py
 
 run1: main
-	./main testy/example1.tga output/example.tga 3
+	./main testy/example1.tga output/example.tga 8
 	python3 create_png.py
 
 run2: main
-	./main testy/example2.tga output/example.tga 2
+	./main testy/example2.tga output/example.tga 8
 	python3 create_png.py
 
 run3: main

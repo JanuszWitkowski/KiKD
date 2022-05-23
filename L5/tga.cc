@@ -5,9 +5,12 @@ uchar* invertBitmap(const uchar bitmap[], size_t n, size_t width, size_t height)
     size_t invIndex = 0;
     for (size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
-            inverted[invIndex++] = bitmap[n-3];
-            inverted[invIndex++] = bitmap[n-2];
-            inverted[invIndex++] = bitmap[n-1];
+            // inverted[invIndex++] = bitmap[n-3];
+            // inverted[invIndex++] = bitmap[n-2];
+            // inverted[invIndex++] = bitmap[n-1];
+            inverted[invIndex++] = bitmap[invIndex];
+            inverted[invIndex++] = bitmap[invIndex];
+            inverted[invIndex++] = bitmap[invIndex];
             n -= 3;
         }
     }
@@ -119,11 +122,12 @@ SimpleTGA::SimpleTGA(const uchar file[], size_t n) {
 
     size_t offset = 18;
     bitmapSize = n - 18 - 26;
-    uchar tmpBitmap[bitmapSize];
+    uchar* tmpBitmap = new uchar[bitmapSize];
     for (size_t i = 0; i < bitmapSize; i++)
         tmpBitmap[i] = file[offset++];
     bitmap = invertBitmap(tmpBitmap, bitmapSize, imageWidth, imageHeight);
     // bitmap = tmpBitmap;
+    delete[] tmpBitmap;
     pixels = new PixelBitmap(bitmap, imageWidth, imageHeight);
 
     for (size_t i = 0; i < 26; i++)
