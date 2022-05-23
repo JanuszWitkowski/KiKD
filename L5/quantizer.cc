@@ -1,6 +1,7 @@
 #include "quantizer.hh"
 #include <cmath>
 #include <unordered_map>
+#include <algorithm>
 
 Quantizer::Quantizer() {
     //
@@ -171,15 +172,54 @@ vector<double*> Quantizer::splitCodebook(vector<double*> data, vector<double*> c
     }
     cb = newCB;
 
-    double avgDistortion = 0.0;
+    double averageDistortion = 0.0;
     double error = epsilon + 1;
     while (error > epsilon) {
         vector<double*> closest;
         for (size_t i = 0; i < dataSize; i++) {
             closest.push_back(nullptr);
         }
-        // unordered_map<
+        // vector<vector<double*>> nearestVectors;
+        // vector<vector<int>> nearestVectorsIndexes;
+        unordered_map<int, vector<double*>> nearestVectors;
+        unordered_map<int, vector<int>> nearestVectorsIndexes;
+        for (size_t i = 0; i < data.size(); i++) {
+            double minDist = -1.0;
+            int closestIndex = -1;
+            for (int j = 0; j < cb.size(); j++) {
+                double d = euclidSquared(data.at(i), cb.at(j));
+                if (j == 0 || d < minDist) {
+                    minDist = d;
+                    closest.at(i) = cb.at(j);
+                    closestIndex = j;
+                }
+            }
+            if (nearestVectors.find(closestIndex) == nearestVectors.end()) {
+                nearestVectors[closestIndex] = vector<double*>();
+            }
+            if (nearestVectorsIndexes.find(closestIndex) == nearestVectorsIndexes.end()) {
+                nearestVectorsIndexes[closestIndex] = vector<int>();
+            }
+            nearestVectors.at(closestIndex).push_back(data.at(i));
+            nearestVectorsIndexes.at(closestIndex).push_back(i);
+        }
+
+        for (int i = 0; i < cb.size(); i++) {
+            vector<double*> nearestVectorsOfI = nearestVectors.at(i);
+            if (nearestVectorsOfI.size() > 0) {
+                double* averageVector = avgVectorOfVectors(nearestVectorsOfI);
+                cb.at(i) = averageVector;
+                // nearestVectorsIndexes.at(i)
+            }
+        }
+
+        double prevAvgDist = averageDistortion > 0.0 ? averageDistortion : initialAvgDist;
+        averageDistortion = avgDistortion(closest, data, dataSize);
+
+        error = (prevAvgDist - averageDistortion) / prevAvgDist;
     }
+    x = averageDistortion;
+    return cb;
 }
 
 double* Quantizer::newVector(double vector[], double epsilon) {
