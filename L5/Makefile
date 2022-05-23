@@ -9,16 +9,24 @@ val: main
 	valgrind --leak-check=full --track-origins=yes ./main testy/example2.tga output/example.tga 0
 
 run0: main
-	./main testy/example0.tga output/example.tga 24
+	./main testy/example0.tga output/example.tga 2
+	python3 create_png.py
 
 run1: main
-	./main testy/example1.tga output/example.tga 10
+	./main testy/example1.tga output/example.tga 3
+	python3 create_png.py
 
 run2: main
-	./main testy/example2.tga output/example.tga 5
+	./main testy/example2.tga output/example.tga 2
+	python3 create_png.py
 
 run3: main
-	./main testy/example3.tga output/example.tga 20
+	./main testy/example3.tga output/example.tga 3
+	python3 create_png.py
+
+test.run: test
+	./test
+	python3 create_png.py
 
 test.val: test
 	valgrind --leak-check=full --track-origins=yes ./test

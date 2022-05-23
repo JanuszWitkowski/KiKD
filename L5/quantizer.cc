@@ -19,13 +19,13 @@ Quantizer::~Quantizer() {
     delete bitmap;
 }
 
-uchar* Quantizer::encode() {
+uchar* Quantizer::encode(string codename) {
     for (size_t i = 0; i < bitmap->getHeight(); i++) {
         for (size_t j = 0; j < bitmap->getWidth(); j++) {
             double diffs[codebook->getSize()];
             for (size_t k = 0; k < codebook->getSize(); k++) {
                 double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
-                double* pixelNew = getPixelAsDoubleArray(bitmap->pixel(i, j));
+                double* pixelNew = getPixelAsDoubleArray(codebook->pixel(k));
                 diffs[k] = euclidSquared(pixelOld, pixelNew);
                 delete[] pixelOld;
                 delete[] pixelNew;
@@ -35,7 +35,10 @@ uchar* Quantizer::encode() {
     }
 
     uchar* bitmapArray = pixelbitmapToArray(bitmap);
-    uchar* tgaArray = tga->arrayToTGA(bitmapArray, bitmap->getWidth() * bitmap->getHeight() * 3);
+    printArrayToFile("output/array.txt", bitmapArray, bitmap->getWidth(), bitmap->getHeight());
+    size_t tgaSize = bitmap->getWidth() * bitmap->getHeight() * 3;
+    uchar* tgaArray = tga->arrayToTGA(bitmapArray, tgaSize);
+    tga->produceTGAFile(codename, tgaArray, tgaSize);
     delete[] bitmapArray;
     return tgaArray;
 }
@@ -151,14 +154,10 @@ double Quantizer::avgDistortion(double* vector0, vector<double*> vectors, size_t
 
 double Quantizer::avgDistortion(vector<double*> vectorsA, vector<double*> vectorsB, size_t size) {
     double distortion = 0.0;
-    // vector<double> vectorsEuclid;
-    // vectorsEuclid.push_back(0.0);
     for (size_t i = 0; i < vectorsA.size(); i++) {
-        // vectorsEuclid.push_back(euclidSquared(vectorsA.at(i), vectorsB.at(i)));
         distortion += euclidSquared(vectorsA.at(i), vectorsB.at(i));
     }
     return distortion/size;
-    // return vectorsEuclid.stream().reduce((s, d) -> s + d / size).get(); ???
 }
 
 double Quantizer::euclidSquared(double a[], double b[]) {
@@ -173,8 +172,8 @@ vector<double*> Quantizer::splitCodebook(vector<double*> data, vector<double*> c
     size_t dataSize = data.size();
     vector<double*> newCB;
     for (size_t i = 0; i < cb.size(); i++) {
-        newCB.push_back(newVector(cb.at(i), epsilon));  // NEEDS CLEENUP!
-        newCB.push_back(newVector(cb.at(i), -epsilon)); // NEEDS CLEANUP!
+        newCB.push_back(newVector(cb.at(i), epsilon));
+        newCB.push_back(newVector(cb.at(i), -epsilon));
     }
     cb = newCB;
 

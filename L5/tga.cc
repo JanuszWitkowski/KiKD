@@ -44,6 +44,17 @@ void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSiz
     f.close();
 }
 
+void printArrayToFile(const string filename, const uchar* array, size_t width, size_t height) {
+    ofstream fout(filename);
+    fout << (int)width << endl;
+    fout << (int)height << endl;
+    size_t n = 3 * width * height;
+    for (size_t i = 0; i < n; i++) {
+        fout << (int)(array[i]) << endl;
+    }
+    fout.close();
+}
+
 
 TGA::TGA(const uchar* file, size_t n) {
     Header = new TGAHeader(file);
@@ -112,6 +123,7 @@ SimpleTGA::SimpleTGA(const uchar file[], size_t n) {
     for (size_t i = 0; i < bitmapSize; i++)
         tmpBitmap[i] = file[offset++];
     bitmap = invertBitmap(tmpBitmap, bitmapSize, imageWidth, imageHeight);
+    // bitmap = tmpBitmap;
     pixels = new PixelBitmap(bitmap, imageWidth, imageHeight);
 
     for (size_t i = 0; i < 26; i++)
@@ -181,6 +193,13 @@ uchar* SimpleTGA::arrayToTGA(uchar* array, size_t size) {
     for (size_t i = 0; i < 26; i++)
         tga[n - 26 + i] = footer[i];
     return tga;
+}
+
+void SimpleTGA::produceTGAFile(string filename, uchar* file, size_t n) {
+    ofstream f(filename);
+    for (size_t i = 0; i < n; i++)
+        f << file[i];
+    f.close();
 }
 
 TGAHeader::TGAHeader(const uchar* file) {

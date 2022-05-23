@@ -27,7 +27,7 @@ public:
     Quantizer();
     Quantizer(uchar* file, size_t n, int colorsNumber);
     virtual ~Quantizer();
-    uchar* encode();
+    uchar* encode(string codename);
     double mse();
     double snr(double error);
     SimpleTGA* getTGA() { return tga; }
