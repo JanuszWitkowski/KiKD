@@ -9,7 +9,7 @@ Quantizer::Quantizer() {
 
 Quantizer::Quantizer(uchar* file, size_t n, int colorsNumber) {
     tga = new SimpleTGA(file, n);
-    codebook = generateCodebook();
+    codebook = generateCodebook(colorsNumber);
     bitmap = new PixelBitmap(file, tga->imageWidth, tga->imageHeight);
 }
 
@@ -27,12 +27,17 @@ uchar* Quantizer::encode() {
                 double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
                 double* pixelNew = getPixelAsDoubleArray(bitmap->pixel(i, j));
                 diffs[k] = euclidSquared(pixelOld, pixelNew);
-                delete pixelOld, pixelNew;
+                delete[] pixelOld;
+                delete[] pixelNew;
             }
             bitmap->pixel(i, j)->set(codebook->pixel(minIndexFromDoubles(diffs, codebook->getSize())));
         }
     }
-    return tga->arrayToTGA(pixelbitmapToArray(bitmap), bitmap->getWidth() * bitmap->getHeight() * 3);
+
+    uchar* bitmapArray = pixelbitmapToArray(bitmap);
+    uchar* tgaArray = tga->arrayToTGA(bitmapArray, bitmap->getWidth() * bitmap->getHeight() * 3);
+    delete[] bitmapArray;
+    return tgaArray;
 }
 
 double Quantizer::mse() {
@@ -42,7 +47,8 @@ double Quantizer::mse() {
             double* pixelOld = getPixelAsDoubleArray(tga->getPixelBitmap()->pixel(i, j));
             double* pixelNew = getPixelAsDoubleArray(bitmap->pixel(i, j));
             sum += euclidSquared(pixelOld, pixelNew);
-            delete pixelOld, pixelNew;
+            delete[] pixelOld;
+            delete[] pixelNew;
         }
     }
     return sum / (tga->imageWidth * tga->imageHeight);
@@ -60,7 +66,7 @@ double Quantizer::snr(double error) {
     return sum / (error * (double)(tga->imageWidth) * (double)(tga->imageHeight));
 }
 
-PixelArray* Quantizer::generateCodebook() {
+PixelArray* Quantizer::generateCodebook(int codebookSize) {
     double epsilon = 0.00001;
     vector<double*> cb;
     vector<double*> data = castBitmapToVectors(tga->getPixelBitmap());
@@ -69,7 +75,7 @@ PixelArray* Quantizer::generateCodebook() {
 
     double avgDist  = avgDistortion(c0, data, data.size());
 
-    while (cb.size() < codebook->getSize()) {
+    while (cb.size() < codebookSize) {
         double x;
         cb = splitCodebook(data, cb, epsilon, avgDist, x);
         avgDist = x;

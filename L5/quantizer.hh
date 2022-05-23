@@ -12,7 +12,7 @@ private:
     SimpleTGA* tga;
     PixelArray* codebook;
     PixelBitmap* bitmap;
-    PixelArray* generateCodebook();
+    PixelArray* generateCodebook(int codebookSize);
     vector<double*> castBitmapToVectors(PixelBitmap* bitmap);
     PixelArray* castCodebook(vector<double*> vectors);
     size_t minIndexFromDoubles(double array[], size_t n);
