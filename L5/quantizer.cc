@@ -209,7 +209,12 @@ vector<double*> Quantizer::splitCodebook(vector<double*> data, vector<double*> c
             if (nearestVectorsOfI.size() > 0) {
                 double* averageVector = avgVectorOfVectors(nearestVectorsOfI);
                 cb.at(i) = averageVector;
-                // nearestVectorsIndexes.at(i)
+                // for (auto& it: nearestVectorsIndexes.at(i)) {
+                //     closest.at(it) = averageVector;
+                // }
+                for (int j = 0; j < nearestVectorsIndexes.at(i).size(); j++) {
+                    closest.at(nearestVectorsIndexes.at(i).at(j)) = averageVector;
+                }
             }
         }
 
