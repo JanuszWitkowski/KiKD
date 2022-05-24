@@ -89,6 +89,7 @@ private:
     uchar footer[26];
 public:
     SimpleTGA(const uchar file[], size_t n);
+    SimpleTGA(const string filename, const uchar file[], size_t n);
     virtual ~SimpleTGA();
     void printSimpleTGA();
     uchar* arrayToTGA(uchar* array, size_t size);

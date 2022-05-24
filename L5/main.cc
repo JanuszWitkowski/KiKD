@@ -34,7 +34,7 @@ int main (int argc, char* argv[]) {
             cout << cYellow << "Liczba kolorów wynosi " << colorsNumber << "." << cReset << endl;
             cout << cYellow << "Rozpoczyna się tworzenie kwantyzatora i budowanie codebook'a..." << cReset << endl;
             auto start = chrono::steady_clock::now();
-            Quantizer* quantizer = new Quantizer(inFile, n, colorsNumber);
+            Quantizer* quantizer = new Quantizer(inName, inFile, n, colorsNumber);
             auto end = chrono::steady_clock::now();
             cout << cYellow << "Utworzono kwantyzator w " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s, rozpoczyna się faza kwantyzacji." << cReset << endl;
             start = chrono::steady_clock::now();

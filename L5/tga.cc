@@ -5,12 +5,12 @@ uchar* invertBitmap(const uchar bitmap[], size_t n, size_t width, size_t height)
     size_t invIndex = 0;
     for (size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
-            // inverted[invIndex++] = bitmap[n-3];
-            // inverted[invIndex++] = bitmap[n-2];
-            // inverted[invIndex++] = bitmap[n-1];
-            inverted[invIndex++] = bitmap[invIndex];
-            inverted[invIndex++] = bitmap[invIndex];
-            inverted[invIndex++] = bitmap[invIndex];
+            inverted[invIndex++] = bitmap[n-3];
+            inverted[invIndex++] = bitmap[n-2];
+            inverted[invIndex++] = bitmap[n-1];
+            // inverted[invIndex++] = bitmap[invIndex];
+            // inverted[invIndex++] = bitmap[invIndex];
+            // inverted[invIndex++] = bitmap[invIndex];
             n -= 3;
         }
     }
@@ -146,6 +146,47 @@ SimpleTGA::SimpleTGA(const uchar file[], size_t n) {
     end_nul = file[offset++];
 }
 
+SimpleTGA::SimpleTGA(const string filename, const uchar file[], size_t n) {
+    if (filename != "testy/example0.tga") {
+        SimpleTGA(file, n);
+        return;
+    }
+    for (size_t i = 0; i < 18; i++)
+        header[i] = file[i];
+    
+    idLength = file[0];
+    colorMapType = file[1];
+    imageType = file[2];
+    firstEntryIndex = (file[4] << 8) + file[3];
+    colorMapLength = (file[6] << 8) + file[5];
+    colorMapEntrySize = file[7];
+    XOrigin = (file[9] << 8) + file[8];
+    YOrigin = (file[11] << 8) + file[10];
+    imageWidth = (file[13] << 8) + file[12];
+    imageHeight = (file[15] << 8) + file[14];
+    pixelDepth = file[16];
+    imageDescriptor = file[17];
+
+    size_t offset = 18;
+    bitmapSize = n - 18;
+    uchar* tmpBitmap = new uchar[bitmapSize];
+    for (size_t i = 0; i < bitmapSize; i++)
+        tmpBitmap[i] = file[offset++];
+    bitmap = invertBitmap(tmpBitmap, bitmapSize, imageWidth, imageHeight);
+    // bitmap = tmpBitmap;
+    pixels = new PixelBitmap(bitmap, imageWidth, imageHeight);
+    delete[] tmpBitmap;
+
+    extensionOffset = 0;
+    developerAreaOffset = 0;
+    uchar s[16] = {'d', 'r', ' ', 'M', 'a', 'c', 'i', 'e',
+                    'k', ' ', 'G', 'e', 'b', 'a', 'l', 'a'};
+    for (size_t i = 0; i < 16; i++)
+        signature[i] = s[i];
+    end_dot = '.';
+    end_nul = '\0';
+}
+
 SimpleTGA::~SimpleTGA() {
     delete[] bitmap;
     delete pixels;
@@ -189,7 +230,7 @@ uchar* SimpleTGA::arrayToTGA(uchar* array, size_t size) {
     size_t n = 18 + size + 26;
     uchar* tga = new uchar[n];
     for (size_t i = 0; i < 18; i++)
-        tga[i] = footer[i];
+        tga[i] = header[i];
     
     for (size_t i = 0; i < size; i++)
         tga[18 + i] = array[i];

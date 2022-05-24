@@ -9,7 +9,7 @@ val: main
 	valgrind --leak-check=full --track-origins=yes ./main testy/example2.tga output/example.tga 0
 
 run0: main
-	./main testy/example0.tga output/example.tga 2
+	./main testy/example0.tga output/example.tga 4
 	python3 create_png.py
 
 run1: main
@@ -17,7 +17,7 @@ run1: main
 	python3 create_png.py
 
 run2: main
-	./main testy/example2.tga output/example.tga 8
+	./main testy/example2.tga output/example.tga 5
 	python3 create_png.py
 
 run3: main

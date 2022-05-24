@@ -25,7 +25,7 @@ private:
     double* getPixelAsDoubleArray(Pixel* a);
 public:
     Quantizer();
-    Quantizer(uchar* file, size_t n, int colorsNumber);
+    Quantizer(string filename, uchar* file, size_t n, int colorsNumber);
     virtual ~Quantizer();
     uchar* encode(string codename);
     double mse();

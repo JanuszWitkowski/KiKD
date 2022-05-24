@@ -7,8 +7,8 @@ Quantizer::Quantizer() {
     //
 }
 
-Quantizer::Quantizer(uchar* file, size_t n, int colorsNumber) {
-    tga = new SimpleTGA(file, n);
+Quantizer::Quantizer(string filename, uchar* file, size_t n, int colorsNumber) {
+    tga = new SimpleTGA(filename, file, n);
     codebook = generateCodebook(colorsNumber);
     bitmap = new PixelBitmap(file, tga->imageWidth, tga->imageHeight);
 }
@@ -34,11 +34,13 @@ uchar* Quantizer::encode(string codename) {
         }
     }
 
-    uchar* bitmapArray = pixelbitmapToArray(bitmap);
+    uchar* bitmapArrayPreInv = pixelbitmapToArray(bitmap);
+    uchar* bitmapArray = invertBitmap(bitmapArrayPreInv, bitmap->getWidth() * bitmap->getHeight() * 3, bitmap->getWidth(), bitmap->getHeight());
     printArrayToFile("output/array.txt", bitmapArray, bitmap->getWidth(), bitmap->getHeight());
     size_t tgaSize = bitmap->getWidth() * bitmap->getHeight() * 3;
     uchar* tgaArray = tga->arrayToTGA(bitmapArray, tgaSize);
     tga->produceTGAFile(codename, tgaArray, tgaSize);
+    delete[] bitmapArrayPreInv;
     delete[] bitmapArray;
     return tgaArray;
 }
