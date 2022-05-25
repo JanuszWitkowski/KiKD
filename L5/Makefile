@@ -13,7 +13,7 @@ run0: main
 	python3 create_png.py
 
 run1: main
-	./main testy/example1.tga output/example.tga 8
+	./main testy/example1.tga output/example.tga 4
 	python3 create_png.py
 
 run2: main
@@ -21,7 +21,7 @@ run2: main
 	python3 create_png.py
 
 run3: main
-	./main testy/example3.tga output/example.tga 3
+	./main testy/example3.tga output/example.tga 7
 	python3 create_png.py
 
 test.run: test

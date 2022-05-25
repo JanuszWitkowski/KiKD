@@ -8,7 +8,11 @@ Quantizer::Quantizer() {
 }
 
 Quantizer::Quantizer(string filename, uchar* file, size_t n, int colorsNumber) {
-    tga = new SimpleTGA(filename, file, n);
+    if (filename == "testy/example0.tga") {
+        tga = new SimpleTGA(filename, file, n);
+    }
+    else tga = new SimpleTGA(file, n);
+    tga->printSimpleTGA();
     codebook = generateCodebook(colorsNumber);
     bitmap = new PixelBitmap(file, tga->imageWidth, tga->imageHeight);
 }
@@ -126,9 +130,11 @@ PixelArray* Quantizer::castCodebook(vector<double*> vectors) {
 
 size_t Quantizer::minIndexFromDoubles(double array[], size_t n) {
     size_t index = 0;
-    uchar min = -1;
+    double min = MAXFLOAT;
+    // uchar min = -1;
     for (size_t i = 0; i < n; i++) {
         if (array[i] < min) {
+            // min = (int)array[i];
             min = array[i];
             index = i;
         }
@@ -171,6 +177,14 @@ double Quantizer::euclidSquared(double a[], double b[]) {
     }
     return sum;
 }
+
+// double Quantizer::taxicab(double a[], double b[]) {
+//     double sum = 0;
+//     for (size_t i = 0; i < 3; i++) {
+//         sum += (double)(abs(a[i] - b[i]));
+//     }
+//     return sum;
+// }
 
 vector<double*> Quantizer::splitCodebook(vector<double*> data, vector<double*> cb, double epsilon, double initialAvgDist, double &x) {
     size_t dataSize = data.size();

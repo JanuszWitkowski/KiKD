@@ -6,7 +6,19 @@
 
 using namespace std;
 
+void testBlue () {
+    string filename = "colors/blue.tga";
+    size_t n;
+    uchar* file = fileToArray(filename, n);
+    SimpleTGA* tga = new SimpleTGA(file, n);
+    tga->printSimpleTGA();
+
+    delete[] file;
+    delete tga;
+}
+
 int main (void) {
+    // testBlue();
     string filename = "testy/example1.tga";
     string gebalaname = "testy/example0.tga";
     size_t n, m;

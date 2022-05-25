@@ -20,6 +20,7 @@ private:
     double avgDistortion(double* vector0, vector<double*> vectors, size_t size);
     double avgDistortion(vector<double*> vectorsA, vector<double*> vectorsB, size_t size);
     double euclidSquared(double a[], double b[]);
+    double taxicab(double a[], double b[]);
     vector<double*> splitCodebook(vector<double*> data, vector<double*> cb, double epsilon, double initialAvgDist, double &x);
     double* newVector(double* vector, double epsilon);
     double* getPixelAsDoubleArray(Pixel* a);

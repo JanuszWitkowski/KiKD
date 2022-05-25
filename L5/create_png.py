@@ -21,4 +21,4 @@ while i < len(numbers):
 
 img = Image.fromarray(data, 'RGB')
 img.save('output/my.png')
-img.show()
+# img.show()
