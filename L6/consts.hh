@@ -4,6 +4,8 @@
 
 using namespace std;
 
+typedef uint8_t uchar;
+
 const string cReset   = "\033[0m";
 const string cBlack   = "\033[30m";
 const string cRed     = "\033[31m";
