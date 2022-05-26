@@ -20,12 +20,12 @@ void szum(double p, string in, string out) {
         }
         else writer.writeBit(b);
     }
-    cout << "counter = " << counter << endl;
+    // cout << "counter/size = " << (double)((double)counter/reader.getFileSizeInBits()) << endl;
 }
 
 int main (int argc, char* argv[]) {
     srand(time(NULL));
-    cout << cGreen << "-----SZUM-----" << cReset << endl;
+    // cout << cGreen << "-----SZUM-----" << cReset << endl;
     if (argc != 4) {
         printError(ARGUMENT, "Niepoprawna liczba argumentów. Schemat podawania argumentów:\n<prawdopodobieństwo odrócenia bitu [0, 1]> <nazwa pliku wejściowego> <nazwa pliku wyjściowego>");
         return 1;
@@ -36,7 +36,7 @@ int main (int argc, char* argv[]) {
         return 1;
     }
     string in = argv[2], out = argv[3];
-    cout <<cGreen << "PODANE PARAMETRY\nPrawdopodobieństwo: " << p << "\nInput: " << in << "\nOutput: " << out << cReset << endl;
+    // cout <<cGreen << "PODANE PARAMETRY\nPrawdopodobieństwo: " << p << "\nInput: " << in << "\nOutput: " << out << cReset << endl;
     szum(p, in, out);
     return 0;
 }

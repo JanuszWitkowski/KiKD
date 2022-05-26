@@ -17,8 +17,8 @@ sprawdz.run: sprawdz
 	./sprawdz sprawdz.cc szum.cc
 
 sprawdz.test: sprawdz szum
-	./szum 0.01 sprawdz.cc output/sprawdz.cc
+	./szum 0.001 sprawdz.cc output/sprawdz.cc
 	./sprawdz sprawdz.cc output/sprawdz.cc
 
 clean:
-	rm -rf *.o output/*.hex szum
+	rm -rf *.o output/* szum

@@ -33,13 +33,13 @@ size_t sprawdz(string in1, string in2) {
 }
 
 int main(int argc, char* argv[]) {
-    cout << cGreen << "----SPRAWDZ----" << cReset << endl;
+    // cout << cGreen << "----SPRAWDZ----" << cReset << endl;
     if (argc != 3) {
         printError(ARGUMENT, "Niepoprawna liczba argumentów. Schemat podawania argumentów:\n<nazwa pierwszego pliku> <nazwa drugiego pliku>");
         return 1;
     }
     string in1 = argv[1], in2 = argv[2];
-    cout << cGreen << "PODANE PARAMETRY\nInput1: " << in1 << "\nInput2: " << in2 << cReset << endl;
+    // cout << cGreen << "PODANE PARAMETRY\nInput1: " << in1 << "\nInput2: " << in2 << cReset << endl;
     size_t counter = sprawdz(in1, in2);
     cout << cBlue << "Znaleziono " << counter << " niezgodnych 4-bitowych bloków." << cReset << endl;
     return 0;
