@@ -31,21 +31,11 @@ public:
     uint getNextBit();
     void printArray();
 
-    uint getCurrentBit () {
-        return (byteBuffer >> byteBufferIndex) & 1;
-    }
-
-    uchar getByte (size_t index) {
-        return file[index];
-    }
-
-    uchar* getFileArray () {
-        return file;
-    }
-
-    size_t getFileSize () {
-        return fileSize;
-    }
+    uint getCurrentBit() { return (byteBuffer >> byteBufferIndex) & 1; }
+    uchar getByte(size_t index) { return file[index]; }
+    uchar* getFileArray() { return file; }
+    size_t getFileSize() { return fileSize; }
+    size_t getFileSizeInBits() { return 8*fileSize; }
 };
 
 class BitWriter : public BitHandler {

@@ -19,15 +19,17 @@ const string cWhite   = "\033[37m";
 enum ErrorType {
     ARGUMENT,
     PARSING,
-    RUNTIME
+    RUNTIME,
+    MISMATCH
 };
 
-const string ErrorTypeName[3] = {
+const string ErrorTypeName[4] = {
     "ARGUMENT",
     "PARSING",
-    "RUNTIME"
+    "RUNTIME",
+    "MISMATCH"
 };
 
-void errorMsg(ErrorType type, string msg) {
+void printError(ErrorType type, string msg) {
     cerr << cRed << ErrorTypeName[type] << " ERROR: " << msg << cReset << endl;
 }
