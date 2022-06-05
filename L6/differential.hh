@@ -12,4 +12,6 @@ double deviation (uchar xn, uchar xm) { return ((double)xn - (double)xm)/2.0; }
 double* filterAverage (uchar* x, size_t n);
 double* filterDeviation (uchar* x, size_t n);
 
+uchar* differentialCoding (double* a, size_t aSize, size_t qBits);
+
 #endif
