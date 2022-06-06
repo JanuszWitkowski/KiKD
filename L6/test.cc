@@ -9,6 +9,7 @@ int main (void) {
     cout << "TEST" << endl;
     string filename = "testy/example0.tga";
     string codename = "output/kikd.kkd";
+    string newname = "output/example0.png";
     size_t n;
     size_t qBits = 3;
     uchar* array = fileToArray(filename, n);
@@ -52,6 +53,7 @@ int main (void) {
     // cout << endl;
 
     printBandsToFile(codename, codings[0], codings[1], tga->imageWidth, tga->imageHeight, qBits);
+    BandSolver* bands = new BandSolver(codename);
 
     // CLEAN-UP
     for (size_t i = 0; i < 3; i++) {
@@ -66,6 +68,7 @@ int main (void) {
     delete[] codings[1];
     delete[] filters;
     delete[] codings;
+    delete bands;
     delete[] colors[BLUE];
     delete[] colors[GREEN];
     delete[] colors[RED];

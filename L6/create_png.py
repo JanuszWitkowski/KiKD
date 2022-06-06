@@ -1,7 +1,10 @@
 from PIL import Image
 import numpy as np
+import sys
 
-with open('output/array.txt') as f:
+filename = sys.argv[1]
+newname = sys.argv[2]
+with open(filename) as f:
     numbers = f.read().splitlines()
 
 w = int(numbers[0])
@@ -20,5 +23,5 @@ while i < len(numbers):
     i += 3
 
 img = Image.fromarray(data, 'RGB')
-img.save('output/my.png')
+img.save(newname)
 # img.show()

@@ -24,12 +24,13 @@ int straightDequantizing (uchar* a, size_t aSize, size_t qBits);
 
 class BandSolver {
 private:
-    double*** filters;
+    int*** filters;
     uchar*** codings;
+    uchar* bitmap;
     size_t bandsNumber = 2;
     size_t colorsNumber = 3;
     size_t length;
-    size_t width, height;
+    size_t width, height, qBits;
 public:
     BandSolver();
     BandSolver(string filename);
@@ -37,7 +38,8 @@ public:
     size_t getLength() { return length; }
     size_t getBandsNumber() { return bandsNumber; }
     size_t gettColorsNumber() { return colorsNumber; }
-    double* colorFilter(size_t band, ColorBGRType color) { return filters[band][color]; }
+    int* colorFilter(size_t band, ColorBGRType color) { return filters[band][color]; }
+    uchar* colorCoding(size_t band, ColorBGRType color) { return codings[band][color]; }
 };
 
 #endif
