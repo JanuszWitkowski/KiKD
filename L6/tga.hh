@@ -2,7 +2,7 @@
 #define __TGA_H
 
 #include <fstream>
-#include "def.hh"
+#include "consts.hh"
 #include "bitrw.hh"
 #include "pixel.hh"
 

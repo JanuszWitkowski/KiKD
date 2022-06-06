@@ -1,7 +1,7 @@
 #ifndef __PIXEL_H
 #define __PIXEL_H
 
-#include "def.hh"
+#include "consts.hh"
 #include <vector>
 
 class Pixel {

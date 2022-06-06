@@ -2,8 +2,8 @@ CC=g++
 CXXFLAGS = -ggdb3
 LDFLAGS = -ggdb3
 
-main: main.o consts.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh
-test: test.o consts.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh
+main: main.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+test: test.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 
 test.val: test
 	valgrind --leak-check=full --track-origins=yes ./test
