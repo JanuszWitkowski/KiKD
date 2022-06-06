@@ -4,6 +4,13 @@
 #include "consts.hh"
 #include <vector>
 
+enum ColorBGRType {
+    BLUE,
+    GREEN,
+    RED,
+    ALL
+};
+
 class Pixel {
 private:
     uchar red;
@@ -33,6 +40,7 @@ public:
     virtual ~PixelArray();
     size_t getSize() { return length; }
     Pixel* pixel(size_t i) { return pixels[i]; }
+    uchar** pixelarrayToColorsArray();
 };
 
 class PixelBitmap {
@@ -47,6 +55,7 @@ public:
     size_t getWidth() { return width; }
     size_t getHeight() { return height; }
     Pixel* pixel(size_t i, size_t j) { return bitmap[i][j]; }
+    PixelArray* colorsArray();
 };
 
 uchar* pixelbitmapToArray(PixelBitmap* bitmap);

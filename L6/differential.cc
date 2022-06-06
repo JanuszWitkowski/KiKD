@@ -1,10 +1,14 @@
 #include "differential.hh"
 
+double averageValue (uchar xn, uchar xm) { return ((double)xn + (double)xm)/2.0; }
+double deviationValue (uchar xn, uchar xm) { return ((double)xn - (double)xm)/2.0; }
+
+
 double* filterAverage (uchar* x, size_t n) {
     double* filter = new double[n];
     filter[0] = x[0];
     for (size_t i = 1; i < n; i++) {
-        filter[i] = average(x[i], x[i-1]);
+        filter[i] = averageValue(x[i], x[i-1]);
     }
     return filter;
 }
@@ -13,7 +17,7 @@ double* filterDeviation (uchar* x, size_t n) {
     double* filter = new double[n];
     filter[0] = x[0];
     for (size_t i = 1; i < n; i++) {
-        filter[i] = deviation(x[i], x[i-1]);
+        filter[i] = deviationValue(x[i], x[i-1]);
     }
     return filter;
 }
@@ -28,7 +32,7 @@ uchar quantize (double x, uchar* q, size_t qSize) {
                 return center - 1;
             }
             else {
-                right = center;
+                right = center - 1;
             }
         }
         else if (x > (double)(q[center])) {
@@ -36,7 +40,7 @@ uchar quantize (double x, uchar* q, size_t qSize) {
                 return center;
             }
             else {
-                left = center;
+                left = center + 1;
             }
         }
         else {
@@ -52,6 +56,7 @@ uchar quantize (double x, uchar* q, size_t qSize) {
 }
 
 uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
+    // cout << "KODOWANIE ROZNICOWE\n";
     size_t qSize = (1 << qBits) + 1;
     uchar q[qSize];
     uchar qNext = (1 << (8 - qBits));
@@ -60,6 +65,7 @@ uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
     for (size_t i = 1; i <= qSize; i++)
         q[i] = q[i-1] + qNext;
     
+    // cout << "ROZPOCZYNAM DIFFY\n";
     double diffs[aSize];
     uchar* d = new uchar[aSize];
     uchar aNew[aSize];
@@ -67,11 +73,18 @@ uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
     d[0] = quantize(diffs[0], q, qSize);
     aNew[0] = d[0];
 
+    // cout << "ROZPOCZYNAM PETLE\n";
     for (size_t i = 1; i < aSize; i++) {
+        // cout << i << "/" << aSize << endl;
         diffs[i] = a[i] - (double)(aNew[i-1]);
+        // cout << "\tdiff = " << diffs[i] << endl;
         d[i] = quantize(diffs[i], q, qSize);
+        // cout << "\td = " << (int)d[i] << endl;
         aNew[i] = q[d[i]] + qHalf - aNew[i-1];
+        // cout << "\taNew = " << (int)aNew[i] << endl;;
     }
+
+    // cout << "ZAKONCZONO ROZNICOWE\n";
     return d;
 }
 

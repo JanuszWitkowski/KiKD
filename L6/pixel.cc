@@ -36,6 +36,19 @@ PixelArray::~PixelArray() {
     delete[] pixels;
 }
 
+uchar** PixelArray::pixelarrayToColorsArray() {
+    uchar** colors = new uchar*[3];
+    colors[BLUE] = new uchar[length];
+    colors[GREEN] = new uchar[length];
+    colors[RED] = new uchar[length];
+    for (size_t i = 0; i < length; i++) {
+        colors[BLUE][i] = pixels[i]->B();
+        colors[GREEN][i] = pixels[i]->G();
+        colors[RED][i] = pixels[i]->R();
+    }
+    return colors;
+}
+
 
 PixelBitmap::PixelBitmap(size_t _width, size_t _height) {
     width = _width;
@@ -68,6 +81,20 @@ PixelBitmap::~PixelBitmap() {
         delete[] bitmap[i];
     }
     delete[] bitmap;
+}
+
+PixelArray* PixelBitmap::colorsArray() {
+    size_t arraySize = width * height;
+    PixelArray* array = new PixelArray(arraySize);
+    size_t arrayIndex = 0;
+    for (size_t i = 0; i < height; i++) {
+        for (size_t j = 0; j < width; j++) {
+            array->pixel(arrayIndex++)->set(pixel(i, j)->B(),
+                                            pixel(i, j)->G(),
+                                            pixel(i, j)->R());
+        }
+    }
+    return array;
 }
 
 uchar* pixelbitmapToArray(PixelBitmap* bitmap) {

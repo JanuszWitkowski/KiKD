@@ -8,13 +8,6 @@
 
 using namespace std;
 
-enum ColorBGRType {
-    BLUE,
-    GREEN,
-    RED,
-    ALL
-};
-
 uchar* invertBitmap(const uchar bitmap[], size_t n, size_t width, size_t height);
 void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSize, size_t width, size_t height);
 void printArrayToFile(const string filename, const uchar* array, size_t width, size_t height);
