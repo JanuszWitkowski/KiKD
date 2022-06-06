@@ -13,5 +13,6 @@ double* filterAverage (uchar* x, size_t n);
 double* filterDeviation (uchar* x, size_t n);
 
 uchar* differentialCoding (double* a, size_t aSize, size_t qBits);
+uchar* straightQuantizing (double* a, size_t aSize, size_t qBits);
 
 #endif
