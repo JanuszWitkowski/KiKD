@@ -8,6 +8,7 @@ using namespace std;
 int main (void) {
     cout << "TEST" << endl;
     string filename = "testy/example0.tga";
+    string codename = "output/kikd.kkd";
     size_t n;
     size_t qBits = 3;
     uchar* array = fileToArray(filename, n);
@@ -37,18 +38,20 @@ int main (void) {
     }
     cout << "Koniec sekcji kodujacej." << endl;
 
-    for (size_t i = 0; i < 2; i++) {
-        cout << "UTWORZONE " << i << endl;
-        for (size_t j = 0; j < 3; j++) {
-            cout << "kolor " << j << endl;
-            for (size_t k = 0; k < length; k++) {
-                cout << (int)codings[i][j][k] << " ";
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
-    cout << endl;
+    // for (size_t i = 0; i < 2; i++) {
+    //     cout << "UTWORZONE " << i << endl;
+    //     for (size_t j = 0; j < 3; j++) {
+    //         cout << "kolor " << j << endl;
+    //         for (size_t k = 0; k < length; k++) {
+    //             cout << (int)codings[i][j][k] << " ";
+    //         }
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
+    // cout << endl;
+
+    printBandsToFile(codename, codings[0], codings[1], tga->imageWidth, tga->imageHeight, qBits);
 
     // CLEAN-UP
     for (size_t i = 0; i < 3; i++) {

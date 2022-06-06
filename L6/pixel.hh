@@ -4,13 +4,6 @@
 #include "consts.hh"
 #include <vector>
 
-enum ColorBGRType {
-    BLUE,
-    GREEN,
-    RED,
-    ALL
-};
-
 class Pixel {
 private:
     uchar red;

@@ -6,6 +6,13 @@ using namespace std;
 
 typedef uint8_t uchar;
 
+enum ColorBGRType {
+    BLUE,
+    GREEN,
+    RED,
+    ALL
+};
+
 const string cReset   = "\033[0m";
 const string cBlack   = "\033[30m";
 const string cRed     = "\033[31m";

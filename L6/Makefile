@@ -12,4 +12,4 @@ test.val: test
 	valgrind --leak-check=full --track-origins=yes ./test
 
 clean:
-	rm -rf *.o main test
+	rm -rf *.o main test output/*
