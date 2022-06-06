@@ -27,15 +27,28 @@ int main (void) {
     for (size_t i = 0; i < 3; i++) {
         cout << "Kolor " << i << endl;
         filters[0][i] = filterAverage(colors[i], length);
-        cout << "Filts dolny\n";
+        cout << "Filts dolny koniec\n";
         filters[1][i] = filterDeviation(colors[i], length);
-        cout << "Filtr gorny\n";
+        cout << "Filtr gorny koniec\n";
         codings[0][i] = differentialCoding(filters[0][i], length, qBits);
-        cout << "Kodowanie roznicowe\n";
+        cout << "Kodowanie roznicowe koniec\n";
         codings[1][i] = straightQuantizing(filters[1][i], length, qBits);
-        cout << "Kwantyzacja wprost\n";
+        cout << "Kwantyzacja wprost koniec\n";
     }
     cout << "Koniec sekcji kodujacej." << endl;
+
+    for (size_t i = 0; i < 2; i++) {
+        cout << "UTWORZONE " << i << endl;
+        for (size_t j = 0; j < 3; j++) {
+            cout << "kolor " << j << endl;
+            for (size_t k = 0; k < length; k++) {
+                cout << (int)codings[i][j][k] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+    cout << endl;
 
     // CLEAN-UP
     for (size_t i = 0; i < 3; i++) {

@@ -1,7 +1,14 @@
 #include "differential.hh"
 
-double averageValue (uchar xn, uchar xm) { return ((double)xn + (double)xm)/2.0; }
-double deviationValue (uchar xn, uchar xm) { return ((double)xn - (double)xm)/2.0; }
+double averageValue (uchar xn, uchar xm) {
+    // cout << (int)xn << "->" << (double)xn << " " << (int)xm << "->" << (double)xm << " =+= " << ((double)xn + (double)xm)/2.0 << endl;
+    return ((double)xn + (double)xm)/2.0; 
+}
+
+double deviationValue (uchar xn, uchar xm) {
+    // cout << (int)xn << "->" << (double)xn << " " << (int)xm << "->" << (double)xm << " =-= " << ((double)xn - (double)xm)/2.0 << endl;
+    return ((double)xn - (double)xm)/2.0;
+}
 
 
 double* filterAverage (uchar* x, size_t n) {
@@ -23,7 +30,7 @@ double* filterDeviation (uchar* x, size_t n) {
 }
 
 
-uchar quantize (double x, uchar* q, size_t qSize) {
+uchar quantize (double x, int* q, size_t qSize) {
     size_t left = 1, right = qSize - 1;
     while (left <= right) {
         size_t center = (left + right)/2;
@@ -52,52 +59,57 @@ uchar quantize (double x, uchar* q, size_t qSize) {
             }
         }
     }
-    return -1;
+    cerr << "ERROR: COS SIE SCHRZANILO Z KWANTYZACJA -- " << x << endl;
+    return 0;
 }
 
 uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
-    // cout << "KODOWANIE ROZNICOWE\n";
     size_t qSize = (1 << qBits) + 1;
-    uchar q[qSize];
-    uchar qNext = (1 << (8 - qBits));
+    int qinit[qSize];
+    uchar qinitNext = (1 << (8 - qBits));
+    qinit[0] = 0;
+    for (size_t i = 1; i < qSize-1; i++) {
+        qinit[i] = qinit[i-1] + qinitNext;
+    }
+    qinit[qSize-1] = -1;
+
+    int q[qSize];
+    uchar qNext = (1 << (9 - qBits));
     uchar qHalf = (qNext >> 1);
-    q[0] = 0;
-    for (size_t i = 1; i <= qSize; i++)
+    q[0] = -256;
+    for (size_t i = 1; i < qSize; i++) {
         q[i] = q[i-1] + qNext;
+    }
     
-    // cout << "ROZPOCZYNAM DIFFY\n";
     double diffs[aSize];
     uchar* d = new uchar[aSize];
     uchar aNew[aSize];
     diffs[0] = a[0];
-    d[0] = quantize(diffs[0], q, qSize);
+    d[0] = quantize(diffs[0], qinit, qSize);
     aNew[0] = d[0];
 
-    // cout << "ROZPOCZYNAM PETLE\n";
     for (size_t i = 1; i < aSize; i++) {
-        // cout << i << "/" << aSize << endl;
         diffs[i] = a[i] - (double)(aNew[i-1]);
-        // cout << "\tdiff = " << diffs[i] << endl;
         d[i] = quantize(diffs[i], q, qSize);
-        // cout << "\td = " << (int)d[i] << endl;
         aNew[i] = q[d[i]] + qHalf - aNew[i-1];
-        // cout << "\taNew = " << (int)aNew[i] << endl;;
     }
 
-    // cout << "ZAKONCZONO ROZNICOWE\n";
     return d;
 }
 
 uchar* straightQuantizing (double* a, size_t aSize, size_t qBits) {
     size_t qSize = (1 << qBits) + 1;
-    uchar q[qSize];
+    int q[qSize];
     uchar qNext = (1 << (8 - qBits));
     double delta = 255.0/2.0;
     q[0] = 0;
-    for (size_t i = 1; i <= qSize; i++)
+    for (size_t i = 1; i < qSize-1; i++) {
         q[i] = q[i-1] + qNext;
+    }
+    q[qSize-1] = -1;
     uchar* output = new uchar[aSize];
-    for (size_t i = 0; i < aSize; i++) {
+    output[0] = quantize(a[0], q, qSize);
+    for (size_t i = 1; i < aSize; i++) {
         output[i] = quantize(a[i] + delta, q, qSize);
     }
     return output;
