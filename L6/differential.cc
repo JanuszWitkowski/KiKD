@@ -59,7 +59,7 @@ uchar quantize (double x, int* q, size_t qSize) {
             }
         }
     }
-    cerr << "ERROR: COS SIE SCHRZANILO Z KWANTYZACJA -- " << x << endl;
+    cerr << cRed << "ERROR: BŁĄD PRZY PRÓBIE KWANTYZACJI WARTOŚCI " << x << cReset << endl;
     return 0;
 }
 
