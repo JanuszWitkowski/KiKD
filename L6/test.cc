@@ -11,7 +11,7 @@ int main (void) {
     string codename = "output/kikd.kkd";
     string newname = "output/example0.txt";
     size_t n;
-    size_t qBits = 3;
+    size_t qBits = 7;
     uchar* array = fileToArray(filename, n);
     SimpleTGA* tga = new SimpleTGA(filename, array, n);
     PixelArray* pixels = tga->getPixelBitmap()->colorsArray();
