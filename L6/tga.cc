@@ -48,8 +48,8 @@ void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSiz
     f.close();
 }
 
-void printArrayToFile(const string filename, const uchar* array, size_t width, size_t height) {
-    ofstream fout("output/tmp.txt");
+void printArrayToFile(const string filename, const string newname, const uchar* array, size_t width, size_t height) {
+    ofstream fout(filename);
     fout << (int)width << endl;
     fout << (int)height << endl;
     size_t n = 3 * width * height;
@@ -58,12 +58,12 @@ void printArrayToFile(const string filename, const uchar* array, size_t width, s
     }
     fout.close();
     // THIS BELOW IS CHEATING and I'm not sorry
-    string strCreate = "python3 output/tmp.txt " + filename, strDelete = "rm output/tmp.txt";
+    string strCreate = "python3 create_image.py output/tmp.txt " + newname, strDelete = "rm output/tmp.txt";
     char cmdCreate[strCreate.size()], cmdDelete[strDelete.size()];
     strcpy(cmdCreate, strCreate.c_str());
     strcpy(cmdDelete, strDelete.c_str());
     system(cmdCreate);
-    // system(cmdDelete);
+    system(cmdDelete);
 }
 
 

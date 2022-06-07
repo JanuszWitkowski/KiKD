@@ -67,10 +67,10 @@ uchar quantize (double x, int* q, size_t qSize) {
 }
 
 uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
-    ofstream f("output/debug0.txt");
-    for (size_t i = 0; i < aSize; i++)
-        f << a[i] << endl;
-    f.close();
+    // ofstream f("output/debug0.txt");
+    // for (size_t i = 0; i < aSize; i++)
+    //     f << a[i] << endl;
+    // f.close();
     size_t qSize = (1 << qBits) + 1;
     int qinit[qSize];
     uchar qinitNext = (1 << (8 - qBits));
@@ -94,17 +94,17 @@ uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
     d[0] = quantize(diffs[0], qinit, qSize);
     // aNew[0] = d[0];
     aNew[0] = floor(a[0]);
-    ofstream fout("output/debug1.txt");
-    fout << (int)(aNew[0]) << endl;
+    // ofstream fout("output/debug1.txt");
+    // fout << (int)(aNew[0]) << endl;
 
     for (size_t i = 1; i < aSize; i++) {
         diffs[i] = a[i] - (double)(aNew[i-1]);
         d[i] = quantize(diffs[i], q, qSize);
         aNew[i] = q[d[i]] + qHalf + aNew[i-1];
-        fout << (int)(aNew[i]) << endl;
+        // fout << (int)(aNew[i]) << endl;
     }
 
-    fout.close();
+    // fout.close();
     return d;
 }
 
@@ -240,11 +240,11 @@ BandSolver::BandSolver(string filename) {
             filters[i][j] = new int[length];
         }
     }
-    ofstream fout("output/debug2.txt");
+    // ofstream fout("output/debug2.txt");
     for (size_t color = 0; color < colorsNumber; color++) {
         filters[0][color][0] = q1[codings[0][color][0]] + q1Half;
         filters[1][color][0] = q1[codings[1][color][0]] + q1Half;
-        if (color == RED) fout << filters[0][color][0] << endl;
+        // if (color == RED) fout << filters[0][color][0] << endl;
         for (size_t i = 1; i < length; i++)  {
             filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]] + q0Half;
             // filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]];
@@ -252,10 +252,10 @@ BandSolver::BandSolver(string filename) {
 
             filters[1][color][i] = q1[codings[1][color][i]] + q1Half - delta;
             // filters[1][color][i] = q1[codings[1][color][i]];
-            if (color == RED) fout << filters[0][color][i] << endl;
+            // if (color == RED) fout << filters[0][color][i] << endl;
         }
     }
-    fout.close();
+    // fout.close();
 
     // SOLVING BITMAP
     bitmap = new uchar[length*3];

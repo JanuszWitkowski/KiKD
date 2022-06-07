@@ -33,7 +33,7 @@ int main (void) {
 
     printBandsToFile(codename, codings[0], codings[1], tga->imageWidth, tga->imageHeight, qBits);
     BandSolver* bands = new BandSolver(codename);
-    printArrayToFile(newname, bands->getBitmap(), tga->imageWidth, tga->imageHeight);
+    // printArrayToFile(newname, bands->getBitmap(), tga->imageWidth, tga->imageHeight);
 
     // CLEAN-UP
     for (size_t i = 0; i < 3; i++) {

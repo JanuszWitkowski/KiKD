@@ -93,7 +93,8 @@ void decodeTGA(string inName, string outName) {
     auto start = chrono::steady_clock::now();
     BandSolver* bands = new BandSolver(inName);
     auto end = chrono::steady_clock::now();
-    printArrayToFile(outName, bands->getBitmap(), bands->getWidth(), bands->getHeight());
+    // cout << bands->getWidth() << " " << bands->getHeight() << " " << inName << " " << outName << endl;
+    printArrayToFile("output/tmp.txt", outName, bands->getBitmap(), bands->getWidth(), bands->getHeight());
 
     cout << cCyan << "-----DEKOMPRESJA PLIKU DO TGA-----" << endl;
     cout << inName << " -> " << outName << endl;
