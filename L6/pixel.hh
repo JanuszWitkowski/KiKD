@@ -48,7 +48,7 @@ public:
     size_t getWidth() { return width; }
     size_t getHeight() { return height; }
     Pixel* pixel(size_t i, size_t j) { return bitmap[i][j]; }
-    PixelArray* colorsArray();
+    PixelArray* colorsArray(size_t _width, size_t _height);
 };
 
 uchar* pixelbitmapToArray(PixelBitmap* bitmap);

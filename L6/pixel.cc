@@ -83,12 +83,12 @@ PixelBitmap::~PixelBitmap() {
     delete[] bitmap;
 }
 
-PixelArray* PixelBitmap::colorsArray() {
-    size_t arraySize = width * height;
+PixelArray* PixelBitmap::colorsArray(size_t _width, size_t _height) {
+    size_t arraySize = _width * _height;
     PixelArray* array = new PixelArray(arraySize);
     size_t arrayIndex = 0;
-    for (size_t i = 0; i < height; i++) {
-        for (size_t j = 0; j < width; j++) {
+    for (size_t i = 0; i < _height; i++) {
+        for (size_t j = 0; j < _width; j++) {
             array->pixel(arrayIndex++)->set(pixel(i, j)->B(),
                                             pixel(i, j)->G(),
                                             pixel(i, j)->R());
