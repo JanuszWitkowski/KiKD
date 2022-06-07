@@ -10,11 +10,20 @@ encode: encode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o 
 decode: decode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 compare: compare.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 
-run: main
+run0: main
 	./main testy/example0.tga output/kikd.kkd 3
 
+run1: main
+	./main testy/example1.tga output/kikd.kkd 4
+
+run2: main
+	./main testy/example2.tga output/kikd.kkd 5
+
+run3: main
+	./main testy/example3.tga output/kikd.kkd 6
+
 val: main
-	valgrind --leak-check=full --track-origins=yes ./main testy/example0.tga output/kikd.kkd 4
+	valgrind --leak-check=full --track-origins=yes ./main testy/example1.tga output/kikd.kkd 4
 
 test.run: test
 	./test

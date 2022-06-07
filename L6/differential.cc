@@ -285,3 +285,47 @@ BandSolver::~BandSolver() {
     delete[] codings;
     delete[] bitmap;
 }
+
+
+
+double mse(PixelBitmap* bitmap1, PixelBitmap* bitmap2) {
+    double sum = 0.0;
+    for (size_t i = 0; i < bitmap1->getHeight(); i++) {
+        for (size_t j = 0; j < bitmap1->getWidth(); j++) {
+            double* pixelOld = getPixelAsDoubleArray(bitmap1->pixel(i, j));
+            double* pixelNew = getPixelAsDoubleArray(bitmap2->pixel(i, j));
+            sum += euclidSquared(pixelOld, pixelNew);
+            delete[] pixelOld;
+            delete[] pixelNew;
+        }
+    }
+    return sum / (bitmap1->getWidth() * bitmap1->getHeight());
+}
+
+double snr(SimpleTGA* tga, double error) {
+    double sum = 0.0;
+    for (size_t i = 0; i < tga->imageHeight; i++) {
+        for (size_t j = 0; j < tga->imageWidth; j++) {
+            sum += pow(tga->getPixelBitmap()->pixel(i, j)->B(), 2.0) +
+                pow(tga->getPixelBitmap()->pixel(i, j)->G(), 2.0) +
+                pow(tga->getPixelBitmap()->pixel(i, j)->R(), 2.0);
+        }
+    }
+    return sum / (error * (double)(tga->imageWidth) * (double)(tga->imageHeight));
+}
+
+double euclidSquared(double a[], double b[]) {
+    double sum = 0.0;
+    for (size_t i = 0; i < 3; i++) {
+        sum += pow((double)(a[i] - b[i]), 2.0);
+    }
+    return sum;
+}
+
+double* getPixelAsDoubleArray(Pixel* a) {
+    double* x = new double[3];
+    x[0] = (double)(a->B());
+    x[1] = (double)(a->G());
+    x[2] = (double)(a->R());
+    return x;
+}

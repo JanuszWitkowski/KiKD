@@ -96,18 +96,33 @@ void decodeTGA(string inName, string outName) {
     // cout << bands->getWidth() << " " << bands->getHeight() << " " << inName << " " << outName << endl;
     printArrayToFile("output/tmp.txt", outName, bands->getBitmap(), bands->getWidth(), bands->getHeight());
 
-    cout << cCyan << "-----DEKOMPRESJA PLIKU DO TGA-----" << endl;
+    cout << cCyan << "-----------DEKOMPRESJA PLIKU DO TGA-----------" << endl;
     cout << inName << " -> " << outName << endl;
     cout << "Liczba bitów kwantyzatora: " << bands->getBits() << endl;
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
-    cout << "----------------------------------" << cReset << endl;
+    cout << "----------------------------------------------" << cReset << endl;
 
     delete bands;
 }
 
 void compareImages(std::string filename1, std::string filename2) {
-    //
+    // size_t n1, n2;
+    // uchar *array1 = fileToArray(filename1, n1), *array2 = fileToArray(filename2, n2);
+    // SimpleTGA *original = new SimpleTGA(filename1, array1, n1);
+    // PixelBitmap *impostorBitmap = new PixelBitmap(array2, )
+    // double MSE = mse(original, impostor);
+    // double SNR = snr(original, MSE);
+
+    // cout << cGreen << "----------------PODSUMOWANIE----------------" << endl;
+    // cout << filename1 << " vs " << filename2 << endl;
+    // cout << "MSE: " << MSE << endl;
+    // cout << "SNR: " << SNR << endl;
+    // cout << "--------------------------------------------" << cReset << endl;
+
+    // delete[] array1;
+    // delete[] array2;
+    // delete original;
 }
 
 

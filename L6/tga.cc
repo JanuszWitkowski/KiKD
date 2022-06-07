@@ -63,7 +63,7 @@ void printArrayToFile(const string filename, const string newname, const uchar* 
     strcpy(cmdCreate, strCreate.c_str());
     strcpy(cmdDelete, strDelete.c_str());
     system(cmdCreate);
-    system(cmdDelete);
+    // system(cmdDelete);
 }
 
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include "consts.hh"
 #include "bitrw.hh"
+#include "tga.hh"
 
 using namespace std;
 
@@ -63,5 +64,11 @@ public:
     void setCodingAt(size_t band, size_t color, size_t i, uchar v) { codings[band][color][i] = v; }
     void setCodingBand(size_t band, size_t color, uchar* array) { codings[band][color] = array; }
 };
+
+
+double mse(PixelBitmap* bitmap1, PixelBitmap* bitmap2);
+double snr(SimpleTGA* tga, double error);
+double euclidSquared(double a[], double b[]);
+double* getPixelAsDoubleArray(Pixel* a);
 
 #endif
