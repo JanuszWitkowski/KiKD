@@ -112,6 +112,7 @@ uchar* straightQuantizing (double* a, size_t aSize, size_t qBits) {
     size_t qSize = (1 << qBits) + 1;
     int q[qSize];
     uchar qNext = (1 << (8 - qBits));
+    uchar qHalf = (qNext >> 1);
     double delta = 255.0/2.0;
     q[0] = 0;
     for (size_t i = 1; i < qSize; i++) {
@@ -183,7 +184,7 @@ BandSolver::BandSolver(string filename) {
     size_t qSize = (1 << qBits) + 1;
     int q1[qSize];
     uchar q1Next = (1 << (8 - qBits));
-    double delta = 255.0/2.0;
+    uchar q1Half = (q1Next >> 1);
     q1[0] = 0;
     for (size_t i = 1; i < qSize; i++) {
         q1[i] = q1[i-1] + q1Next;
@@ -195,6 +196,7 @@ BandSolver::BandSolver(string filename) {
     for (size_t i = 1; i < qSize; i++) {
         q0[i] = q0[i-1] + q0Next;
     }
+    int delta = 255/2;
 
     // RECONSTRUCTING FILTERS
     filters = new int**[bandsNumber];
@@ -206,14 +208,16 @@ BandSolver::BandSolver(string filename) {
     }
     ofstream fout("output/debug2.txt");
     for (size_t color = 0; color < colorsNumber; color++) {
-        filters[0][color][0] = q1[codings[0][color][0]];
-        filters[1][color][0] = q1[codings[1][color][0]];
+        filters[0][color][0] = q1[codings[0][color][0]] + q1Half;
+        filters[1][color][0] = q1[codings[1][color][0]] + q1Half;
         if (color == RED) fout << filters[0][color][0] << endl;
         for (size_t i = 1; i < length; i++)  {
             filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]] + q0Half;
             // filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]];
             // filters[0][color][i] = q0[codings[0][color][i]];
-            filters[1][color][i] = q1[codings[1][color][i]];
+
+            filters[1][color][i] = q1[codings[1][color][i]] + q1Half - delta;
+            // filters[1][color][i] = q1[codings[1][color][i]];
             if (color == RED) fout << filters[0][color][i] << endl;
         }
     }
