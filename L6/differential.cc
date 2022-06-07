@@ -13,7 +13,7 @@ double deviationValue (uchar xn, uchar xm) {
 
 double* filterAverage (uchar* x, size_t n) {
     double* filter = new double[n];
-    filter[0] = x[0];
+    filter[0] = ((double)(x[0]))/2.0;
     for (size_t i = 1; i < n; i++) {
         filter[i] = averageValue(x[i], x[i-1]);
     }
@@ -22,7 +22,7 @@ double* filterAverage (uchar* x, size_t n) {
 
 double* filterDeviation (uchar* x, size_t n) {
     double* filter = new double[n];
-    filter[0] = x[0];
+    filter[0] = ((double)(x[0]))/2.0;
     for (size_t i = 1; i < n; i++) {
         filter[i] = deviationValue(x[i], x[i-1]);
     }
@@ -194,6 +194,12 @@ BandSolver::BandSolver(string filename) {
     }
 
     // SOLVING BITMAP
+    bitmap = new uchar[length*3];
+    for (size_t i = 0; i < length; i++) {
+        for (size_t color = 0; color < colorsNumber; color++) {
+            bitmap[3*i + color] = floor(filters[0][color][i] + filters[1][color][i]);
+        }
+    }
 }
 
 BandSolver::~BandSolver() {

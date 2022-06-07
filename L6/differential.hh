@@ -40,6 +40,8 @@ public:
     size_t gettColorsNumber() { return colorsNumber; }
     int* colorFilter(size_t band, ColorBGRType color) { return filters[band][color]; }
     uchar* colorCoding(size_t band, ColorBGRType color) { return codings[band][color]; }
+    uchar* getBitmap() { return bitmap; }
+    uchar getBitmapAt(size_t i) { return bitmap[i]; }
 };
 
 #endif
