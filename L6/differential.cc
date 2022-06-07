@@ -1,4 +1,5 @@
 #include "differential.hh"
+#include <fstream>
 
 double averageValue (uchar xn, uchar xm) {
     // cout << (int)xn << "->" << (double)xn << " " << (int)xm << "->" << (double)xm << " =+= " << ((double)xn + (double)xm)/2.0 << endl;
@@ -13,7 +14,8 @@ double deviationValue (uchar xn, uchar xm) {
 
 double* filterAverage (uchar* x, size_t n) {
     double* filter = new double[n];
-    filter[0] = ((double)(x[0]))/2.0;
+    // filter[0] = ((double)(x[0]))/2.0;
+    filter[0] = x[0];
     for (size_t i = 1; i < n; i++) {
         filter[i] = averageValue(x[i], x[i-1]);
     }
@@ -22,7 +24,8 @@ double* filterAverage (uchar* x, size_t n) {
 
 double* filterDeviation (uchar* x, size_t n) {
     double* filter = new double[n];
-    filter[0] = ((double)(x[0]))/2.0;
+    // filter[0] = ((double)(x[0]))/2.0;
+    filter[0] = x[0];
     for (size_t i = 1; i < n; i++) {
         filter[i] = deviationValue(x[i], x[i-1]);
     }
@@ -85,14 +88,19 @@ uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
     uchar aNew[aSize];
     diffs[0] = a[0];
     d[0] = quantize(diffs[0], qinit, qSize);
-    aNew[0] = d[0];
+    // aNew[0] = d[0];
+    aNew[0] = floor(a[0]);
+    ofstream fout("output/debug1.txt");
+    fout << (int)(aNew[0]) << endl;
 
     for (size_t i = 1; i < aSize; i++) {
         diffs[i] = a[i] - (double)(aNew[i-1]);
         d[i] = quantize(diffs[i], q, qSize);
         aNew[i] = q[d[i]] + qHalf + aNew[i-1];
+        fout << (int)(aNew[i]) << endl;
     }
 
+    fout.close();
     return d;
 }
 
@@ -133,6 +141,7 @@ void printBandsToFile (string filename, uchar** downs, uchar** ups, size_t width
             }
         }
     }
+    writer.padWithZerosByte();
 }
 
 
@@ -184,20 +193,38 @@ BandSolver::BandSolver(string filename) {
     }
 
     // RECONSTRUCTING FILTERS
+    filters = new int**[bandsNumber];
+    for (size_t i = 0; i < bandsNumber; i++) {
+        filters[i] = new int*[colorsNumber];
+        for (size_t j = 0; j < colorsNumber; j++) {
+            filters[i][j] = new int[length];
+        }
+    }
+    ofstream fout("output/debug2.txt");
     for (size_t color = 0; color < colorsNumber; color++) {
         filters[0][color][0] = q1[codings[0][color][0]];
         filters[1][color][0] = q1[codings[1][color][0]];
+        if (color == RED) fout << filters[0][color][0] << endl;
         for (size_t i = 1; i < length; i++)  {
             filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]];
+            // filters[0][color][i] = q0[codings[0][color][i]];
             filters[1][color][i] = q1[codings[1][color][i]];
+            if (color == RED) fout << filters[0][color][i] << endl;
         }
     }
+    fout.close();
 
     // SOLVING BITMAP
     bitmap = new uchar[length*3];
-    for (size_t i = 0; i < length; i++) {
+    for (size_t color = 0; color < colorsNumber; color++) {
+        bitmap[0 + color] = filters[0][color][0];
+    }
+    for (size_t i = 1; i < length; i++) {
         for (size_t color = 0; color < colorsNumber; color++) {
-            bitmap[3*i + color] = floor(filters[0][color][i] + filters[1][color][i]);
+            bitmap[3*i + color] = \
+                        // floor(filters[0][color][i] + filters[1][color][i]);
+                        floor(filters[0][color][i]);
+                        // floor(filters[1][color][i]);
         }
     }
 }
