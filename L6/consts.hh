@@ -22,8 +22,3 @@ const string cBlue    = "\033[34m";
 const string cMagenta = "\033[35m";
 const string cCyan    = "\033[36m";
 const string cWhite   = "\033[37m";
-
-void printError(string errorType, string errorMsg) {
-    cout << cRed << errorType << " ERROR: ";
-    cout << errorMsg << cReset << endl;
-}

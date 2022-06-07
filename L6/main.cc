@@ -8,6 +8,11 @@
 
 using namespace std;
 
+void printError(string errorType, string errorMsg) {
+    std::cout << cRed << errorType << " ERROR: ";
+    std::cout << errorMsg << cReset << std::endl;
+}
+
 bool checkArguments(int c, char* v[], string &arg1, string &arg2, size_t &arg3) {
     if (c < 3 or c > 4) {
         printError("ARGUMENT", "Niepoprawna liczba argumentów.\nPrawidłowe wywołania programu:\n\
@@ -73,13 +78,13 @@ void encodeTGA(string inName, string outName, size_t qBits) {
 
 void decodeTGA(string inName, string outName) {
     //
-    string strCreate = "python3 output/tmp.txt" + outName, strDelete = "rm output/tmp.txt";
-    char cmdCreate[strCreate.size()], cmdDelete[strDelete.size()];
-    strcpy(cmdCreate, strCreate.c_str());
-    strcpy(cmdDelete, strDelete.c_str());
-    // THIS BELOW IS CHEATING and I'm not sorry
-    system(cmdCreate);
-    system(cmdDelete);
+    // string strCreate = "python3 output/tmp.txt" + outName, strDelete = "rm output/tmp.txt";
+    // char cmdCreate[strCreate.size()], cmdDelete[strDelete.size()];
+    // strcpy(cmdCreate, strCreate.c_str());
+    // strcpy(cmdDelete, strDelete.c_str());
+    // // THIS BELOW IS CHEATING and I'm not sorry
+    // system(cmdCreate);
+    // system(cmdDelete);
 }
 
 void compareImages(std::string filename1, std::string filename2) {
