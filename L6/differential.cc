@@ -151,8 +151,39 @@ void printBandsToFile (string filename, uchar** downs, uchar** ups, size_t width
 
 
 
-BandSolver::BandSolver() {
-    //
+FilterHolder::FilterHolder(size_t size) {
+    length = size;
+    filter = new double*[colorsNumber];
+    for (size_t color = 0; color < colorsNumber; color++) {
+        filter[color] = new double[length];
+        for (size_t i = 0; i < length; i++) {
+            filter[color][i] = 0.0;
+        }
+    }
+}
+
+FilterHolder::~FilterHolder() {
+    for (size_t color = 0; color < colorsNumber; color++)
+        delete[] filter[color];
+    delete filter;
+}
+
+BandSolver::BandSolver(size_t size) {
+    length = size;
+    filters = new int**[bandsNumber];
+    codings = new uchar**[bandsNumber];
+    for (size_t band = 0; band < bandsNumber; band++) {
+        filters[band] = new int*[colorsNumber];
+        codings[band] = new uchar*[colorsNumber];
+        for (size_t color = 0; color < colorsNumber; color++) {
+            filters[band][color] = new int[length];
+            codings[band][color] = new uchar[length];
+            for (size_t i = 0; i < length; i++) {
+                filters[band][color][i] = 0;
+                codings[band][color][i] = 0;
+            }
+        }
+    }
 }
 
 BandSolver::BandSolver(string filename) {

@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cstring>
-#include "consts.hh"
+#include <chrono>
 #include "main.hh"
+#include "consts.hh"
+#include "differential.hh"
+#include "tga.hh"
 
 using namespace std;
 
@@ -32,7 +35,40 @@ bool checkArguments(int c, char* v[], string &arg1, string &arg2, size_t &arg3) 
 }
 
 void encodeTGA(string inName, string outName, size_t qBits) {
-    //
+    size_t n;
+    uchar* array = fileToArray(inName, n);
+    SimpleTGA* tga = new SimpleTGA(inName, array, n);
+    PixelArray* pixels = tga->getPixelBitmap()->colorsArray();
+    uchar** colors = pixels->pixelarrayToColorsArray();
+    size_t length = pixels->getSize();
+    FilterHolder *downs = new FilterHolder(length), *ups = new FilterHolder(length);
+    BandSolver *bands = new BandSolver(length);
+
+    auto start = chrono::steady_clock::now();
+    for (size_t color = 0; color < 3; color++) {
+        downs->setFilter(color, filterAverage(colors[color], length));
+        ups->setFilter(color, filterDeviation(colors[color], length));
+        bands->setCodingBand(0, color, differentialCoding(downs->getFilter()[color], length, qBits));
+        bands->setCodingBand(1, color, straightQuantizing(ups->getFilter()[color], length, qBits));
+    }
+    auto end  = chrono::steady_clock::now();
+    printBandsToFile(outName, bands->getCoding(0), bands->getCoding(1), tga->imageWidth, tga->imageHeight, qBits);
+
+    cout << cBlue << "-----KWANTYZACJA RÓWNOMIERNA Z ROZBICIEM NA DWA FILTRY-----" << endl;
+    cout << inName << " -> " << outName << endl;
+    cout << "Liczba bitów kwantyzatora: " << qBits << endl;
+    cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
+    cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
+    cout << "-----------------------------------------------------------" << cReset << endl;
+
+    delete downs, ups;
+    for (size_t color = 0; color < 3; color++)
+        delete[] colors[color];
+    delete[] colors;
+    delete bands;
+    delete pixels;
+    delete tga;
+    delete[] array;
 }
 
 void decodeTGA(string inName, string outName) {
@@ -57,5 +93,6 @@ int main (int argc, char* argv[]) {
     if (!checkArguments(argc, argv, inName, outName, qBits)) return 1;
     encodeTGA(inName, outName, qBits);
     decodeTGA(outName, newName);
+    compareImages(inName, newName);
     return 0;
 }

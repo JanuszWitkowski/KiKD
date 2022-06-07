@@ -2,11 +2,16 @@ CC=g++
 CXXFLAGS = -ggdb3
 LDFLAGS = -ggdb3
 
-main: main.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+all: clean main encode decode compare
+
+main: main.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 test: test.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+encode: encode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+decode: decode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+compare: compare.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 
 run: main
-	./main
+	./main testy/example0.tga output/kikd.kkd 4
 
 test.run: test
 	./test
