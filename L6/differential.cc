@@ -67,6 +67,10 @@ uchar quantize (double x, int* q, size_t qSize) {
 }
 
 uchar* differentialCoding (double* a, size_t aSize, size_t qBits) {
+    ofstream f("output/debug0.txt");
+    for (size_t i = 0; i < aSize; i++)
+        f << a[i] << endl;
+    f.close();
     size_t qSize = (1 << qBits) + 1;
     int qinit[qSize];
     uchar qinitNext = (1 << (8 - qBits));
@@ -206,7 +210,8 @@ BandSolver::BandSolver(string filename) {
         filters[1][color][0] = q1[codings[1][color][0]];
         if (color == RED) fout << filters[0][color][0] << endl;
         for (size_t i = 1; i < length; i++)  {
-            filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]];
+            filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]] + q0Half;
+            // filters[0][color][i] = filters[0][color][i-1] + q0[codings[0][color][i]];
             // filters[0][color][i] = q0[codings[0][color][i]];
             filters[1][color][i] = q1[codings[1][color][i]];
             if (color == RED) fout << filters[0][color][i] << endl;
@@ -222,8 +227,8 @@ BandSolver::BandSolver(string filename) {
     for (size_t i = 1; i < length; i++) {
         for (size_t color = 0; color < colorsNumber; color++) {
             bitmap[3*i + color] = \
-                        // floor(filters[0][color][i] + filters[1][color][i]);
-                        floor(filters[0][color][i]);
+                        floor(filters[0][color][i] + filters[1][color][i]);
+                        // floor(filters[0][color][i]);
                         // floor(filters[1][color][i]);
         }
     }
