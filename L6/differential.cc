@@ -165,7 +165,7 @@ FilterHolder::FilterHolder(size_t size) {
 FilterHolder::~FilterHolder() {
     for (size_t color = 0; color < colorsNumber; color++)
         delete[] filter[color];
-    delete filter;
+    delete[] filter;
 }
 
 BandSolver::BandSolver(size_t size) {
@@ -184,6 +184,10 @@ BandSolver::BandSolver(size_t size) {
             }
         }
     }
+    bitmap = new uchar[length*3];
+    for (size_t i = 0; i < length*3; i++) {
+        bitmap[i] = 0;
+    }
 }
 
 BandSolver::BandSolver(string filename) {
@@ -192,7 +196,6 @@ BandSolver::BandSolver(string filename) {
     width = reader.getNextByte();
     height = reader.getNextByte();
     qBits = reader.getNextByte();
-    cout << "Width: " << width << ", Height: " << height << ", Quantizer bits: " << qBits << endl;
     length = width*height;
     codings = new uchar**[bandsNumber];
     for (size_t band = 0; band < bandsNumber; band++) {

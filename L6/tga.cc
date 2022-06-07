@@ -1,4 +1,5 @@
 #include "tga.hh"
+#include <cstring>
 
 uchar* invertBitmap(const uchar bitmap[], size_t n, size_t width, size_t height) {
     uchar* inverted = new uchar[n];
@@ -48,7 +49,7 @@ void buildImageTGA(const string filename, const uchar bitmap[], size_t bitmapSiz
 }
 
 void printArrayToFile(const string filename, const uchar* array, size_t width, size_t height) {
-    ofstream fout(filename);
+    ofstream fout("output/tmp.txt");
     fout << (int)width << endl;
     fout << (int)height << endl;
     size_t n = 3 * width * height;
@@ -56,6 +57,13 @@ void printArrayToFile(const string filename, const uchar* array, size_t width, s
         fout << (int)(array[i]) << endl;
     }
     fout.close();
+    // THIS BELOW IS CHEATING and I'm not sorry
+    string strCreate = "python3 output/tmp.txt " + filename, strDelete = "rm output/tmp.txt";
+    char cmdCreate[strCreate.size()], cmdDelete[strDelete.size()];
+    strcpy(cmdCreate, strCreate.c_str());
+    strcpy(cmdDelete, strDelete.c_str());
+    system(cmdCreate);
+    // system(cmdDelete);
 }
 
 

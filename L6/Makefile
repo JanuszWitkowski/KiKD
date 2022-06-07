@@ -11,7 +11,10 @@ decode: decode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o 
 compare: compare.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 
 run: main
-	./main testy/example0.tga output/kikd.kkd 4
+	./main testy/example0.tga output/kikd.kkd 3
+
+val: main
+	valgrind --leak-check=full --track-origins=yes ./main testy/example0.tga output/kikd.kkd 4
 
 test.run: test
 	./test

@@ -52,6 +52,9 @@ public:
     size_t getLength() { return length; }
     size_t getBandsNumber() { return bandsNumber; }
     size_t getColorsNumber() { return colorsNumber; }
+    size_t getWidth() { return width; }
+    size_t getHeight() { return height; }
+    size_t getBits() { return qBits; }
     uchar** getCoding(size_t band) { return codings[band]; }
     int* colorFilter(size_t band, ColorBGRType color) { return filters[band][color]; }
     uchar* colorCoding(size_t band, ColorBGRType color) { return codings[band][color]; }

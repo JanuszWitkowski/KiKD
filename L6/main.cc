@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring>
 #include <chrono>
 #include "main.hh"
 #include "consts.hh"
@@ -46,18 +45,22 @@ void encodeTGA(string inName, string outName, size_t qBits) {
     PixelArray* pixels = tga->getPixelBitmap()->colorsArray();
     uchar** colors = pixels->pixelarrayToColorsArray();
     size_t length = pixels->getSize();
-    FilterHolder *downs = new FilterHolder(length), *ups = new FilterHolder(length);
-    BandSolver *bands = new BandSolver(length);
 
     auto start = chrono::steady_clock::now();
-    for (size_t color = 0; color < 3; color++) {
-        downs->setFilter(color, filterAverage(colors[color], length));
-        ups->setFilter(color, filterDeviation(colors[color], length));
-        bands->setCodingBand(0, color, differentialCoding(downs->getFilter()[color], length, qBits));
-        bands->setCodingBand(1, color, straightQuantizing(ups->getFilter()[color], length, qBits));
+    double*** filters = new double**[2];
+    filters[0] = new double*[3];
+    filters[1] = new double*[3];
+    uchar*** codings = new uchar**[2];
+    codings[0] = new uchar*[3];
+    codings[1] = new uchar*[3];
+    for (size_t i = 0; i < 3; i++) {
+        filters[0][i] = filterAverage(colors[i], length);
+        filters[1][i] = filterDeviation(colors[i], length);
+        codings[0][i] = differentialCoding(filters[0][i], length, qBits);
+        codings[1][i] = straightQuantizing(filters[1][i], length, qBits);
     }
     auto end  = chrono::steady_clock::now();
-    printBandsToFile(outName, bands->getCoding(0), bands->getCoding(1), tga->imageWidth, tga->imageHeight, qBits);
+    printBandsToFile(outName, codings[0], codings[1], tga->imageWidth, tga->imageHeight, qBits);
 
     cout << cBlue << "-----KWANTYZACJA RÓWNOMIERNA Z ROZBICIEM NA DWA FILTRY-----" << endl;
     cout << inName << " -> " << outName << endl;
@@ -66,25 +69,40 @@ void encodeTGA(string inName, string outName, size_t qBits) {
     cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
     cout << "-----------------------------------------------------------" << cReset << endl;
 
-    delete downs, ups;
     for (size_t color = 0; color < 3; color++)
         delete[] colors[color];
     delete[] colors;
-    delete bands;
     delete pixels;
     delete tga;
     delete[] array;
+    for (size_t i = 0; i < 3; i++) {
+        delete[] filters[0][i];
+        delete[] filters[1][i];
+        delete[] codings[0][i];
+        delete[] codings[1][i];
+    }
+    delete[] filters[0];
+    delete[] filters[1];
+    delete[] codings[0];
+    delete[] codings[1];
+    delete[] filters;
+    delete[] codings;
 }
 
 void decodeTGA(string inName, string outName) {
-    //
-    // string strCreate = "python3 output/tmp.txt" + outName, strDelete = "rm output/tmp.txt";
-    // char cmdCreate[strCreate.size()], cmdDelete[strDelete.size()];
-    // strcpy(cmdCreate, strCreate.c_str());
-    // strcpy(cmdDelete, strDelete.c_str());
-    // // THIS BELOW IS CHEATING and I'm not sorry
-    // system(cmdCreate);
-    // system(cmdDelete);
+    auto start = chrono::steady_clock::now();
+    BandSolver* bands = new BandSolver(inName);
+    auto end = chrono::steady_clock::now();
+    printArrayToFile(outName, bands->getBitmap(), bands->getWidth(), bands->getHeight());
+
+    cout << cCyan << "-----DEKOMPRESJA PLIKU DO TGA-----" << endl;
+    cout << inName << " -> " << outName << endl;
+    cout << "Liczba bitów kwantyzatora: " << bands->getBits() << endl;
+    cout << "Czas kompresji: " << chrono::duration_cast<chrono::seconds>(end - start).count() << "s" << endl;
+    cout << "Czas kompresji: " << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << "ns" << endl;
+    cout << "----------------------------------" << cReset << endl;
+
+    delete bands;
 }
 
 void compareImages(std::string filename1, std::string filename2) {
