@@ -41,8 +41,8 @@ bool checkArguments(int c, char* v[], string &arg1, string &arg2, size_t &arg3) 
 void encodeTGA(string inName, string outName, size_t qBits) {
     size_t n;
     uchar* array = fileToArray(inName, n);
-    // SimpleTGA* tga = new SimpleTGA(inName, array, n);
-    SimpleTGA* tga = new SimpleTGA(array, n);
+    SimpleTGA* tga = new SimpleTGA(inName, array, n);
+    // SimpleTGA* tga = new SimpleTGA(array, n);
     // PixelArray* pixels = tga->getPixelBitmap()->colorsArray(tga->imageWidth, tga->imageHeight);
     // uchar** colors = pixels->pixelarrayToColorsArray();
     // size_t length = pixels->getSize();
