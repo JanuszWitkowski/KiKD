@@ -4,14 +4,14 @@ LDFLAGS = -ggdb3
 
 all: clean main encode decode compare
 
-main: main.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh universal.o universal.hh
-test: test.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh universal.o universal.hh
-encode: encode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh universal.o universal.hh
-decode: decode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh universal.o universal.hh
-compare: compare.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh universal.o universal.hh
+main: main.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+test: test.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+encode: encode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+decode: decode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
+compare: compare.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 
 run0: main
-	./main testy/example0.tga output/kikd.kkd 3
+	./main testy/example0.tga output/kikd.kkd 7
 
 run1: main
 	./main testy/example1.tga output/kikd.kkd 4
@@ -23,7 +23,7 @@ run3: main
 	./main testy/example3.tga output/kikd.kkd 6
 
 val: main
-	valgrind --leak-check=full --track-origins=yes ./main testy/example0.tga output/kikd.kkd 4
+	valgrind --leak-check=full --track-origins=yes ./main testy/example1.tga output/kikd.kkd 4
 
 test.run: test
 	./test
