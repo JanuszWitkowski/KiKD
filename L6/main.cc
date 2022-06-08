@@ -41,11 +41,19 @@ bool checkArguments(int c, char* v[], string &arg1, string &arg2, size_t &arg3) 
 void encodeTGA(string inName, string outName, size_t qBits) {
     size_t n;
     uchar* array = fileToArray(inName, n);
-    SimpleTGA* tga = new SimpleTGA(inName, array, n);
-    // SimpleTGA* tga = new SimpleTGA(array, n);
-    PixelArray* pixels = tga->getPixelBitmap()->colorsArray(tga->imageWidth, tga->imageHeight);
-    uchar** colors = pixels->pixelarrayToColorsArray();
-    size_t length = pixels->getSize();
+    // SimpleTGA* tga = new SimpleTGA(inName, array, n);
+    SimpleTGA* tga = new SimpleTGA(array, n);
+    // PixelArray* pixels = tga->getPixelBitmap()->colorsArray(tga->imageWidth, tga->imageHeight);
+    // uchar** colors = pixels->pixelarrayToColorsArray();
+    // size_t length = pixels->getSize();
+    size_t length = tga->imageWidth * tga->imageHeight;
+    uchar** colors = new uchar*[3];
+    for (size_t color = 0; color < 3; color++) {
+        colors[color] = new uchar[length];
+        for (size_t i = 0; i < length; i++) {
+            colors[color][i] = tga->getBitmap()[color + 3*i];
+        }
+    }
 
     auto start = chrono::steady_clock::now();
     double*** filters = new double**[2];
@@ -73,7 +81,7 @@ void encodeTGA(string inName, string outName, size_t qBits) {
     for (size_t color = 0; color < 3; color++)
         delete[] colors[color];
     delete[] colors;
-    delete pixels;
+    // delete pixels;
     delete tga;
     delete[] array;
     for (size_t i = 0; i < 3; i++) {

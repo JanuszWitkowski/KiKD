@@ -1,5 +1,6 @@
 #include "differential.hh"
 #include <fstream>
+#include "universal.hh"
 
 double averageValue (uchar xn, uchar xm) {
     // cout << (int)xn << "->" << (double)xn << " " << (int)xm << "->" << (double)xm << " =+= " << ((double)xn + (double)xm)/2.0 << endl;
@@ -128,25 +129,30 @@ uchar* straightQuantizing (double* a, size_t aSize, size_t qBits) {
 
 
 void printBandsToFile (string filename, uchar** downs, uchar** ups, size_t width, size_t height, size_t qBits) {
-    BitWriter writer(filename);
-    writer.writeByte((uchar)width);
-    writer.writeByte((uchar)height);
-    writer.writeByte((uchar)qBits);
+    cout << "PRINT | " << filename << " w: " << width << " h: " << height << endl;
+    // BitWriter writer(filename);
+    BitWriter* writer = new BitWriter(filename);
+    // writer.writeByte((uchar)width);
+    // writer.writeByte((uchar)height);
+    writer->writeByte((uchar)qBits);
+    eliasOmega(width, writer);
+    eliasOmega(height, writer);
     for (size_t i = 0; i < width*height; i++) {
         for (size_t color = 0; color < 3; color++) {
             for (int bits = qBits-1; bits >= 0; bits--) {
-                writer.writeBit((((downs[color][i]) >> bits) & 1));
+                writer->writeBit((((downs[color][i]) >> bits) & 1));
             }
         }
     }
     for (size_t i = 0; i < width*height; i++) {
         for (size_t color = 0; color < 3; color++) {
             for (int bits = qBits-1; bits >= 0; bits--) {
-                writer.writeBit((((ups[color][i]) >> bits) & 1));
+                writer->writeBit((((ups[color][i]) >> bits) & 1));
             }
         }
     }
-    writer.padWithZerosByte();
+    writer->padWithZerosByte();
+    delete writer;
 }
 
 
@@ -192,11 +198,17 @@ BandSolver::BandSolver(size_t size) {
 
 BandSolver::BandSolver(string filename) {
     // READING FILE
-    BitReader reader(filename);
-    width = reader.getNextByte();
-    height = reader.getNextByte();
-    qBits = reader.getNextByte();
+    // BitReader reader(filename);
+    BitReader* reader = new BitReader(filename);
+    // width = reader.getNextByte();
+    // height = reader.getNextByte();
+    qBits = reader->getNextByte();
+    width = eliasOmega(reader);
+    height = eliasOmega(reader);
     length = width*height;
+    cout << filename << endl;
+    cout << "width: " << width << " height: " << height << endl;
+    cout << "qBits: " << qBits << " length: " << length << endl;
     codings = new uchar**[bandsNumber];
     for (size_t band = 0; band < bandsNumber; band++) {
         codings[band] = new uchar*[colorsNumber];
@@ -207,7 +219,7 @@ BandSolver::BandSolver(string filename) {
             for (size_t color = 0; color < colorsNumber; color++) {
                 uchar v = 0;
                 for (size_t bits = 0; bits < qBits; bits++) {
-                    v = (v << 1) + reader.getNextBit();
+                    v = (v << 1) + reader->getNextBit();
                 }
                 codings[band][color][i] = v;
             }
@@ -270,6 +282,8 @@ BandSolver::BandSolver(string filename) {
                         // floor(filters[1][color][i]);
         }
     }
+
+    delete reader;
 }
 
 BandSolver::~BandSolver() {
