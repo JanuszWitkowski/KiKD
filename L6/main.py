@@ -44,7 +44,6 @@ class Bitmap:
         result = []
         row = []
         for i in range(width * height):
-            # print(i)
             row.append(
                 Pixel(
                     blue=bitmap[i * 3], green=bitmap[i * 3 + 1], red=bitmap[i * 3 + 2]
@@ -122,7 +121,6 @@ def differential_decoding(diffs):   # dekodowanie różnicowe
     result = [a]
     for x in diffs[1:]:
         a = a + x
-        # print(a.red, a.green, a.blue)
         result.append(a)
     return result
 
@@ -133,7 +131,6 @@ def low_high_decoding(low, high):   # odwracanie filtrów
     for i in range(len(low)):
         decoded.append(low[i] - high[i])
         decoded.append(low[i] + high[i])
-        # print(low[i].red, high[i].red)
 
     result = []
     for i in range(len(decoded)):
@@ -154,27 +151,12 @@ def encode(bitmap, k):
     quantified = quantify_uniform(filtered_high, k)
     high_bytes = bytes(bitmap_to_array(quantified))
 
-    # tests stuff
-    # flatten the bitmap
+    # spłaszczamy bitmapę
     bitmap = [
         bitmap[x, y]
         for y in reversed(range(bitmap.height))
         for x in range(bitmap.width)
     ]
-
-    # l_mse, l_mse_r, l_mse_g, l_mse_b, l_snr = tests(bitmap, filtered_low)
-    # h_mse, h_mse_r, h_mse_g, h_mse_b, h_snr = tests(bitmap, quantified)
-
-    # print("Low MSE:", l_mse)
-    # print("Low MSE (red):", l_mse_r)
-    # print("Low MSE (green):", l_mse_g)
-    # print("Low MSE (blue):", l_mse_b)
-    # print("Low SNR:", l_snr)
-    # print("High MSE:", h_mse)
-    # print("High MSE (red):", h_mse_r)
-    # print("High MSE (green):", h_mse_g)
-    # print("High MSE (blue):", h_mse_b)
-    # print("High SNR:", h_snr)
 
     return low_bytes, high_bytes
 
@@ -183,8 +165,6 @@ def to_array_pixels(org):
     result = []
     for i in range(0, len(org), 3):
         result.append(Pixel(org[i], org[i + 1], org[i + 2]))
-    # print(result[0].red)
-
     return result
 
 
