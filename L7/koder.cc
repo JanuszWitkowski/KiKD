@@ -19,7 +19,7 @@ void koder (string inName, string outName) {
 }
 
 int main (int argc, char* argv[]) {
-    // cout << cGreen << "-----SZUM-----" << cReset << endl;
+    cout << cGreen << "-----KODER-----" << cReset << endl;
     if (argc != 3) {
         printError(ARGUMENT, "Niepoprawna liczba argumentów. Schemat podawania argumentów:\n<nazwa pliku wejściowego> <nazwa pliku wyjściowego>");
         return 1;

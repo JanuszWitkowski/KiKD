@@ -4,6 +4,7 @@ LDFLAGS = -ggdb3
 
 koder: koder.o bitrw.o bitrw.hh
 szum: szum.o bitrw.o bitrw.hh
+dekoder: dekoder.o bitrw.o bitrw.hh
 sprawdz: sprawdz.o bitrw.o bitrw.hh
 
 koder.run: koder
@@ -17,6 +18,11 @@ szum.test: szum.run
 	xxd output/szum.cc output/szum_out.hex
 	diff output/szum_in.hex output/szum_out.hex
 
+dekoder.run: koder dekoder sprawdz
+	./koder testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/kikd.kkd
+	./dekoder output/kikd.kkd output/pan-tadzio.txt
+	./sprawdz testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/pan-tadzio.txt
+
 sprawdz.run: sprawdz
 	./sprawdz sprawdz.cc szum.cc
 
@@ -25,4 +31,4 @@ sprawdz.test: sprawdz szum
 	./sprawdz sprawdz.cc output/sprawdz.cc
 
 clean:
-	rm -rf *.o output/* szum
+	rm -rf *.o output/* koder szum dekoder sprawdz

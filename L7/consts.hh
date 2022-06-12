@@ -59,14 +59,3 @@ uint8_t* cycleHamming () {
     }
     return h;
 }
-
-uint8_t* reverseCycleHamming () {
-    uint8_t* h = cycleHamming();
-    uint8_t* r = new uint8_t[256];
-    for (size_t i = 0; i < 256; i++)
-        r[i] = 16;
-    for (uint8_t number = 0; number < 16; number++)
-        r[h[number]] = number;
-    delete[] h;
-    return r;
-}

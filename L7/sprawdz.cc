@@ -33,7 +33,7 @@ size_t sprawdz(string in1, string in2) {
 }
 
 int main(int argc, char* argv[]) {
-    // cout << cGreen << "----SPRAWDZ----" << cReset << endl;
+    cout << cGreen << "----SPRAWDZ----" << cReset << endl;
     if (argc != 3) {
         printError(ARGUMENT, "Niepoprawna liczba argumentów. Schemat podawania argumentów:\n<nazwa pierwszego pliku> <nazwa drugiego pliku>");
         return 1;

@@ -25,7 +25,7 @@ void szum(double p, string in, string out) {
 
 int main (int argc, char* argv[]) {
     srand(time(NULL));
-    // cout << cGreen << "-----SZUM-----" << cReset << endl;
+    cout << cGreen << "-----SZUM-----" << cReset << endl;
     if (argc != 4) {
         printError(ARGUMENT, "Niepoprawna liczba argumentów. Schemat podawania argumentów:\n<prawdopodobieństwo odrócenia bitu [0, 1]> <nazwa pliku wejściowego> <nazwa pliku wyjściowego>");
         return 1;
