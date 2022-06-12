@@ -36,6 +36,7 @@ public:
     uchar* getFileArray() { return file; }
     size_t getFileSize() { return fileSize; }
     size_t getFileSizeInBits() { return 8*fileSize; }
+    bool isEOF() { return fileIndex >= fileSize; }
 };
 
 class BitWriter : public BitHandler {

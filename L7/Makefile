@@ -2,8 +2,12 @@ CC=g++
 CXXFLAGS = -ggdb3
 LDFLAGS = -ggdb3
 
+koder: koder.o bitrw.o bitrw.hh
 szum: szum.o bitrw.o bitrw.hh
 sprawdz: sprawdz.o bitrw.o bitrw.hh
+
+koder.run: koder
+	./koder koder.cc output/koder.kkd
 
 szum.run: szum
 	./szum 0.5 szum.cc output/szum.cc

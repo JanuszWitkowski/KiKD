@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "consts.hh"
 
 using namespace std;
 
@@ -32,4 +33,40 @@ const string ErrorTypeName[4] = {
 
 void printError(ErrorType type, string msg) {
     cerr << cRed << ErrorTypeName[type] << " ERROR: " << msg << cReset << endl;
+}
+
+uint8_t* cycleHamming () {
+    uint8_t* h = new uint8_t[16];
+    for (uint8_t i = 0; i < 16; i++) {
+        uint8_t code = 0;
+        uint8_t a = ((i >> 3) & 1);
+        uint8_t b = ((i >> 2) & 1);
+        uint8_t c = ((i >> 1) & 1);
+        uint8_t d = (i & 1);
+        code = (a << 7) +
+                (((a + b) % 2) << 6) +
+                (((b + c) % 2) << 5) +
+                (((a + c + d) % 2) << 4) +
+                (((b + d) % 2) << 3) +
+                (c << 2) +
+                (d << 1);
+        uint8_t ones_counter = 0;
+        for (size_t j = 7; j > 0; j--)
+            if ( ((code >> j) & 1) == 1 )
+                ones_counter++;
+        code += (ones_counter % 2);
+        h[i] = code;
+    }
+    return h;
+}
+
+uint8_t* reverseCycleHamming () {
+    uint8_t* h = cycleHamming();
+    uint8_t* r = new uint8_t[256];
+    for (size_t i = 0; i < 256; i++)
+        r[i] = 16;
+    for (uint8_t number = 0; number < 16; number++)
+        r[h[number]] = number;
+    delete[] h;
+    return r;
 }
