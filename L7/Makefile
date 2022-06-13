@@ -7,6 +7,17 @@ szum: szum.o bitrw.o bitrw.hh
 dekoder: dekoder.o bitrw.o bitrw.hh
 sprawdz: sprawdz.o bitrw.o bitrw.hh
 
+run: koder szum dekoder sprawdz
+	./koder testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/kikd.kkd
+	./szum 0.01 output/kikd.kkd output/kikd_szum.kkd
+	./dekoder output/kikd_szum.kkd output/pan-tadzio.txt
+	./sprawdz testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/pan-tadzio.txt
+
+xxd: testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/pan-tadzio.txt
+	xxd testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/p1.hex
+	xxd output/pan-tadzio.txt output/p2.hex
+	diff output/p1.hex output/p2.hex
+
 koder.run: koder
 	./koder koder.cc output/koder.kkd
 

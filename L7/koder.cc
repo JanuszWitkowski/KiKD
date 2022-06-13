@@ -6,6 +6,7 @@ using namespace std;
 
 void koder (string inName, string outName) {
     BitReader reader(inName);
+    // reader.printFileArray();
     BitWriter writer(outName);
     uchar* hammingCodes = cycleHamming();
     while (!reader.isEOF()) {

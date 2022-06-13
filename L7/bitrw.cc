@@ -37,6 +37,7 @@ BitHandler::BitHandler() {
 // READER
 BitReader::BitReader (const string filename) : BitHandler() {
     file = fileToArray(filename, fileSize);
+    printArray(file, fileSize);
     fileIndex = 0;
 }
 
@@ -51,21 +52,21 @@ uchar BitReader::getNextByte () {
 }
 
 bool BitReader::isNextBitOne () {
+    uint b = getNextBit();
+    return b == 1;
+}
+
+uint BitReader::getNextBit () {
     if (byteBufferIndex == 0) {
-        // cout << 8*fileIndex + 8 - byteBufferIndex << " " ; 
         byteBuffer = file[fileIndex];
         fileIndex++;
         byteBufferIndex = 8;
     }
     byteBufferIndex--;
-    return (byteBuffer >> byteBufferIndex) & 1 > 0;
+    return (byteBuffer >> byteBufferIndex) & 1;
 }
 
-uint BitReader::getNextBit () {
-    return isNextBitOne() ? 1 : 0;
-}
-
-void BitReader::printArray (void) {
+void BitReader::printFileArray (void) {
       for (size_t i = 0; i < fileSize; i++) {
           cout << file[i] << " ";
       }

@@ -29,7 +29,7 @@ public:
     uchar getNextByte();
     bool isNextBitOne();
     uint getNextBit();
-    void printArray();
+    void printFileArray();
 
     uint getCurrentBit() { return (byteBuffer >> byteBufferIndex) & 1; }
     uchar getByte(size_t index) { return file[index]; }
