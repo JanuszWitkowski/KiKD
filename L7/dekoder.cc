@@ -35,13 +35,17 @@ uchar* checkMatrix () {
     }
     return m;
 }
+uchar checkToShift[8] = {
+    0, 7, 6, 4, 1, 5, 2, 3
+};
 
-size_t dekoder (string inName, string outName) {
+size_t dekoder (string inName, string outName, size_t &fix_counter) {
     BitReader reader(inName);
     BitWriter writer(outName);
     uchar* reverseHamming = reverseCycleHamming();
     uchar* checkCodes = checkMatrix();
     size_t counter = 0;
+    fix_counter = 0;
 
     while (!reader.isEOF()) {
         uchar byte = reader.getNextByte();
@@ -59,8 +63,10 @@ size_t dekoder (string inName, string outName) {
             to_write = reverseHamming[byte];
         }
         else {      // nieparzysta liczba błędów
-            byte = byte - (((byte >> check) & 1) << check) + ((1 - ((byte >> check) & 1)) << check);    //TODO: POPRAWIĆ CHECK!!!
+            uchar shift = checkToShift[check];
+            byte = byte - (((byte >> shift) & 1) << shift) + ((1 - ((byte >> shift) & 1)) << shift);
             to_write = reverseHamming[byte];
+            fix_counter++;
         }
         for (int i = 3; i >= 0; i--)
             writer.writeBit((to_write >> i) & 1);
@@ -78,7 +84,7 @@ int main (int argc, char* argv[]) {
         return 1;
     }
     string in = argv[1], out = argv[2];
-    size_t counter = dekoder(in, out);
-    cout << cBlue << "Napotkano 2 błędy w " << counter << " przypadkach." << cReset << endl;
+    size_t fix_counter, err_counter = dekoder(in, out, fix_counter);
+    cout << cBlue << "Napotkano 2 błędy w " << err_counter << " przypadkach. Naprawiono " << fix_counter << " bloków." << cReset << endl;
     return 0;
 }
