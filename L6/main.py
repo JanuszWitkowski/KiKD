@@ -98,7 +98,7 @@ def filters(bitmap):
 
 
 def bitmap_to_array(bitmap):
-    print(type(bitmap))
+    # print(type(bitmap))
     array = []
     for pixel in bitmap:
         array += [(pixel.blue + 256) % 256, (pixel.green + 256) % 256, (pixel.red + 256) % 256]
@@ -182,7 +182,8 @@ def d(a, b):
 
 
 def mse(original, new):
-    return (1 / len(original)) * sum([d(a, b) for a, b in zip(original, new)])
+    # return (1 / len(original)) * sum([d(a, b) for a, b in zip(original, new)])
+    return sum([d(a, b) for a, b in zip(original, new)]) / len(original)
 
 
 def snr(x, mserr):
@@ -216,8 +217,8 @@ def tests(original, new):
 
 def main():
     if len(argv) >= 4:
-        if argv[2] == "--encode":
-            with open(argv[1], "rb") as f:
+        if argv[1] == "-e":
+            with open(argv[2], "rb") as f:
                 tga = f.read()
                 header = tga[:18]
                 footer = tga[len(tga) - 26:]
@@ -240,8 +241,8 @@ def main():
                 b = bytes(header)
                 f.write(b + low + high)
             
-        elif argv[2] == "--decode":
-            with open(argv[1], "rb") as f:
+        elif argv[1] == "-d":
+            with open(argv[2], "rb") as f:
                 coded = f.read()
                 width = coded[13] * 256 + coded[12]
                 height = coded[15] * 256 + coded[14]
@@ -257,8 +258,8 @@ def main():
             with open(argv[3] + "_decoded.tga", "wb") as f:
                 f.write(header + result)
             
-        elif argv[2] == "--compare":
-            with open(argv[1], "rb") as f:
+        elif argv[1] == "-c":
+            with open(argv[2], "rb") as f:
                 original = f.read()
                 header = original[:18]
                 footer = original[len(original) - 26:]
@@ -302,7 +303,7 @@ def main():
         
     else:
         print("BŁĄD: Niepopawne wywołanie programu.")
-        print("main.py <input_file> <--encode/--decode/--compare> [output_prefix] [k - default 2]")
+        print("main.py <-e/-d/-c> <input_file> [output_prefix] [k - default 2]")
 
 
 if __name__ == "__main__":
