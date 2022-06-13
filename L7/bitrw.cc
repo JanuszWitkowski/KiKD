@@ -15,6 +15,7 @@ uchar* fileToArray (const string filename, size_t &n) {
     streampos start = fin.tellg();
     fin.ignore(numeric_limits<streamsize>::max());
     n = fin.gcount();
+    n++;
     fin.seekg(start,ios_base::beg);
     uchar* array = new uchar[n];
     fin.read((char *)array, n);
@@ -37,7 +38,7 @@ BitHandler::BitHandler() {
 // READER
 BitReader::BitReader (const string filename) : BitHandler() {
     file = fileToArray(filename, fileSize);
-    printArray(file, fileSize);
+    // printArray(file, fileSize);
     fileIndex = 0;
 }
 
