@@ -9,7 +9,7 @@ sprawdz: sprawdz.o bitrw.o bitrw.hh
 
 run: koder szum dekoder sprawdz
 	./koder testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/kikd.kkd
-	./szum 0.0005 output/kikd.kkd output/kikd_szum.kkd
+	./szum 0.00005 output/kikd.kkd output/kikd_szum.kkd
 	./dekoder output/kikd_szum.kkd output/pan-tadzio.txt
 	./sprawdz testy/pan-tadeusz-czyli-ostatni-zajazd-na-litwie.txt output/pan-tadzio.txt
 

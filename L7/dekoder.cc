@@ -84,6 +84,7 @@ int main (int argc, char* argv[]) {
         return 1;
     }
     string in = argv[1], out = argv[2];
+    cout << cGreen << "PODANE PARAMETRY\nInput: " << cYellow << in << cGreen << "\nOutput: " << cYellow << out << cReset << endl;
     size_t fix_counter, err_counter = dekoder(in, out, fix_counter);
     cout << cBlue << "Napotkano 2 błędy w " << err_counter << " przypadkach. Naprawiono " << fix_counter << " bloków." << cReset << endl;
     return 0;

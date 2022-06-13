@@ -1,5 +1,4 @@
 #include <iostream>
-// #include <memory>
 #include <random>
 #include <ctime>
 #include "bitrw.hh"
@@ -7,7 +6,7 @@
 
 using namespace std;
 
-void szum(double p, string in, string out) {
+size_t szum(double p, string in, string out) {
     BitReader reader(in);
     BitWriter writer(out);
     size_t fileSize = reader.getFileSizeInBits();
@@ -20,7 +19,7 @@ void szum(double p, string in, string out) {
         }
         else writer.writeBit(b);
     }
-    // cout << "counter/size = " << (double)((double)counter/reader.getFileSizeInBits()) << endl;
+    return counter;
 }
 
 int main (int argc, char* argv[]) {
@@ -36,7 +35,8 @@ int main (int argc, char* argv[]) {
         return 1;
     }
     string in = argv[2], out = argv[3];
-    // cout <<cGreen << "PODANE PARAMETRY\nPrawdopodobieństwo: " << p << "\nInput: " << in << "\nOutput: " << out << cReset << endl;
-    szum(p, in, out);
+    cout <<cGreen << "PODANE PARAMETRY\nPrawdopodobieństwo: " << cYellow << p << cGreen << "\nInput: " << cYellow << in << cGreen << "\nOutput: " << cYellow << out << cReset << endl;
+    size_t counter = szum(p, in, out);
+    cout << cBlue << "Nałożono faulty na " << counter << " bitów pliku." << cReset << endl;
     return 0;
 }

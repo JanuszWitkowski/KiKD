@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     string in1 = argv[1], in2 = argv[2];
-    // cout << cGreen << "PODANE PARAMETRY\nInput1: " << in1 << "\nInput2: " << in2 << cReset << endl;
+    cout << cGreen << "PODANE PARAMETRY\nInput1: " << cYellow << in1 << cGreen << "\nInput2: " << cYellow << in2 << cReset << endl;
     size_t counter = sprawdz(in1, in2);
     cout << cBlue << "Znaleziono " << counter << " niezgodnych 4-bitowych bloków." << cReset << endl;
     return 0;

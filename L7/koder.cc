@@ -24,6 +24,7 @@ int main (int argc, char* argv[]) {
         return 1;
     }
     string in = argv[1], out = argv[2];
+    cout << cGreen << "PODANE PARAMETRY\nInput: " << cYellow << in << cGreen << "\nOutput: " << cYellow << out << cReset << endl;
     koder(in, out);
     return 0;
 }
