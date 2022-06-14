@@ -36,7 +36,7 @@ class Pixel:
         return Pixel(r, g, b)
 
 
-class Bitmap:
+class PixelBitmap:
     def __init__(self, bitmap, width, height):
         self.width = width
         self.height = height
@@ -228,7 +228,7 @@ def main():
 
             if width * height * 3 != len(tga):
                 tga = tga[:-26]
-            bitmap = Bitmap(tga, width, height)
+            bitmap = PixelBitmap(tga, width, height)
 
             if len(argv) == 5:
                 k = int(argv[4])
@@ -255,7 +255,7 @@ def main():
 
             result = decode(low, high, width, height)
 
-            with open(argv[3] + "_decoded.tga", "wb") as f:
+            with open(argv[3] + "_new.tga", "wb") as f:
                 f.write(header + result)
             
         elif argv[1] == "-c":
@@ -269,7 +269,7 @@ def main():
 
             if width * height * 3 != len(original):
                 original = original[:-26]
-            bitmap_original = Bitmap(original, width, height)
+            bitmap_original = PixelBitmap(original, width, height)
             bitmap_original = [
                 bitmap_original[x, y]
                 for y in reversed(range(bitmap_original.height))
@@ -286,7 +286,7 @@ def main():
 
             if width * height * 3 != len(new):
                 new = new[:-26]
-            bitmap_new = Bitmap(new, width, height)
+            bitmap_new = PixelBitmap(new, width, height)
             bitmap_new = [
                 bitmap_new[x, y]
                 for y in reversed(range(bitmap_new.height))

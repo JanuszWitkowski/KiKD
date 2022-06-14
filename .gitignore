@@ -18,3 +18,6 @@ tests
 /L6/test
 kikd.kkd
 L6/output/*
+__pycache__
+/L6/errors/*
+/L6/results/*

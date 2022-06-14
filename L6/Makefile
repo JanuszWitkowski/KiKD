@@ -4,6 +4,23 @@ LDFLAGS = -ggdb3
 
 all: clean main encode decode compare
 
+
+tests: main.py
+	for quant in {1..7} \
+	do \
+		for img in 0 1 2 3 \
+		do \
+			INPUT := $(addsuffix $(addsuffix .tga,$$img),testy/example) \
+			OUTPUT := output/kikd.kkd \
+			RESULT := $(addsuffix $$quant,$(addsuffix $$img,results/)) \
+			ERROR := $(addsuffix $(addsuffix .txt,$$quant),$(addsuffix $$img,errors/)) \
+			python3 main.py -e $(INPUT) $(OUTPUT) $$quant \
+			python3 main.py -d $(OUTPUT) $(RESULT) \
+			python3 main.py -c $(INPUT) $(addsuffix _new.tga,$(RESULT)) >$(ERROR) \
+		done \
+	done
+
+
 main: main.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 test: test.o bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
 encode: encode.o main.hh bitrw.o bitrw.hh stats.o stats.hh tga.o tga.hh pixel.o pixel.hh differential.o differential.hh
