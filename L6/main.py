@@ -105,7 +105,7 @@ def bitmap_to_array(bitmap):
     return array
 
 
-def differential_coding(bitmap):    # kodowanie różnicowe
+def differential_encoding(bitmap):    # kodowanie różnicowe
     a = bitmap[0]
     result = [a]
     for pixel in bitmap[1:]:
@@ -146,7 +146,7 @@ def quantify_uniform(bitmap, k):    # liczy rozkład jednostajny
 def encode(bitmap, k):
     filtered_low, filtered_high = filters(bitmap)
 
-    low = differential_coding(filtered_low)
+    low = differential_encoding(filtered_low)
     low_bytes = bytes(bitmap_to_array(low))
     quantified = quantify_uniform(filtered_high, k)
     high_bytes = bytes(bitmap_to_array(quantified))
