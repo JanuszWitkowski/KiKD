@@ -255,7 +255,7 @@ def main():
 
             result = decode(low, high, width, height)
 
-            with open(argv[3] + "_new.tga", "wb") as f:
+            with open(argv[3], "wb") as f:
                 f.write(header + result)
             
         elif argv[1] == "-c":
@@ -303,7 +303,7 @@ def main():
         
     else:
         print("BŁĄD: Niepopawne wywołanie programu.")
-        print("main.py <-e/-d/-c> <input_file> [output_prefix] [k - default 2]")
+        print("main.py <-e/-d/-c> <input_file> [output_file] [k - default 2]")
 
 
 if __name__ == "__main__":
